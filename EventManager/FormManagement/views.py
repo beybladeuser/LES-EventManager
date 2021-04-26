@@ -6,6 +6,7 @@ from Models.models import *
 
 def formsHome(request) :
 
+
     formTypes = Formtype.objects.all()
     errorMessage = None
     if not formTypes :
