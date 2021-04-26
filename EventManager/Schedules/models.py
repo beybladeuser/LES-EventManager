@@ -8,7 +8,7 @@ class Day(models.Model):
     day = models.DateField(db_column='Day')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'day'
 
 class Schedule(models.Model):
@@ -16,7 +16,7 @@ class Schedule(models.Model):
     eventid = models.ForeignKey('Models.Event', models.DO_NOTHING, db_column='EventID')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'schedule'
 
 class Timebracket(models.Model):
@@ -28,5 +28,5 @@ class Timebracket(models.Model):
     endtime = models.TimeField(db_column='EndTime')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'timebracket'

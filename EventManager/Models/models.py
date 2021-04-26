@@ -3,7 +3,7 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from FormManagement.models import *
@@ -17,7 +17,7 @@ class AssetEvent(models.Model):
     eventid_event = models.ForeignKey('Event', models.DO_NOTHING, db_column='EventID_Event')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'asset_event'
 
 
@@ -31,7 +31,7 @@ class AssetLogistics(models.Model):
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'asset_logistics'
 
 class Event(models.Model):
@@ -45,7 +45,7 @@ class Event(models.Model):
     eventname = models.CharField(db_column='eventName', max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'event'
 
 
@@ -54,7 +54,7 @@ class Eventtype(models.Model):
     typename = models.CharField(db_column='TypeName', max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'eventtype'
 
 
@@ -69,7 +69,7 @@ class Informacaomensagem(models.Model):
     recetorid = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        
         db_table = 'informacaomensagem'
 
 
@@ -84,7 +84,7 @@ class Informacaonotificacao(models.Model):
     recetorid = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        
         db_table = 'informacaonotificacao'
 
 
@@ -92,7 +92,7 @@ class Mensagemenviada(models.Model):
     mensagem_id = models.IntegerField()
 
     class Meta:
-        managed = False
+        
         db_table = 'mensagemenviada'
 
 
@@ -100,7 +100,7 @@ class Mensagemrecebida(models.Model):
     mensagem_id = models.IntegerField()
 
     class Meta:
-        managed = False
+        
         db_table = 'mensagemrecebida'
 
 
@@ -126,7 +126,7 @@ class Notificacao(models.Model):
     target_content_type_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        
         db_table = 'notificacao'
 
 
@@ -138,7 +138,7 @@ class Resgistration(models.Model):
     participantuserid = models.ForeignKey(Participante, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'resgistration'
 
 

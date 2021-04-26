@@ -8,7 +8,7 @@ class Administrador(models.Model):
     gabinete = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
+        
         db_table = 'administrador'
 
 
@@ -19,7 +19,7 @@ class Colaborador(models.Model):
     faculdade_id = models.IntegerField()
 
     class Meta:
-        managed = False
+        
         db_table = 'colaborador'
 
 
@@ -30,7 +30,7 @@ class Coordenador(models.Model):
     faculdadeid = models.IntegerField(db_column='FaculdadeID')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'coordenador'
 
 
@@ -38,7 +38,7 @@ class Participante(models.Model):
     utilizador_ptr_id = models.IntegerField(primary_key=True)
 
     class Meta:
-        managed = False
+        
         db_table = 'participante'
 
 
@@ -49,7 +49,7 @@ class Professoruniversitario(models.Model):
     faculdade_id = models.IntegerField()
 
     class Meta:
-        managed = False
+        
         db_table = 'professoruniversitario'
 
 class Responsavel(models.Model):
@@ -59,7 +59,7 @@ class Responsavel(models.Model):
     inscricao_id = models.IntegerField()
 
     class Meta:
-        managed = False
+        
         db_table = 'responsavel'
 
 
@@ -69,5 +69,5 @@ class Utilizador(models.Model):
     valido = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
+        
         db_table = 'utilizador'

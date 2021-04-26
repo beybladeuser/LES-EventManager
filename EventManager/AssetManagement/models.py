@@ -3,7 +3,7 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
@@ -29,7 +29,7 @@ class Asset(models.Model):
 
 
     class Meta:
-        managed = False
+        
         db_table = 'asset'
 
 
@@ -42,7 +42,7 @@ class Building(models.Model):
        return self.buildingname
 
     class Meta:
-        managed = False
+        
         db_table = 'building'
 
 
@@ -51,7 +51,7 @@ class Campus(models.Model):
     campusname = models.CharField(db_column='CampusName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'campus'
 
     def __str__(self):
@@ -64,7 +64,7 @@ class Equipment(models.Model):
     equipmenttypeid_equipmenttype = models.ForeignKey('Equipmenttype', models.DO_NOTHING, db_column='EquipmentTypeID_EquipmentType')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'equipment'
       
 
@@ -76,7 +76,7 @@ class Equipmenttype(models.Model):
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'equipmenttype'
     
     def __str__(self):
@@ -90,7 +90,7 @@ class Rooms(models.Model):
     buildingid_building = models.ForeignKey(Building, models.DO_NOTHING, db_column='BuildingID_Building')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'rooms'
 
     def __str__(self):
@@ -102,7 +102,7 @@ class Service(models.Model):
     servicetypeid_servicetype = models.ForeignKey('Servicetype', models.DO_NOTHING, db_column='ServiceTypeID_ServiceType')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'service'
     
     def __str__(self):
@@ -116,7 +116,7 @@ class Servicetype(models.Model):
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        
         db_table = 'servicetype'
 
     def __str__(self):
