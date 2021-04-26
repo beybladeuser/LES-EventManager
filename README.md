@@ -63,7 +63,7 @@ How to run this:
     
     (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate
 ```
-5º: add a super user
+4º: add a super user
 ```
     c:\folder_example> Django\Scripts\activate.bat
     
@@ -72,8 +72,14 @@ How to run this:
     (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py createsuperuser
 ```   
   put the credetials that you want
+  
+5º: dar load dos valores default
+
+```
+  python manage.py loaddata fixtures.json
+```
     
-4º: run the server
+6º: run the server
 ```    
     c:\folder_example> Django\Scripts\activate.bat
     
