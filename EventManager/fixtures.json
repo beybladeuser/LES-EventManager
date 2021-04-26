@@ -12,5 +12,47 @@
 	  "fields": {
 		"typename": "Registration"
 	  }
+	},
+	{
+	  "model": "FormManagement.Formtype",
+	  "pk": 3,
+	  "fields": {
+		"typename": "Feedback"
+	  }
+	},
+	{
+	  "model": "FormManagement.Formtype",
+	  "pk": 4,
+	  "fields": {
+		"typename": "Logistic"
+	  }
+	}
+
+
+
+	
+
+	
+	,
+	{
+	  "model": "auth.group",
+	  "pk": 1,
+	  "fields": {
+		"name": "Administrator"
+	  }
+	},
+	{
+	  "model": "auth.group",
+	  "pk": 2,
+	  "fields": {
+		"name": "Participant"
+	  }
+	},
+	{
+	  "model": "auth.group",
+	  "pk": 3,
+	  "fields": {
+		"name": "Proponent"
+	  }
 	}
   ]
