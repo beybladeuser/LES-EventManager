@@ -5,23 +5,27 @@ How to run this:
 
 1º install django and all other libs:
 
-  `c:\folder_example> python -m venv Django`
+```
+  c:\folder_example> python -m venv Django
   
-  `c:\folder_example> Django\Scripts\activate.bat`
+  c:\folder_example> Django\Scripts\activate.bat
   
-  `(Django) c:\folder_example> python -m pip install --upgrade pip`
+  (Django) c:\folder_example> python -m pip install --upgrade pip
   
-  `(Django) c:\folder_example> python -m pip install Django`
+  (Django) c:\folder_example> python -m pip install Django
   
-  `(Django) c:\folder_example> python -m pip install django-crispy-forms`
+  (Django) c:\folder_example> python -m pip install django-crispy-forms
   
-  `(Django) c:\folder_example> python -m pip install mysqlclient`
+  (Django) c:\folder_example> python -m pip install mysqlclient
+```  
   
 2º clone this rep:
   Sugestion: have the files like this
+  ```
     c:\folder_example\
       Django\
       LES-EventManager\
+  ```
       
   Where Django contains the django install and LES-EventManager contains this rep
 
@@ -49,33 +53,33 @@ How to run this:
 ```
    
    next do the following:
-   
-    `c:\folder_example> Django\Scripts\activate.bat`
+```
+    c:\folder_example> Django\Scripts\activate.bat
     
-    `(Django) c:\folder_example> cd LES-EventManager\EventManager\`
+    (Django) c:\folder_example> cd LES-EventManager\EventManager\
     
-    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py makemigrations`
+    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py makemigrations
     
-    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate`
-    
+    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate
+```
 5º: add a super user
-
-    `c:\folder_example> Django\Scripts\activate.bat`
+```
+    c:\folder_example> Django\Scripts\activate.bat
     
-    `(Django) c:\folder_example> cd LES-EventManager\EventManager\`
+    (Django) c:\folder_example> cd LES-EventManager\EventManager\
     
-    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py createsuperuser`
-    
+    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py createsuperuser
+```   
   put the credetials that you want
     
 4º: run the server
+```    
+    c:\folder_example> Django\Scripts\activate.bat
     
-    `c:\folder_example> Django\Scripts\activate.bat`
+    (Django) c:\folder_example> cd LES-EventManager\EventManager\
     
-    `(Django) c:\folder_example> cd LES-EventManager\EventManager\`
-    
-    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py runserver`
-    
+    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py runserver
+ ```   
  should be working fine
     
 
