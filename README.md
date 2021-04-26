@@ -49,26 +49,21 @@ How to run this:
 ```
    
    next do the following:
-   
     `c:\folder_example> Django\Scripts\activate.bat`
-    
     `(Django) c:\folder_example> cd LES-EventManager\EventManager\`
-    
-    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py makemigrations
-    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate
+    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py makemigrations`
+    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate`
     
 5º: add a super user
-    c:\folder_example> Django\Scripts\activate.bat
-    (Django) c:\folder_example> cd LES-EventManager\EventManager\
-    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py createsuperuser
-    
+    `c:\folder_example> Django\Scripts\activate.bat`
+    `(Django) c:\folder_example> cd LES-EventManager\EventManager\`
+    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py createsuperuser`
     put the credetials that you want
     
 4º: run the server
-    c:\folder_example> Django\Scripts\activate.bat
-    (Django) c:\folder_example> cd LES-EventManager\EventManager\
-    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py runserver
-    
+    `c:\folder_example> Django\Scripts\activate.bat`
+    `(Django) c:\folder_example> cd LES-EventManager\EventManager\`
+    `(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py runserver`
     should be working fine
     
 
