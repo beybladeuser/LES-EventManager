@@ -30,7 +30,7 @@ class Answer(models.Model):
     usersThatAnsweredThis = property(getUserThatAnsweredThis)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'answer'
 
 # Create your models here.
@@ -61,7 +61,7 @@ class Form(models.Model):
     formquestions = property(getQuestions)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'form'
 
 
@@ -73,7 +73,7 @@ class Formtype(models.Model):
         return self.typename
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'formtype'
 
 
@@ -106,7 +106,7 @@ class Questions(models.Model):
     allanswers = property(getAllAnswers)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'questions'
 
 class QuestionsForm(models.Model):
@@ -118,7 +118,7 @@ class QuestionsForm(models.Model):
         return "Form: " + self.formid_form.formname + " | Q: " + self.questionsid_questions.question
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'questions_form'
 
 
@@ -130,7 +130,7 @@ class Questiontype(models.Model):
         return self.typename
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'questiontype'
 
 class Multipleoptions(models.Model):
@@ -142,5 +142,5 @@ class Multipleoptions(models.Model):
         return "Q: " + self.questionsid_questions.question + " | Option: " + self.option
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'multipleoptions'
