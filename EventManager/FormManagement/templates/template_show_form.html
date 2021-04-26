@@ -1,0 +1,61 @@
+{% extends "template_base.html" %}
+
+{% block loggedInContent %}
+  <div class="row my-5">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+      {% if errorMessage %}
+        <h2>{{errorMessage}}</h2>
+      {% else %}
+        <h2>Showing {{formType}} Form for Events of type {{eventType}}</h2>
+        {% for question in questions %}
+          <div class="card my-5">
+            <div class="card-header">
+              <h4>Question: {{question.question}}</h4>
+            </div>
+            <div class="card-body">
+              {% if question.options %}
+                <h5>question options:</h5> 
+                <p>
+                  {% for option in question.options %}
+                      {{option.option}} |
+                  {% endfor %}
+                </p>
+              {% endif %}
+
+              {% if question.allanswers %}
+                <h5>question answers:</h5>
+                {% for answer in question.allanswers %}
+                  <p> 
+                    Answer by 
+                    {% if answer.eventid_event %}
+                      event {{answer.eventid_event.eventname}}
+                    {% elif answer.resgistrationid %}
+                      user {{answer.usersThatAnsweredThis.username}}
+                    {% endif %}
+                    : {{answer.answer}}
+                  </p>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <a class="btn btn-lg" href='{{return_addr}}'>Back to form listings</a><br>
+    </div>
+  </div>
+{% endblock %}
+
+{% block loggedOutContent %}
+  <div class="row my-3">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <div class="card">
+           <div class="card-header">
+               <h2>You must be signed in to access this page</h2>
+           </div>
+       </div>
+   </div>
+  </div>
+{% endblock %}

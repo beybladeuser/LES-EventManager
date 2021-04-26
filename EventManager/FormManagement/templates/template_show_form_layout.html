@@ -1,0 +1,100 @@
+{% extends "template_base.html" %}
+
+{% block PageTittle %}
+    Form Layout
+{% endblock %}
+
+{% block loggedInContent %}
+    {% if errorMessage %}
+        <div class="row my-5">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>{{errorMessage}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row my-3">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h2>Viewing form: {{form.formname}}</h2>
+                <b>Form designend for events of type: </b>{{form.eventtypeid.typename}}<br>
+                <b>Created by: </b>{{form.createdby.username}}<b> on: </b>{{form.dateofcreation}}<br>
+                <b>Last Edited by: </b>{{form.lasteditedby.username}}<b> on: </b>{{form.dateoflastedit}}<br><br>
+                    
+                <h4>Questions:</h4>
+            </div>
+        </div>
+
+        {% for question in form.formquestions %}
+            <div class="row my-3">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>{{question.question}}</h2>
+                        </div>
+                        <div class="card-body">
+                            <b>Question of type: </b>{{question.questiontypeid_questiontype.typename}}<br>
+                            <b>Created by: </b>{{question.createdby.username}}<b> on: </b>{{question.dateofcreation}}<br>
+                            <b>Last Edited by: </b>{{question.lasteditedby.username}}<b> on: </b>{{question.dateoflastedit}}
+
+                            {% if question.options %}
+                                <br><br>
+                                <b>Options:</b>
+                                <p>
+
+                                    {% for option in question.options %}
+                                        {{option.option}} |
+                                    {% endfor %}
+                                </p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-lg" href="">
+                                Edit Question
+                            </a>
+                            |
+                            <a class="btn btn-lg" href="">
+                                Delete Question
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="row my-3">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <a class="btn btn-lg" href="">
+                    Add New Question
+                </a>
+            </div>
+        </div>
+
+    {% endif %}
+
+    <div class="row my-5">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <a class="btn btn-lg" href='{{return_addr}}'>Back to form listings</a><br>
+        </div>
+    </div>
+{% endblock %}
+
+{% block loggedOutContent %}
+    <div class="row my-3">
+        <div class="col-sm-1"></div>
+       <div class="col-sm-10">
+           <div class="card">
+               <div class="card-header">
+                   <h2>You must be signed in to access this page</h2>
+               </div>
+           </div>
+       </div>
+    </div>
+{% endblock %}

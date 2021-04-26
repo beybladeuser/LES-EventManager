@@ -1,0 +1,14 @@
+
+  <table style="width:100%">
+    <tr>
+      <th>Equipment Name</th>
+      <th>Equipment Type</th>
+    </tr>
+    {% for equipment in Equipments %}
+        <tr>
+            <td>  <p>{{equipment.assetid}}</p></td>
+            <td>  <p>{{equipment.equipmenttypeid_equipmenttype}}</p></td>
+        </tr>
+    {% endfor %}
+  </table>
+

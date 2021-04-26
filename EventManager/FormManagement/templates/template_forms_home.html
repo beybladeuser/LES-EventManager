@@ -1,0 +1,56 @@
+{% extends "template_base.html" %}
+
+{% block PageTittle %}
+    Form Manager
+{% endblock %}
+
+{% block loggedInContent %}
+    {% if errorMessage %}
+        <div class="row my-5">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>{{errorMessage}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {% for formType in formTypes %}
+            <div class="row my-3">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>{{formType.typename}} Forms</h2>
+                        </div>
+                        <div class="card-body">
+                            <a class="btn btn-lg" href="{% url 'listFormsFromType' formType.id %}">
+                                See Existing Forms
+                            </a>
+                            |
+                            <a class="btn btn-lg" href="{% url 'createForm' formType.id %}">
+                                Create New
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block loggedOutContent %}
+    <div class="row my-3">
+        <div class="col-sm-1"></div>
+       <div class="col-sm-10">
+           <div class="card">
+               <div class="card-header">
+                   <h2>You must be signed in to access this page</h2>
+               </div>
+           </div>
+       </div>
+    </div>
+{% endblock %}

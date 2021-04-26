@@ -1,0 +1,14 @@
+
+  <table style="width:100%">
+    <tr>
+      <th>Room Name</th>
+      <th>Building</th>
+    </tr>
+    {% for room in Rooms %}
+        <tr>
+            <td>  <p>{{room.assetid}}</p></td>
+            <td>  <p>{{room.buildingid_building}}</p></td>
+        </tr>
+    {% endfor %}
+  </table>
+

@@ -1,0 +1,14 @@
+
+  <table style="width:100%">
+    <tr>
+      <th>Service Name</th>
+      <th>Service Type</th>
+    </tr>
+    {% for service in Services %}
+        <tr>
+            <td>  <p>{{service.assetid}}</p></td>
+            <td>  <p>{{service.servicetypeid_servicetype}}</p></td>
+        </tr>
+    {% endfor %}
+  </table>
+

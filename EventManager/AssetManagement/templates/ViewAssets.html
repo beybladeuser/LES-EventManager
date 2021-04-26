@@ -1,0 +1,14 @@
+
+  <table style="width:100%">
+    <tr>
+      <th>Asset Name</th>
+      <th>Quantity</th>
+    </tr>
+    {% for asset in Assets %}
+        <tr>
+            <td>  <p>{{asset.assetname}}</p></td>
+            <td>  <p>{{asset.quantity}}</p></td>
+        </tr>
+    {% endfor %}
+  </table>
+
