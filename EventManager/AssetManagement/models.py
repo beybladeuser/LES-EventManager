@@ -29,7 +29,6 @@ class Asset(models.Model):
 
 
     class Meta:
-        
         db_table = 'asset'
 
 
