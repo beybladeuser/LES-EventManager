@@ -4,12 +4,17 @@ The source for the final project of LES
 How to run this:
 
 1º install django and all other libs:
-  'c:\folder_example> python -m venv Django'
-  'c:\folder_example> Django\Scripts\activate.bat'
-  '(Django) c:\folder_example> python -m pip install --upgrade pip'
-  '(Django) c:\folder_example> python -m pip install Django'
-  '(Django) c:\folder_example> python -m pip install django-crispy-forms'
-  '(Django) c:\folder_example> python -m pip install mysqlclient'
+  `c:\folder_example> python -m venv Django`
+  
+  `c:\folder_example> Django\Scripts\activate.bat`
+  
+  `(Django) c:\folder_example> python -m pip install --upgrade pip`
+  
+  `(Django) c:\folder_example> python -m pip install Django`
+  
+  `(Django) c:\folder_example> python -m pip install django-crispy-forms`
+  
+  `(Django) c:\folder_example> python -m pip install mysqlclient`
   
 2º clone this rep:
   Sugestion: have the files like this
