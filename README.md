@@ -50,6 +50,7 @@ How to run this:
               'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"
           }
       }
+    }
 ```
    
    next do the following:
@@ -83,4 +84,4 @@ How to run this:
  should be working fine
     
 
-}
+
