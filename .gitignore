@@ -1,10 +1,13 @@
-EventManager\AssetManagement\__pycache__\*
-EventManager\EventManagement\__pycache__\*
-EventManager\EventManager\__pycache__\*
-EventManager\FormManagement\__pycache__\*
+EventManager/AssetManagement/__pycache__/*
+EventManager/EventManagement/__pycache__/*
+EventManager/EventManager/__pycache__/*
+EventManager/FormManagement/__pycache__/*
 
-EventManager\Index\__pycache__\*
-EventManager\Models\__pycache__\*
-EventManager\PreEventManagement\__pycache__\*
-EventManager\Schedules\__pycache__\*
-EventManager\Sessions\__pycache__\*
+EventManager/Index/__pycache__/*
+EventManager/Models/__pycache__/*
+EventManager/PreEventManagement/__pycache__/*
+EventManager/Schedules/__pycache__/*
+EventManager/Sessions/__pycache__/*
+
+
+EventManager/Sessions/migrations/__pycache__/*
