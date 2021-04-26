@@ -1,0 +1,16 @@
+[
+	{
+	  "model": "FormManagement.Formtype",
+	  "pk": 1,
+	  "fields": {
+		"typename": "Proposal"
+	  }
+	},
+	{
+	  "model": "FormManagement.Formtype",
+	  "pk": 2,
+	  "fields": {
+		"typename": "Registration"
+	  }
+	}
+  ]
