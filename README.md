@@ -4,6 +4,7 @@ The source for the final project of LES
 How to run this:
 
 1º install django and all other libs:
+
   `c:\folder_example> python -m venv Django`
   
   `c:\folder_example> Django\Scripts\activate.bat`
@@ -29,8 +30,10 @@ How to run this:
   https://medium.com/@sonuyohannan/django-and-mysql-how-to-connect-mysql-database-with-django-project-ee3c695fe7c5
   
   install xampp
-  in LES-EventManager\EventManager\EventManager\settings.py make sure the following code uses your xampp settings:
   
+  in LES-EventManager\EventManager\EventManager\settings.py make sure the following code uses your xampp settings:
+
+```  
     DATABASES = {
       'default': {
           'ENGINE': 'django.db.backends.mysql',
@@ -43,10 +46,14 @@ How to run this:
               'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"
           }
       }
+```
    
    next do the following:
-    c:\folder_example> Django\Scripts\activate.bat
-    (Django) c:\folder_example> cd LES-EventManager\EventManager\
+   
+    `c:\folder_example> Django\Scripts\activate.bat`
+    
+    `(Django) c:\folder_example> cd LES-EventManager\EventManager\`
+    
     (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py makemigrations
     (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate
     
