@@ -6,8 +6,7 @@ from Models.models import *
 
 def formsHome(request) :
 
-
-    formTypes = Formtype.objects.all()
+    #formTypes = Formtype.objects.all()
     errorMessage = None
     if not formTypes :
         errorMessage = "Error: No form types found on data base"
