@@ -72,6 +72,14 @@ class Formtype(models.Model):
     def __str__(self) :
         return self.typename
 
+    @staticmethod
+    def makeOptions() :
+        formTypes = Formtype.objects.all()
+        options=([(formType.id, formType.typename) for formType in formTypes])
+        return options
+
+    
+
     class Meta:
         managed = True
         db_table = 'formtype'
