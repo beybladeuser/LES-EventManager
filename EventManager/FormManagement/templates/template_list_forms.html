@@ -45,7 +45,7 @@
                                 Edit Form
                             </a>
                             |
-                            <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}">
+                            <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
                                 Delete Form
                             </a>
                         </div>
