@@ -94,6 +94,7 @@ def listFormsFromType(request, formTypeID = None) :
                 errorMessage = "Error: No forms of type " + formType[0].typename
             else :
                 request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(formTypeID)
+                request.session['delete_form_return_redirect'] = "/forms/listformsfromtype/" + str(formTypeID)
 
         else :
             errorMessage = "Error: Invalid form type"
@@ -104,7 +105,7 @@ def listFormsFromType(request, formTypeID = None) :
     template = loader.get_template('template_list_forms.html')
     context = {
         'forms' : forms,
-        'formType' : formType,
+        'formType' : formType[0],
         'errorMessage' : errorMessage,
     }
     return HttpResponse(template.render(context, request))
@@ -124,14 +125,18 @@ def createForm(request, formTypeID=None, formID=None) :
             formCreation_form = formCreation(request.POST)
             if formCreation_form.is_valid():
                 newForm = formCreation_form.save(formID, request.user)
+                request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(newForm.formTypeID)
                 return redirect("checkFormLayout", newForm.id)
 
         else:
             if formCreate :
-                formCreation_form = formCreation()
+                formCreation_form = formCreation(initial={
+                    'formType': formTypeID,
+                })
             else :
                 existing_form = Form.objects.get(pk=formID)
                 formCreation_form = formCreation(initial={
+                    'formId' : existing_form.id,
                     'formName': existing_form.formname,
                     'formType': existing_form.formtypeid_formtype.id,
                     'eventType': existing_form.eventtypeid.id
@@ -147,3 +152,20 @@ def createForm(request, formTypeID=None, formID=None) :
         'formCreation' : formCreation_form
     }
     return HttpResponse(template.render(context, request))
+
+
+def deleteForm_action(request, formID=None):
+    return_addr="formsHome"
+    return_addr = request.session.get('delete_form_return_redirect', return_addr)
+    if return_addr != formsHome :
+        del request.session['form_return_redirect']
+        request.session.modified = True
+    
+    if formID and Form.objects.filter(id=formID).exists() :
+        questionFormsRelations = QuestionsForm.objects.filter(formid_form=formID)
+        for questionFormsRelation in questionFormsRelations:
+            questionFormsRelation.delete()
+        
+        Form.objects.get(pk=formID).delete()
+
+    return redirect(return_addr)

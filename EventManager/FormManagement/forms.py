@@ -7,6 +7,7 @@ import datetime
 # Create your forms here.
 
 class formCreation(forms.Form):
+	formId = forms.CharField(widget=forms.HiddenInput, max_length=255, required=False)
 	formName = forms.CharField(label='Form Name', max_length=255, required=True)
 	OPTIONS_formType = Formtype.makeOptions()
 	formType = forms.CharField(widget=forms.Select(choices=OPTIONS_formType), label='Form Type', required=True)
@@ -15,6 +16,26 @@ class formCreation(forms.Form):
 
 	class Meta:
 		model = Formtype
+
+	def clean_eventType(self, *args, **kwargs):
+		formType = self.cleaned_data.get("formType")
+		eventType = self.cleaned_data.get("eventType")
+		formId = self.cleaned_data.get("formId")
+
+		temp = Form.objects.filter(eventtypeid=eventType, formtypeid_formtype=formType)
+		if not formId:
+			if formType == "1" and temp.exists() :
+				raise forms.ValidationError("Cannot have two proposal forms for the same event type")
+			else:
+				return eventType
+		else:
+			if formType == "1" and temp.exclude(id=formID).exists() :
+				raise forms.ValidationError("Cannot have two proposal forms for the same event type")
+			else:
+				return eventType
+
+		
+
 
 	def save(self, FormID = None, user = None):
 		if FormID and Form.objects.filter(id=FormID).exists():
