@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from FormManagement.models import Form, Formtype, QuestionsForm, Questions, Multipleoptions, Questiontype, Answer
 from Models.models import *
 
+from .forms import *
+
 def formsHome(request) :
 
     formTypes = Formtype.objects.all()
@@ -111,15 +113,37 @@ def listFormsFromType(request, formTypeID = None) :
 def createForm(request, formTypeID=None, formID=None) :
     formCreate = None
     errorMessage = None
-    if formTypeID :
-        if not formID :
+    if formTypeID and Formtype.objects.filter(id=formTypeID).exists() :
+        if not formID or not Form.objects.filter(id=formID).exists() :
             formCreate = True
     else :
         errorMessage = "Error: No form type specified"
+    
+    if not errorMessage :
+        if request.method == 'POST':
+            formCreation_form = formCreation(request.POST)
+            if formCreation_form.is_valid():
+                newForm = formCreation_form.save(formID, request.user)
+                return redirect("checkFormLayout", newForm.id)
+
+        else:
+            if formCreate :
+                formCreation_form = formCreation()
+            else :
+                existing_form = Form.objects.get(pk=formID)
+                formCreation_form = formCreation(initial={
+                    'formName': existing_form.formname,
+                    'formType': existing_form.formtypeid_formtype.id,
+                    'eventType': existing_form.eventtypeid.id
+                })
+    
+    
+
 
     template = loader.get_template('template_create_new_form.html')
     context = {
         'formCreate' : formCreate,
         'errorMessage' : errorMessage,
+        'formCreation' : formCreation_form
     }
     return HttpResponse(template.render(context, request))

@@ -53,6 +53,12 @@ class Eventtype(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     typename = models.CharField(db_column='TypeName', max_length=255)  # Field name made lowercase.
 
+    @staticmethod
+    def makeOptions() :
+        eventTypes = Eventtype.objects.all()
+        options=([(eventType.id, eventType.typename) for eventType in eventTypes])
+        return options
+
     class Meta:
         
         db_table = 'eventtype'
