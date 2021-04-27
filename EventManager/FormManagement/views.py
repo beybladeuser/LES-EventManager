@@ -114,11 +114,12 @@ def listFormsFromType(request, formTypeID = None) :
 def createForm(request, formTypeID=None, formID=None) :
     formCreate = None
     errorMessage = None
+    formCreation_form = None
     if formTypeID and Formtype.objects.filter(id=formTypeID).exists() :
         if not formID or not Form.objects.filter(id=formID).exists() :
             formCreate = True
     else :
-        errorMessage = "Error: No form type specified"
+        errorMessage = "Error: No form type specified or invalid form type"
     
     if not errorMessage :
         if request.method == 'POST':

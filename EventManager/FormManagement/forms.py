@@ -3,7 +3,6 @@ from .models import Formtype, Form
 from Models.models import Eventtype
 import datetime
 
-
 # Create your forms here.
 
 class formCreation(forms.Form):

@@ -1,11 +1,12 @@
 #criar form temos que dizer que tipo de form que é
 #so pode haver um formulario para cada tipo de evento
 #feed back e inscriçao é ilimitado
-from django.db import models
+from django.db import models, connection
 from django.contrib.auth.models import User
 from django.conf import settings
 
 from Models.models import *
+
 
 
 class Answer(models.Model):
@@ -43,6 +44,7 @@ class Form(models.Model):
     dateoflastedit = models.DateTimeField(db_column='DateOfLastEdit')  # Field name made lowercase.
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='CreatedBy', related_name='FormCreatedBy')
     lasteditedby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='LastEditedBy', related_name='FormLastEditedBy')
+    published = models.BooleanField(db_column='published', default=False)
 
     def __str__(self) :
         return self.formname
@@ -74,9 +76,13 @@ class Formtype(models.Model):
 
     @staticmethod
     def makeOptions() :
-        formTypes = Formtype.objects.all()
-        options=([(formType.id, formType.typename) for formType in formTypes])
-        return options
+        if "formtype" in connection.introspection.table_names() :
+            formTypes = Formtype.objects.all()
+            options=([(formType.id, formType.typename) for formType in formTypes])
+            return options
+
+        else:
+            return (("1", "No Database created"),)
 
     
 

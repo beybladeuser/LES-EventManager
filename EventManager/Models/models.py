@@ -5,7 +5,7 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
-from django.db import models
+from django.db import models, connection
 from FormManagement.models import *
 from AssetManagement.models import *
 from Sessions.models import *
@@ -55,9 +55,12 @@ class Eventtype(models.Model):
 
     @staticmethod
     def makeOptions() :
-        eventTypes = Eventtype.objects.all()
-        options=([(eventType.id, eventType.typename) for eventType in eventTypes])
-        return options
+        if "eventtype" in connection.introspection.table_names() :
+            eventTypes = Eventtype.objects.all()
+            options=([(eventType.id, eventType.typename) for eventType in eventTypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
     class Meta:
         
