@@ -108,5 +108,247 @@
 		"is_superuser": "1",
 		"is_staff":"1"
 	  }
+	},
+
+
+
+
+
+
+	{
+		"model": "AssetManagement.Campus",
+		"pk": 1,
+		"fields" :{
+			"campusname": "Gambelas"
+		}
+	},
+	{
+		"model": "AssetManagement.Campus",
+		"pk": 2,
+		"fields" :{
+			"campusname": "Portimão"
+		}
+	},
+	{
+		"model": "AssetManagement.Campus",
+		"pk": 3,
+		"fields" :{
+			"campusname": "Penha"
+		}
+	},
+
+
+
+
+
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 1,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 1"
+		}
+	},
+	
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 2,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 2"
+		}
+	},
+	
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 3,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 3"
+		}
+	},
+	
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 4,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 4"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 5,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 5"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 6,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 6"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 7,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 7"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 8,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 8"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 9,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 1"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 10,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 2"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 11,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 3"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 12,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 4"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 13,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 5"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 14,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 6"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 15,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 7"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 16,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 8"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 1"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 18,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 2"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 19,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 3"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 20,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 4"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 21,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 5"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 22,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 6"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 23,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 7"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 24,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 8"
+		}
 	}
+
+
+
+
+
   ]
