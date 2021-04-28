@@ -14,4 +14,5 @@ urlpatterns = [
     path('createform/', views.createForm, name='createForm'),
     path('createform/<int:formTypeID>/', views.createForm, name='createForm'),
     path('createform/<int:formTypeID>/<int:formID>/', views.createForm, name='createForm'),
+    path('deleteForm/<int:formID>/', views.deleteForm_action, name='deleteForm'),
 ]

@@ -51,6 +51,26 @@
 
 	
 
+	,
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 1,
+	  "fields": {
+		"typename": "Open Ended"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 2,
+	  "fields": {
+		"typename": "Multiple Choice"
+	  }
+	}
+
+
+
+
+
 	
 	,
 	{

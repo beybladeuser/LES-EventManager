@@ -8,6 +8,7 @@ from django.conf import settings
 from PreEventManagement.models import *
 
 
+
 class Answer(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     questionsid_questions = models.ForeignKey('Questions', models.DO_NOTHING, db_column='QuestionsID_Questions')  # Field name made lowercase.
@@ -43,6 +44,7 @@ class Form(models.Model):
     dateoflastedit = models.DateTimeField(db_column='DateOfLastEdit')  # Field name made lowercase.
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='CreatedBy', related_name='FormCreatedBy')
     lasteditedby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='LastEditedBy', related_name='FormLastEditedBy')
+    published = models.BooleanField(db_column='published', default=False)
 
     def __str__(self) :
         return self.formname
