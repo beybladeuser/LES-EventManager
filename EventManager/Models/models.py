@@ -83,7 +83,3 @@ class Notificacao(models.Model):
         db_table = 'notificacao'
 
 
-
-
-
-
