@@ -10,12 +10,19 @@ EventManager/Sessions/__pycache__
 
 
 
-EventManager/AssetManagement/migrations
+EventManager/AssetManagement/migrations/*
 !/EventManager/AssetManagement/migrations/__init__.py
-EventManager/EventManagement/migrations/__pycache__
-EventManager/FormManagement/migrations/__pycache__
-EventManager/Index/migrations/__pycache__
-EventManager/Models/migrations/__pycache__
-EventManager/PreEventManagement/migrations/__pycache__
-EventManager/Schedules/migrations/__pycache__
-EventManager/Sessions/migrations/__pycache__
+EventManager/EventManagement/migrations/*
+!/EventManager/EventManagement/migrations/__init__.py
+EventManager/FormManagement/migrations/*
+!/EventManager/FormManagement/migrations/__init__.py
+EventManager/Index/migrations/*
+!/EventManager/Index/migrations/__init__.py
+EventManager/Models/migrations/*
+!/EventManager/Models/migrations/__init__.py
+EventManager/PreEventManagement/migrations/*
+!/EventManager/PreEventManagement/migrations/__init__.py
+EventManager/Schedules/migrations/*
+!/EventManager/Schedules/migrations/__init__.py
+EventManager/Sessions/migrations/*
+!/EventManager/Sessions/migrations/__init__.py
