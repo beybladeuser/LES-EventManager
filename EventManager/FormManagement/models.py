@@ -74,9 +74,13 @@ class Formtype(models.Model):
 
     @staticmethod
     def makeOptions() :
-        formTypes = Formtype.objects.all()
-        options=([(formType.id, formType.typename) for formType in formTypes])
-        return options
+        if "formtype" in connection.introspection.table_names() :
+            formTypes = Formtype.objects.all()
+            options=([(formType.id, formType.typename) for formType in formTypes])
+            return options
+
+        else:
+            return (("1", "No Database created"),)
 
     
 
