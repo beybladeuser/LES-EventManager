@@ -52,9 +52,12 @@ class Eventtype(models.Model):
 
     @staticmethod
     def makeOptions() :
-        eventTypes = Eventtype.objects.all()
-        options=([(eventType.id, eventType.typename) for eventType in eventTypes])
-        return options
+        if "eventtype" in connection.introspection.table_names() :
+            eventTypes = Eventtype.objects.all()
+            options=([(eventType.id, eventType.typename) for eventType in eventTypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
     class Meta:
         
