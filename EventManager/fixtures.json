@@ -34,14 +34,14 @@
 
 	,
 	{
-	  "model": "Models.Eventtype",
+	  "model": "PreEventManagement.Eventtype",
 	  "pk": 1,
 	  "fields": {
 		"typename": "Palestra"
 	  }
 	},
 	{
-	  "model": "Models.Eventtype",
+	  "model": "PreEventManagement.Eventtype",
 	  "pk": 2,
 	  "fields": {
 		"typename": "Summer Course"
