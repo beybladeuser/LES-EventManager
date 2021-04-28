@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from Models.models import *
+from PreEventManagement.models import *
 
 
 class Answer(models.Model):
