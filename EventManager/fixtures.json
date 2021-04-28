@@ -115,6 +115,128 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 1,
+		"fields" :{
+			"assetname": "Microfone YETI",
+			"quantity": 10
+		}
+	},
+
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 2,
+		"fields" :{
+			"assetname": "Microfone XXM",
+			"quantity": 12
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 3,
+		"fields" :{
+			"assetname": "Microfone de Mesa YY",
+			"quantity": 22
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 4,
+		"fields" :{
+			"assetname": "Projetor IOA",
+			"quantity": 9
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 5,
+		"fields" :{
+			"assetname": "Projetor YAU",
+			"quantity": 10
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 6,
+		"fields" :{
+			"assetname": "Laptop GG",
+			"quantity": 10
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 7,
+		"fields" :{
+			"assetname": "Laptop ASUS",
+			"quantity": 10
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 8,
+		"fields" :{
+			"assetname": "Laptop Magalhães",
+			"quantity": 120
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 9,
+		"fields" :{
+			"assetname": "IMac PRO",
+			"quantity": 2
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 10,
+		"fields" :{
+			"assetname": "Auscutadores OZONE",
+			"quantity": 20
+		}
+	},
+
+
+
+
+
+
+
+
+
+
 	{
 		"model": "AssetManagement.Campus",
 		"pk": 1,
