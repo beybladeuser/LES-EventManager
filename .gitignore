@@ -10,7 +10,8 @@ EventManager/Sessions/__pycache__
 
 
 
-EventManager/AssetManagement/migrations/__pycache__
+EventManager/AssetManagement/migrations
+
 EventManager/EventManagement/migrations/__pycache__
 EventManager/FormManagement/migrations/__pycache__
 EventManager/Index/migrations/__pycache__
