@@ -59,7 +59,7 @@ How to run this:
     
     (Django) c:\folder_example> cd LES-EventManager\EventManager\
     
-    (optional e melhor nao fazer)(Django) c:\folder_example\LES-EventManager\EventManager> python manage.py makemigrations (n recomendo)
+    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py makemigrations
     
     (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate
 ```
