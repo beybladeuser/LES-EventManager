@@ -35,7 +35,7 @@ class Asset(models.Model):
 class Building(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     campusid = models.ForeignKey('Campus', models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.
-    buildingname = models.CharField(db_column='BuildingName', unique=True, max_length=255)  # Field name made lowercase.
+    buildingname = models.CharField(db_column='BuildingName', max_length=255)  # Field name made lowercase.
 
     def __str__(self):
        return self.buildingname
@@ -56,7 +56,7 @@ class Campus(models.Model):
     def __str__(self):
        return self.campusname
 
-
+    
 
 class Equipment(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
