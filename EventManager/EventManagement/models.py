@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 from PreEventManagement.models import *
+from FormManagement.models import *
 
 class Resgistration(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
@@ -11,11 +12,10 @@ class Resgistration(models.Model):
     waspresent = models.IntegerField(db_column='WasPresent', blank=True, null=True)  # Field name made lowercase.
     participantuserid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
 
-def cancelregistrations(self) :
-    Answer.objects.filter(Registrationid_answer=id_registrations , participantuserid_registrations=id.authUser).delete()
-    return redirect('home.html')
+    def cancelregistrations(self, user) :
+        Answer.objects.filter(resgistrationid=self.id).delete()
+        return True
 
 
     class Meta:
-        
         db_table = 'resgistration'
