@@ -15,6 +15,9 @@ def home(request) :
 
 
 
+
+
+
 def consultar_assets(request):
     template = loader.get_template('ViewAssets.html')
     context = {
