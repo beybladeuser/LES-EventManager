@@ -1,4 +1,11 @@
-from django.db import models
+from django.db import models, connection
+from django.contrib.auth.models import User
+from django.conf import settings
+
+
+from FormManagement.models import *
+from AssetManagement.models import *
+from Sessions.models import *
 
 # Create your models here.
 class AssetEvent(models.Model):
@@ -31,7 +38,7 @@ class Event(models.Model):
     formfeedbackid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormFeedBackID', related_name='Event2feedbackForm')  # Field name made lowercase.
     campusid = models.ForeignKey(Campus, models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.
     wasvalidated = models.TextField(db_column='wasValidated')  # Field name made lowercase. This field type is a guess.
-    proponentid = models.ForeignKey('Sessions.Utilizador', models.DO_NOTHING, db_column='ProponentID')  # Field name made lowercase.
+    proponentid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ProponentID')  # Field name made lowercase.
     eventname = models.CharField(db_column='eventName', max_length=255)  # Field name made lowercase.
 
     class Meta:

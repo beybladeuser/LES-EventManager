@@ -11,9 +11,6 @@ from AssetManagement.models import *
 from Sessions.models import *
 
 
-
-
-
 class Informacaomensagem(models.Model):
     data = models.DateTimeField()
     pendente = models.IntegerField()
@@ -84,6 +81,5 @@ class Notificacao(models.Model):
     class Meta:
         
         db_table = 'notificacao'
-
 
 

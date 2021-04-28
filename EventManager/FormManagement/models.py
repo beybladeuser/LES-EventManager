@@ -5,15 +5,15 @@ from django.db import models, connection
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from Models.models import *
+from PreEventManagement.models import *
 
 
 
 class Answer(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     questionsid_questions = models.ForeignKey('Questions', models.DO_NOTHING, db_column='QuestionsID_Questions')  # Field name made lowercase.
-    eventid_event = models.ForeignKey('Models.Event', models.DO_NOTHING, db_column='EventID_Event', blank=True, null=True)  # Field name made lowercase.
-    resgistrationid = models.ForeignKey('Models.Resgistration', models.DO_NOTHING, db_column='ResgistrationID', blank=True, null=True)  # Field name made lowercase.
+    eventid_event = models.ForeignKey('PreEventManagement.Event', models.DO_NOTHING, db_column='EventID_Event', blank=True, null=True)  # Field name made lowercase.
+    resgistrationid = models.ForeignKey('EventManagement.Resgistration', models.DO_NOTHING, db_column='ResgistrationID', blank=True, null=True)  # Field name made lowercase.
     answer = models.CharField(max_length=255)
     dateofcreation = models.DateTimeField(db_column='DateOfCreation')  # Field name made lowercase.
 
@@ -37,7 +37,7 @@ class Answer(models.Model):
 # Create your models here.
 class Form(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    eventtypeid = models.ForeignKey('Models.Eventtype', models.DO_NOTHING, db_column='EventTypeID')  # Field name made lowercase.
+    eventtypeid = models.ForeignKey('PreEventManagement.Eventtype', models.DO_NOTHING, db_column='EventTypeID')  # Field name made lowercase.
     formtypeid_formtype = models.ForeignKey('Formtype', models.DO_NOTHING, db_column='FormTypeID_FormType')  # Field name made lowercase.
     formname = models.CharField(db_column='FormName', max_length=255)  # Field name made lowercase.
     dateofcreation = models.DateTimeField(db_column='DateOfCreation')  # Field name made lowercase.
