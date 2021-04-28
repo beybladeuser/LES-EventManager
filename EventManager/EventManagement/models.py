@@ -9,8 +9,8 @@ class Resgistration(models.Model):
     participantuserid = models.ForeignKey(Participante, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
 
 def cancelregistrations(self) :
-        return Answer.objects.filter(Registrationid_answer=id_registrations , participantuserid_registrations=id.authUser).delete()
-
+    Answer.objects.filter(Registrationid_answer=id_registrations , participantuserid_registrations=id.authUser).delete()
+    return redirect('home.html')
 
 
     class Meta:
