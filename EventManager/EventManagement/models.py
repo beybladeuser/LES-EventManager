@@ -5,6 +5,7 @@ from django.conf import settings
 from PreEventManagement.models import *
 from FormManagement.models import *
 
+
 class Resgistration(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     eventid_event = models.ForeignKey('PreEventManagement.Event', models.DO_NOTHING, db_column='EventID_Event')  # Field name made lowercase.
@@ -16,6 +17,7 @@ class Resgistration(models.Model):
         Answer.objects.filter(resgistrationid=self.id).delete()
         return True
 
+   
 
     class Meta:
         db_table = 'resgistration'
