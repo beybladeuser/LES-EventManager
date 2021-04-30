@@ -95,6 +95,7 @@ class Questions(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     questiontypeid_questiontype = models.ForeignKey('Questiontype', models.DO_NOTHING, db_column='QuestionTypeID_QuestionType')  # Field name made lowercase.
     question = models.CharField(max_length=255)
+    required = models.BooleanField(db_column='Required', default=False)
     
     dateofcreation = models.DateTimeField(db_column='DateOfCreation')  # Field name made lowercase.
     dateoflastedit = models.DateTimeField(db_column='DateOfLastEdit')  # Field name made lowercase.
@@ -113,6 +114,14 @@ class Questions(models.Model):
     
     def getAllAnswers(self) :
         return Answer.objects.filter(questionsid_questions=self.id)
+
+    def makeOptions(self) :
+        if ("questions" and "multipleoptions") in connection.introspection.table_names() :
+            options=([(option.id, option.option) for option in self.options])
+            return options
+
+        else:
+            return (("1", "No Database created"),)
     
 
     options = property(getMultipleOptions)

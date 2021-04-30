@@ -170,3 +170,24 @@ def deleteForm_action(request, formID=None):
         Form.objects.get(pk=formID).delete()
 
     return redirect(return_addr)
+
+
+def testForm(request, formID = 1):
+    if request.method == 'POST':
+        form = EventManagerForm(request.POST, eventManagerFormID=formID, associatedRegistration=1, associatedEvent=None)
+        if form.is_valid():
+            answeredForm = form.save()
+            request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(answeredForm.formtypeid_formtype.id)
+            return redirect("checkFormLayout", answeredForm.id)
+    
+    else:
+        form = EventManagerForm(eventManagerFormID=formID, associatedRegistration=1, associatedEvent=None)
+    
+    
+
+
+    template = loader.get_template('template_test_form.html')
+    context = {
+        'form' : form,
+    }
+    return HttpResponse(template.render(context, request))
