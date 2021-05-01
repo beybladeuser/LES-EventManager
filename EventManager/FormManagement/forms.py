@@ -17,11 +17,16 @@ class formCreation(forms.Form):
 	class Meta:
 		model = Formtype
 
+	def clean(self, *args, **kwargs):
+		formType = self.cleaned_data.get("formType")
+		formName = self.cleaned_data.get("formName")
+		if Form.objects.filter(formname=formName, formtypeid_formtype=formType).exists() :
+			self.add_error("formName", 'Can\'t have duplicate form names of forms of same type')
+
 	def clean_eventType(self, *args, **kwargs):
 		formType = self.cleaned_data.get("formType")
 		eventType = self.cleaned_data.get("eventType")
 		formId = self.cleaned_data.get("formId")
-
 		temp = Form.objects.filter(eventtypeid=eventType, formtypeid_formtype=formType)
 		if not formId:
 			if formType == "1" and temp.exists() :
@@ -107,6 +112,19 @@ class EventManagerForm(forms.Form) :
 		if (self.registration and self.event) or (not self.registration and not self.event) :
 			self.hasError
 
+	def clean(self) :
+		if self.hasError :
+			return None
+		for question in self.form.formquestions :
+			field_name = "question"+str(question.id)
+			if self.cleaned_data[field_name] :
+				if self.event and question.getAnswersForForm(self.form.id).filter(eventid_event=self.event.id).exists() :
+					self.add_error(field_name, 'Cant Answer to this form twice')
+				elif self.registration and question.getAnswersForForm(self.form.id).filter(resgistrationid=self.registration.id).exists() :
+					self.add_error(field_name, 'Cant Answer to this form twice')
+
+
+
 	def save(self) :
 		if self.hasError :
 			return None
@@ -116,6 +134,7 @@ class EventManagerForm(forms.Form) :
 				
 				answerModel = Answer()
 				answerModel.questionsid_questions = question
+				answerModel.associatedformid = self.form
 				if self.event:
 					answerModel.eventid_event = self.event
 				elif self.registration:

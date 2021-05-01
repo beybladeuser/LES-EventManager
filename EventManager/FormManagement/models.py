@@ -11,6 +11,7 @@ from PreEventManagement.models import *
 
 class Answer(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    associatedformid = models.ForeignKey('Form', models.DO_NOTHING, db_column='AssociatedFormID', default=1)
     questionsid_questions = models.ForeignKey('Questions', models.DO_NOTHING, db_column='QuestionsID_Questions')  # Field name made lowercase.
     eventid_event = models.ForeignKey('PreEventManagement.Event', models.DO_NOTHING, db_column='EventID_Event', blank=True, null=True)  # Field name made lowercase.
     resgistrationid = models.ForeignKey('EventManagement.Resgistration', models.DO_NOTHING, db_column='ResgistrationID', blank=True, null=True)  # Field name made lowercase.
@@ -114,6 +115,9 @@ class Questions(models.Model):
     
     def getAllAnswers(self) :
         return Answer.objects.filter(questionsid_questions=self.id)
+
+    def getAnswersForForm(self, formID) :
+        return self.allanswers.filter(associatedformid=formID)
 
     def makeOptions(self) :
         if ("questions" and "multipleoptions") in connection.introspection.table_names() :
