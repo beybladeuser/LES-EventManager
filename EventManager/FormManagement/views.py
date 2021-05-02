@@ -24,6 +24,7 @@ def formsHome(request) :
 def checkFormLayout(request, formID = None, return_addr = '/forms/listformsfromtype/') :
     errorMessage = None
     form = None
+    canEdit = False
     if formID :
         form_query = Form.objects.filter(id=formID)
         if not form_query :
@@ -33,6 +34,9 @@ def checkFormLayout(request, formID = None, return_addr = '/forms/listformsfromt
     
     else :
         errorMessage = "Error: No Form ID given"
+
+    if form and form.canEdit(request.user) :
+        canEdit = True
 
     return_addr = request.session.get('form_return_redirect', return_addr)
     #if return_addr != '/forms/listformsfromtype/' :
@@ -45,6 +49,7 @@ def checkFormLayout(request, formID = None, return_addr = '/forms/listformsfromt
         'form' : form,
         'return_addr' : return_addr,
         'errorMessage' : errorMessage,
+        'canEdit' : canEdit,
     }
     return HttpResponse(template.render(context, request))
 
@@ -115,28 +120,37 @@ def createForm(request, formTypeID=None, formID=None) :
     formCreate = None
     errorMessage = None
     formCreation_form = None
-    if formTypeID and Formtype.objects.filter(id=formTypeID).exists() :
-        if not formID or not Form.objects.filter(id=formID).exists() :
-            formCreate = True
-    else :
-        errorMessage = "Error: No form type specified or invalid form type"
+
+    if formID and Form.objects.filter(id=formID).exists():
+        formToEdit = Form.objects.get(pk=formID)
+        if not formToEdit.canEdit(request.user) :
+            errorMessage = "Error: Cannot edit this form"
+    elif request.user.groups.filter(pk=2).exists():
+        errorMessage = "Error: Participant cannot create forms, account must be Proponent or Administrator"
+
+    if not errorMessage :
+        if formTypeID and Formtype.objects.filter(id=formTypeID).exists() :
+            if not formID or not Form.objects.filter(id=formID).exists() :
+                formCreate = True
+        else :
+            errorMessage = "Error: No form type specified or invalid form type"
     
     if not errorMessage :
         if request.method == 'POST':
-            formCreation_form = formCreation(request.POST)
+            formCreation_form = formCreation(request.POST, currentUser=request.user)
             if formCreation_form.is_valid():
-                newForm = formCreation_form.save(formID, request.user)
+                newForm = formCreation_form.save(formID)
                 request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(newForm.formtypeid_formtype.id)
                 return redirect("checkFormLayout", newForm.id)
 
         else:
             if formCreate :
-                formCreation_form = formCreation(initial={
+                formCreation_form = formCreation(currentUser=request.user,initial={
                     'formType': formTypeID,
                 })
             else :
                 existing_form = Form.objects.get(pk=formID)
-                formCreation_form = formCreation(initial={
+                formCreation_form = formCreation(currentUser=request.user,initial={
                     'formId' : existing_form.id,
                     'formName': existing_form.formname,
                     'formType': existing_form.formtypeid_formtype.id,
@@ -158,18 +172,139 @@ def createForm(request, formTypeID=None, formID=None) :
 def deleteForm_action(request, formID=None):
     return_addr="formsHome"
     return_addr = request.session.get('delete_form_return_redirect', return_addr)
-    if return_addr != formsHome :
+    if return_addr != 'formsHome' :
         del request.session['form_return_redirect']
         request.session.modified = True
     
     if formID and Form.objects.filter(id=formID).exists() :
-        questionFormsRelations = QuestionsForm.objects.filter(formid_form=formID)
-        for questionFormsRelation in questionFormsRelations:
-            questionFormsRelation.delete()
-        
-        Form.objects.get(pk=formID).delete()
+        formToDelete = Form.objects.get(pk=formID)
+        if request.user.is_authenticated and formToDelete.canEdit(request.user) :
+            questionFormsRelations = QuestionsForm.objects.filter(formid_form=formID)
+            for questionFormsRelation in questionFormsRelations:
+                questionFormsRelation.delete()
+
+            formToDelete.delete()
 
     return redirect(return_addr)
+
+
+def createQuestion(request, questionID=None,formID=None):
+    questionCreate = None
+    errorMessage = None
+    questionCreation_form = None
+    #formCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=None, questionToEdit=None)
+
+    if questionID and Questions.objects.filter(id=questionID).exists():
+        questionToEdit = Questions.objects.get(pk=questionID)
+        if not questionToEdit.canEdit(request.user) :
+            errorMessage = "Error: Cannot edit this question"
+    elif request.user.groups.filter(pk=2).exists():
+        errorMessage = "Error: Participant cannot create questions, account must be Proponent or Administrator"
+
+    if formID and Form.objects.filter(id=formID).exists():
+        formToEdit = Form.objects.get(pk=formID)
+        if not formToEdit.canEdit(request.user):
+            errorMessage = "Error: Cannot edit this form"
+
+    if not questionID or not Questions.objects.filter(id=questionID).exists() :
+        questionCreate = True
+
+
+    
+
+    if not errorMessage :
+        if questionID and Questions.objects.filter(id=questionID).exists() :
+            questionToEdit = Questions.objects.get(id=questionID)
+        else :
+            questionToEdit = None
+        
+        if formID or Form.objects.filter(id=formID).exists() :
+            associatedForm = Form.objects.get(id=formID)
+        else :
+            associatedForm = None
+
+        if request.method == 'POST':
+            questionCreation_form = openEndedQuestionCreation(request.POST, currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit)
+            if questionCreation_form.is_valid():
+                newForm = questionCreation_form.save()
+
+                if associatedForm :
+                    return redirect("checkFormLayout", associatedForm.id)
+                else :
+                    return redirect("listQuestions")
+
+        else:
+            if questionToEdit :
+                questionCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit,initial={
+                    'question': questionToEdit.question,
+                })
+            else :
+                questionCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit)
+
+    template = loader.get_template('template_create_new_question.html')
+    context = {
+        'questionCreate' : questionCreate,
+        'errorMessage' : errorMessage,
+        'questionCreation' : questionCreation_form
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def listQuestions(request, formID=None) :
+    questions = None
+    errorMessage = None
+    formToAssociate = None
+
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToAssociate = Form.objects.get(id=formID)
+        if not formToAssociate.canEdit(request.user) :
+            formToAssociate = None
+
+    
+
+    if request.user.groups.filter(id=2).exists() :
+        errorMessage = "Error: participant cant view all questions"
+    else :
+        questions = Questions.objects.all()
+
+    template = loader.get_template('template_list_questions.html')
+    context = {
+        'errorMessage' : errorMessage,
+        'questions' : questions,
+        'formToAssociate' : formToAssociate,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def associateQuestion(request, questionID=None, formID=None) :
+    if questionID and Questions.objects.filter(id=questionID).exists() :
+        question = Questions.objects.get(id=questionID)
+    else :
+        return redirect('listQuestions')
+
+    if formID and Form.objects.filter(id=formID).exists() :
+        form = Form.objects.get(id=formID)
+    else :
+        return redirect('listQuestions')
+
+    form.associateQuestion(question, request.user)
+
+    return redirect('listQuestions', form.id)
+
+def deassociateQuestion(request, questionID=None, formID=None) :
+    if questionID and Questions.objects.filter(id=questionID).exists() :
+        question = Questions.objects.get(id=questionID)
+    else :
+        return redirect('checkFormLayout')
+
+    if formID and Form.objects.filter(id=formID).exists() :
+        form = Form.objects.get(id=formID)
+    else :
+        return redirect('checkFormLayout')
+
+    form.deassociateQuestion(question, request.user)
+
+    return redirect('checkFormLayout', form.id)
 
 
 def testForm(request, formID = 1):

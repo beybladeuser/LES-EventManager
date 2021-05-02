@@ -14,7 +14,16 @@ urlpatterns = [
     path('createform/', views.createForm, name='createForm'),
     path('createform/<int:formTypeID>/', views.createForm, name='createForm'),
     path('createform/<int:formTypeID>/<int:formID>/', views.createForm, name='createForm'),
-    path('deleteForm/<int:formID>/', views.deleteForm_action, name='deleteForm'),
+    path('deleteform/<int:formID>/', views.deleteForm_action, name='deleteForm'),
+
+    path('createquestion/<int:questionID>/<int:formID>/', views.createQuestion, name='createQuestion'),
+
+    path('listquestions/', views.listQuestions, name='listQuestions'),
+    path('listquestions/<int:formID>', views.listQuestions, name='listQuestions'),
+
+
+    path('associatequestion/<int:questionID>/<int:formID>/', views.associateQuestion, name='associateQuestion'),
+    path('deassociatequestion/<int:questionID>/<int:formID>/', views.deassociateQuestion, name='deassociateQuestion'),
 
 
     path('test/', views.testForm, name='test'),

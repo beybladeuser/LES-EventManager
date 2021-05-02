@@ -1,5 +1,5 @@
 from django import forms
-from .models import Formtype, Form, Answer, Multipleoptions
+from .models import Formtype, Form, Answer, Multipleoptions, Questiontype, Questions, QuestionsForm
 from PreEventManagement.models import Eventtype
 from EventManagement.models import Resgistration
 import datetime
@@ -7,6 +7,7 @@ import datetime
 # Create your forms here.
 
 class formCreation(forms.Form):
+	user = None
 	formId = forms.CharField(widget=forms.HiddenInput, max_length=255, required=False)
 	formName = forms.CharField(label='Form Name', max_length=255, required=True)
 	OPTIONS_formType = Formtype.makeOptions()
@@ -14,10 +15,27 @@ class formCreation(forms.Form):
 	OPTIONS_eventType = Eventtype.makeOptions()
 	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType), label='Event Type', required=True)
 
+	def __init__(self, *args, **kwargs):
+		if kwargs :
+			self.user = kwargs.pop('currentUser', None)
+		super().__init__(*args, **kwargs)
+
 	class Meta:
 		model = Formtype
 
 	def clean(self, *args, **kwargs):
+
+		formId = self.cleaned_data.get("formId")
+		if not self.user :
+			self.add_error("eventType", 'Must be logged in to perform this action')
+			return
+		
+		if formId and Form.objects.filter(id=formId).exists():
+			form = Form.objects.get(id=formId)
+			if form.createdby.id != self.user.id and not self.user.groups.filter(pk=1).exists() :
+				self.add_error("eventType", 'Not allowed to edit this form')
+				return
+
 		formType = self.cleaned_data.get("formType")
 		formName = self.cleaned_data.get("formName")
 		if Form.objects.filter(formname=formName, formtypeid_formtype=formType).exists() :
@@ -39,10 +57,7 @@ class formCreation(forms.Form):
 			else:
 				return eventType
 
-		
-
-
-	def save(self, FormID = None, user = None):
+	def save(self, FormID = None):
 		if FormID and Form.objects.filter(id=FormID).exists():
 			newForm = Form.objects.get(pk=FormID)
 		else :
@@ -62,13 +77,70 @@ class formCreation(forms.Form):
 		newForm.dateoflastedit = datetime.datetime.now()
 
 		if not FormID :
-			newForm.createdby = user
+			newForm.createdby = self.user
 		
-		newForm.lasteditedby = user
+		newForm.lasteditedby = self.user
 		
 
 		newForm.save()
 		return newForm
+
+
+class openEndedQuestionCreation(forms.Form):
+	user = None
+	form = None
+	questionToEdit = None
+	question = forms.CharField(label='Question', max_length=255, required=True)
+
+	def __init__(self, *args, **kwargs):
+		if kwargs :
+			self.user = kwargs.pop('currentUser', None)
+			self.form = kwargs.pop('associatedForm', None)
+			self.questionToEdit = kwargs.pop('questionToEdit', None)
+		super().__init__(*args, **kwargs)
+
+	def clean(self, *args, **kwargs):
+
+		if not self.user :
+			self.add_error("question", 'Must be logged in to perform this action')
+			return
+		
+		if self.questionToEdit and self.questionToEdit.createdby.id != self.user.id and not self.user.groups.filter(pk=1).exists():
+			self.add_error("question", 'Not allowed to edit this form')
+			return
+
+		question = self.cleaned_data.get("question")
+		if Questions.objects.filter(question=question).exists() :
+			self.add_error("question", 'Can\'t have duplicate questions')
+
+	def save(self) :
+		newQuestion = None
+		if self.questionToEdit :
+			newQuestion = self.questionToEdit
+		else :
+			newQuestion = Questions()
+
+		question = self.cleaned_data.get("question")
+		newQuestion.question = question
+		newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
+
+		if not self.questionToEdit :
+			newQuestion.createdby = self.user
+			newQuestion.dateofcreation = datetime.datetime.now()
+		
+		newQuestion.lasteditedby = self.user
+		newQuestion.dateoflastedit = datetime.datetime.now()
+
+		newQuestion.save()
+
+		if self.form :
+			self.form.associateQuestion(newQuestion, self.user)
+
+		return newQuestion
+
+
+
+
 
 
 #para inicializar este form este deve estar na forma "form = EventManagerForm(eventManagerFormID=<formID>, associatedRegistration=<resID>, associatedEvent=<EvID>)"

@@ -42,10 +42,9 @@
                         <div class="card-body">
                             <b>Question of type: </b>{{question.questiontypeid_questiontype.typename}}<br>
                             <b>Created by: </b>{{question.createdby.username}}<b> on: </b>{{question.dateofcreation}}<br>
-                            <b>Last Edited by: </b>{{question.lasteditedby.username}}<b> on: </b>{{question.dateoflastedit}}
+                            <b>Last Edited by: </b>{{question.lasteditedby.username}}<b> on: </b>{{question.dateoflastedit}}<br><br>
 
                             {% if question.options %}
-                                <br><br>
                                 <b>Options:</b>
                                 <p>
 
@@ -54,47 +53,58 @@
                                     {% endfor %}
                                 </p>
                             {% endif %}
+                            <a class="btn btn-sm" href="">
+                                <b>Add option</b>
+                            </a>
                         </div>
                         <div class="card-footer">
-                            <a class="btn btn-lg" href="">
-                                Edit Question
-                            </a>
-                            |
-                            <a class="btn btn-lg" href="">
-                                Remove Question
-                            </a>
+                            {% if canEdit %}
+                                <a class="btn btn-lg" href="{% url 'createQuestion' question.id form.id %}">
+                                    Rename Question
+                                </a>
+                                |
+                                <a class="btn btn-lg" href="{% url 'deassociateQuestion' question.id form.id %}" onclick="return confirm('Are you sure?');">
+                                    Remove Question
+                                </a>
+                            {% else %}
+                                <a class="btn btn-lg">
+                                    Can't edit question
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         {% endfor %}
 
-        <div class="row my-3" onclick="toggleAddQuestionOptions()">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <div class="btn btn-lg">
-                    Add Question
+        {% if canEdit %}
+            <div class="row my-3" onclick="toggleAddQuestionOptions()">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <div class="btn btn-lg">
+                        Add Question
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row my-3" style="display: none;" id="addExis">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <a class="btn btn-lg" href="">
-                    Add from existing questions
-                </a>
+            <div class="row my-3" style="display: none;" id="addExis">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <a class="btn btn-lg" href="{% url 'listQuestions' form.id %}">
+                        Add from existing questions
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <div class="row my-3" style="display: none;" id="addNew">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-8">
-                <a class="btn btn-lg" href="">
-                    Create New
-                </a>
+            <div class="row my-3" style="display: none;" id="addNew">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <a class="btn btn-lg" href="{% url 'createQuestion' 0 form.id %}">
+                        Create New
+                    </a>
+                </div>
             </div>
-        </div>
+        {% endif %}
 
     {% endif %}
 

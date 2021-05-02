@@ -7,6 +7,8 @@ from django.conf import settings
 
 from PreEventManagement.models import *
 
+import datetime
+
 
 
 class Answer(models.Model):
@@ -60,6 +62,29 @@ class Form(models.Model):
         Form_Questions = QuestionsForm.objects.filter(formid_form=self.id)
         Questions_Associated_with_form = [x.questionsid_questions for x in Form_Questions]
         return Questions_Associated_with_form
+
+    def associateQuestion(self, question, user) :
+        if user.id == self.createdby.id or user.groups.filter(pk=1).exists() :
+            if not QuestionsForm.objects.filter(questionsid_questions=question, formid_form=self):
+                form_question_association = QuestionsForm()
+                form_question_association.questionsid_questions = question
+                form_question_association.formid_form = self
+                form_question_association.save()
+                self.dateoflastedit = datetime.datetime.now()
+                self.lasteditedby = user
+                self.save()
+
+    def deassociateQuestion(self, question, user) :
+        if self.canEdit(user) :
+            if QuestionsForm.objects.filter(questionsid_questions=question, formid_form=self):
+                QuestionsForm.objects.get(questionsid_questions=question, formid_form=self).delete()
+                self.dateoflastedit = datetime.datetime.now()
+                self.lasteditedby = user
+                self.save()
+
+    def canEdit(self, user) :
+        return user.id == self.createdby.id or user.groups.filter(pk=1).exists()
+
 
     formquestions = property(getQuestions)
 
@@ -126,11 +151,21 @@ class Questions(models.Model):
 
         else:
             return (("1", "No Database created"),)
+
+    def getAssociatedForms(self) :
+        questionsForms = QuestionsForm.objects.filter(questionsid_questions=self)
+        associatedForms = [x.formid_form for x in questionsForms]
+        return associatedForms
+
+    def canEdit(self, user) :
+        return user.groups.filter(pk=1).exists() or self.createdby.id == user.id
     
 
     options = property(getMultipleOptions)
 
     allanswers = property(getAllAnswers)
+
+    associatedforms = property(getAssociatedForms)
 
     class Meta:
         managed = True
@@ -155,6 +190,16 @@ class Questiontype(models.Model):
 
     def __str__(self) :
         return self.typename
+
+    @staticmethod
+    def makeOptions() :
+        if "questiontype" in connection.introspection.table_names() :
+            questionTypes = Questiontype.objects.all()
+            options=([(questionType.id, questionType.typename) for questionType in questionTypes])
+            return options
+
+        else:
+            return (("1", "No Database created"),)
 
     class Meta:
         managed = True
