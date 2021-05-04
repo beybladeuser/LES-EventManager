@@ -52,7 +52,7 @@ class formCreation(forms.Form):
 			else:
 				return eventType
 		else:
-			if formType == "1" and temp.exclude(id=formID).exists() :
+			if formType == "1" and temp.exclude(id=formId).exists() :
 				raise forms.ValidationError("Cannot have two proposal forms for the same event type")
 			else:
 				return eventType
