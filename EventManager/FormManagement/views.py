@@ -35,21 +35,27 @@ def checkFormLayout(request, formID = None, return_addr = '/forms/listformsfromt
     else :
         errorMessage = "Error: No Form ID given"
 
-    if form and form.canEdit(request.user) :
-        canEdit = True
+    if form :
+        form.canEdit = form.canEdit(request.user)
+        request.session["deleteOption_form_redirect"] = formID
+        request.session["createOption_form_redirect"] = formID
+
 
     return_addr = request.session.get('form_return_redirect', return_addr)
     #if return_addr != '/forms/listformsfromtype/' :
     #    del request.session['form_return_redirect']
     #    request.session.modified = True
-
     
+    questions = form.formquestions
+    for question in questions :
+        question.canEdit = question.canEdit(request.user)
+
     template = loader.get_template('template_show_form_layout.html')
     context = {
         'form' : form,
+        'questions' : questions,
         'return_addr' : return_addr,
         'errorMessage' : errorMessage,
-        'canEdit' : canEdit,
     }
     return HttpResponse(template.render(context, request))
 
@@ -106,6 +112,8 @@ def listFormsFromType(request, formTypeID = None) :
     else :
         errorMessage = "Error: No form type given"
 
+    for form in forms :
+        form.canEdit = form.canEdit(request.user)
 
     template = loader.get_template('template_list_forms.html')
     context = {
@@ -266,6 +274,16 @@ def listQuestions(request, formID=None) :
         errorMessage = "Error: participant cant view all questions"
     else :
         questions = Questions.objects.all()
+        if formToAssociate :
+            questions = [x for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
+        for question in questions :
+            question.canEdit = question.canEdit(request.user)
+        
+        if request.session.get("deleteOption_form_redirect") :
+            del request.session["deleteOption_form_redirect"]
+        if request.session.get("createOption_form_redirect") :
+            del request.session["createOption_form_redirect"]
+        request.session.modified = True
 
     template = loader.get_template('template_list_questions.html')
     context = {
@@ -306,6 +324,91 @@ def deassociateQuestion(request, questionID=None, formID=None) :
 
     return redirect('checkFormLayout', form.id)
 
+def createOption(request, questionID=None, optionID=None) :
+    optionCreate = None
+    errorMessage = None
+    optionCreation_form = None
+    #formCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=None, questionToEdit=None)
+
+    if questionID and Questions.objects.filter(id=questionID).exists():
+        questionToEdit = Questions.objects.get(pk=questionID)
+        if not questionToEdit.canEdit(request.user) :
+            errorMessage = "Error: Cannot edit this question"
+
+    if not optionID or not Multipleoptions.objects.filter(id=optionID).exists() :
+        optionCreate = True
+
+    if not errorMessage :
+        optionToEdit = None
+        if optionID and Multipleoptions.objects.filter(id=optionID).exists() :
+            optionToEdit = Multipleoptions.objects.get(id=optionID)
+            
+        associatedQuestion = Questions.objects.get(id=questionID)
+
+        if request.method == 'POST':
+            optionCreation_form = QuestionOptionForm(request.POST, currentUser=request.user, associatedQuestion=associatedQuestion, optionToEdit=optionToEdit)
+            if optionCreation_form.is_valid():
+                newOption = optionCreation_form.save()
+
+                if newOption and request.session.get('createOption_form_redirect', None) :
+                    return redirect("checkFormLayout", request.session.get('createOption_form_redirect', None))
+                else :
+                    return redirect("listQuestions")
+
+        else:
+            if optionToEdit :
+                optionCreation_form = QuestionOptionForm(currentUser=request.user, associatedQuestion=associatedQuestion, optionToEdit=optionToEdit,initial={
+                    'option': optionToEdit.option,
+                })
+            else :
+                optionCreation_form = QuestionOptionForm(currentUser=request.user, associatedQuestion=associatedQuestion, optionToEdit=optionToEdit)
+
+    template = loader.get_template('template_create_new_option.html')
+    context = {
+        'optionCreate' : optionCreate,
+        'errorMessage' : errorMessage,
+        'optionCreation' : optionCreation_form
+    }
+    return HttpResponse(template.render(context, request))
+
+def deleteOption(request, questionID=None, optionID=None) :
+    expression = not questionID or not Questions.objects.filter(id=questionID)
+    expression = expression or not optionID or not Multipleoptions.objects.filter(id=optionID)
+    
+    if not expression :
+        question = Questions.objects.get(id=questionID)
+        option = Multipleoptions.objects.get(id=optionID)
+        expression = question.canEdit(request.user)
+        expression = expression and option.questionsid_questions == question
+        if expression :
+            option.delete()
+            question.notifyOptionRemoval(request.user)
+
+    if request.session.get('deleteOption_form_redirect', None) : 
+        return redirect("checkFormLayout", request.session.get('deleteOption_form_redirect', None))
+    else :
+        return redirect("listQuestions")
+
+def deleteQuestion(request, questionID=None) :
+    questionToDelete = None
+    if questionID and Questions.objects.filter(id=questionID).exists() :
+        questionToDelete = Questions.objects.get(id=questionID)
+    
+    if questionToDelete and questionToDelete.canEdit(request.user):
+        forms_questions = QuestionsForm.objects.filter(questionsid_questions=questionToDelete)
+        for forms_question in forms_questions :
+            forms_question.delete()
+        
+        for option in questionToDelete.options :
+            option.delete()
+        
+        for answer in questionToDelete.allanswers :
+            answer.delete()
+        questionToDelete.delete()
+        
+
+
+    return redirect("listQuestions")
 
 def testForm(request, formID = 1):
     if request.method == 'POST':

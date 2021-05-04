@@ -18,6 +18,7 @@
             </div>
         </div>
     {% else %}
+        <!--
         <div class="row my-3">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
@@ -26,6 +27,17 @@
                 </a>
             </div>
         </div>
+        -->
+        {% if formToAssociate %}
+            <div class="row my-3">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <a class="btn btn-lg" href="{% url 'checkFormLayout' formToAssociate.id %}">
+                        <b>Return to Form {{formToAssociate.formname}}</b>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
         {% for question in questions %}
             <div class="row my-3">
                 <div class="col-sm-1"></div>
@@ -44,17 +56,31 @@
                                 <p>
 
                                     {% for option in question.options %}
-                                        {{option.option}} |
+                                        {{option.option}}
+                                        {% if question.canEdit %}
+                                            |
+                                            <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
+                                                <b>Edit</b>
+                                            </a>
+                                            |
+                                            <a class="btn btn-sm" href="{% url 'deleteOption' question.id option.id %}">
+                                                <b>Remove</b>
+                                            </a>
+                                        {% endif %}
+                                        <br>
                                     {% endfor %}
                                 </p>
                             {% endif %}
-                            <a class="btn btn-sm" href="">
-                                <b>Add option</b>
-                            </a>
+                            {% if question.canEdit %}
+                                <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
+                                    <b>>>Add option</b>
+                                </a>
+                                <br><br>
+                            {% endif %}
                             
 
                             {% if question.associatedforms %}
-                                <br><br>
+                                
                                 <b>Associated Forms:</b><br>
                                 {% for associatedform in question.associatedforms %}
                                         {{associatedform.formname}} <br>
@@ -68,13 +94,19 @@
                                 </a>
                                 |
                             {% endif %}
+                            {% if question.canEdit %}
                             <a class="btn btn-lg" href="{% url 'createQuestion' question.id 0 %}">
                                 Rename Question
                             </a>
                             |
-                            <a class="btn btn-lg" href="" onclick="return confirm('Are you sure?');">
+                            <a class="btn btn-lg" href="{% url 'deleteQuestion' question.id%}" onclick="return confirm('Are you sure?');">
                                 Delete Question
                             </a>
+                            {% else %}
+                                <a class="btn btn-lg" >
+                                    Can't Edit Question
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

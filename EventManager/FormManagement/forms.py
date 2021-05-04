@@ -140,7 +140,45 @@ class openEndedQuestionCreation(forms.Form):
 
 
 
+class QuestionOptionForm(forms.Form):
+	user = None
+	associatedQuestion = None
+	optionToEdit = None
+	option = forms.CharField(label='Option', max_length=255, required=True)
 
+	def __init__(self, *args, **kwargs):
+		if kwargs :
+			self.user = kwargs.pop('currentUser', None)
+			self.associatedQuestion = kwargs.pop('associatedQuestion', None)
+			self.optionToEdit = kwargs.pop('optionToEdit', None)
+		super().__init__(*args, **kwargs)
+
+	def clean(self, *args, **kwargs) :
+		if not self.associatedQuestion.canEdit(self.user) :
+			self.add_error("option", 'Can\'t edit this question')
+			return
+		
+		if self.optionToEdit and self.optionToEdit.questionsid_questions != self.associatedQuestion :
+			self.add_error("option", 'Option to edit is not related to the given question')
+	
+	def save(self) :
+		newOption = None
+		if self.optionToEdit :
+			newOption = self.optionToEdit
+		else :
+			newOption = Multipleoptions()
+
+		newOption.option = self.cleaned_data.get("option")
+		if not self.optionToEdit :
+			newOption.questionsid_questions = self.associatedQuestion
+
+		newOption.save()
+
+		self.associatedQuestion.notifyNewOption(self.user)
+
+		return newOption
+
+		
 
 
 #para inicializar este form este deve estar na forma "form = EventManagerForm(eventManagerFormID=<formID>, associatedRegistration=<resID>, associatedEvent=<EvID>)"

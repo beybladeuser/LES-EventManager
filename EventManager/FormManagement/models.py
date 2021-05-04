@@ -49,6 +49,8 @@ class Form(models.Model):
     lasteditedby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='LastEditedBy', related_name='FormLastEditedBy')
     published = models.BooleanField(db_column='published', default=False)
 
+    canEdit = False
+    
     def __str__(self) :
         return self.formname
 
@@ -128,6 +130,8 @@ class Questions(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='CreatedBy', related_name='QuestionCreatedBy')
     lasteditedby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='LastEditedBy', related_name='QuestionLastEditedBy')
 
+    canEdit = False
+
     def __str__(self) :
         return "Q: " + self.question
 
@@ -160,6 +164,23 @@ class Questions(models.Model):
     def canEdit(self, user) :
         return user.groups.filter(pk=1).exists() or self.createdby.id == user.id
     
+    def notifyNewOption(self, user) :
+        if self.questiontypeid_questiontype.id != 2 :
+            multiChoiceType = Questiontype.objects.get(id=2)
+            self.questiontypeid_questiontype = multiChoiceType
+
+        self.lasteditedby = user
+        self.dateoflastedit = datetime.datetime.now()
+        self.save()
+
+    def notifyOptionRemoval(self, user) :
+        if not self.options :
+            multiChoiceType = Questiontype.objects.get(id=1)
+            self.questiontypeid_questiontype = multiChoiceType
+        
+        self.lasteditedby = user
+        self.dateoflastedit = datetime.datetime.now()
+        self.save()
 
     options = property(getMultipleOptions)
 

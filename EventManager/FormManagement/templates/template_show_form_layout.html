@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        {% for question in form.formquestions %}
+        {% for question in questions %}
             <div class="row my-3">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
@@ -49,16 +49,29 @@
                                 <p>
 
                                     {% for option in question.options %}
-                                        {{option.option}} |
+                                        {{option.option}} 
+                                        {% if question.canEdit %}
+                                            |
+                                            <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
+                                                <b>Edit</b>
+                                            </a>
+                                            |
+                                            <a class="btn btn-sm" href="{% url 'deleteOption' question.id option.id %}">
+                                                <b>Remove</b>
+                                            </a>
+                                        {% endif %}
+                                        <br>
                                     {% endfor %}
                                 </p>
                             {% endif %}
-                            <a class="btn btn-sm" href="">
-                                <b>Add option</b>
-                            </a>
+                            {% if question.canEdit %}
+                                <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
+                                    <b>>>Add option</b>
+                                </a>
+                            {% endif %}
                         </div>
                         <div class="card-footer">
-                            {% if canEdit %}
+                            {% if question.canEdit %}
                                 <a class="btn btn-lg" href="{% url 'createQuestion' question.id form.id %}">
                                     Rename Question
                                 </a>
@@ -77,7 +90,7 @@
             </div>
         {% endfor %}
 
-        {% if canEdit %}
+        {% if form.canEdit %}
             <div class="row my-3" onclick="toggleAddQuestionOptions()">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">

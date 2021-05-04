@@ -25,6 +25,14 @@ urlpatterns = [
     path('associatequestion/<int:questionID>/<int:formID>/', views.associateQuestion, name='associateQuestion'),
     path('deassociatequestion/<int:questionID>/<int:formID>/', views.deassociateQuestion, name='deassociateQuestion'),
 
+    path('createoption/<int:questionID>/<int:optionID>/', views.createOption, name='createOption'),
+    path('createoption/<int:questionID>/', views.createOption, name='createOption'),
+    
+    
+    path('deleteoption/<int:questionID>/<int:optionID>/', views.deleteOption, name='deleteOption'),
+
+    path('deletequestion/<int:questionID>/', views.deleteQuestion, name='deleteQuestion'),
+
 
     path('test/', views.testForm, name='test'),
 ]
