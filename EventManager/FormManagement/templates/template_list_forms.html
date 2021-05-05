@@ -40,6 +40,7 @@
                             <a class="btn btn-lg" href="{% url 'checkFormLayout' form.id %}">
                                 See Form Layout
                             </a>
+                            {% if form.canEdit %}
                             |
                             <a class="btn btn-lg" href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
                                 Edit Form
@@ -48,6 +49,7 @@
                             <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
                                 Delete Form
                             </a>
+                            {% endif %}
                         </div>
                     </div>
                     
