@@ -4,6 +4,7 @@ from django.conf import settings
 
 
 from FormManagement.models import *
+from EventManagement.models import *
 from AssetManagement.models import *
 from Sessions.models import *
 
@@ -40,6 +41,9 @@ class Event(models.Model):
     wasvalidated = models.TextField(db_column='wasValidated')  # Field name made lowercase. This field type is a guess.
     proponentid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ProponentID')  # Field name made lowercase.
     eventname = models.CharField(db_column='eventName', max_length=255)  # Field name made lowercase.
+
+    def canRegister(self, user) :
+        return not Resgistration.objects.filter(participantuserid=user, eventid_event=self).exists()
 
     class Meta:
         

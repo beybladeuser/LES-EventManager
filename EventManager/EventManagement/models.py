@@ -13,9 +13,14 @@ class Resgistration(models.Model):
     waspresent = models.BooleanField(db_column='WasPresent', default=False)  # Field name made lowercase.
     participantuserid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
 
-    def cancelregistrations(self, user) :
-        Answer.objects.filter(resgistrationid=self.id).delete()
-        return True
+    def canCancel(self, user) :
+        return user == participantuserid or user.groups.filter(pk=1).exists()
+
+
+    def cancelregistration(self, user) :
+        if self.canCancel(user) :
+            Answer.objects.filter(resgistrationid=self.id).delete()
+            self.delete()
 
    
 
