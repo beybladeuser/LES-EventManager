@@ -198,8 +198,8 @@ class EventManagerForm(forms.Form) :
 		
 		if kwargs :
 			formID = kwargs.pop('eventManagerFormID', None)
-			registrationID = kwargs.pop('associatedRegistration', None)
-			eventID = kwargs.pop('associatedEvent', None)
+			self.registration = kwargs.pop('associatedRegistration', None)
+			self.event = kwargs.pop('associatedEvent', None)
 		super().__init__(*args, **kwargs)
 		
 		
@@ -213,17 +213,12 @@ class EventManagerForm(forms.Form) :
 		else :
 			self.hasError = True
 
-		if registrationID and Resgistration.objects.filter(pk=registrationID).exists():
-			self.registration = Resgistration.objects.get(pk=registrationID)
-
-		if eventID and Event.objects.filter(pk=eventID).exists():
-			self.event = Event.objects.get(pk=eventID)
-
 		if (self.registration and self.event) or (not self.registration and not self.event) :
-			self.hasError
+			self.hasError = True
 
 	def clean(self) :
 		if self.hasError :
+			self.add_error(self.form.formquestions[0].question, 'Only one of the init args: associatedRegistration or associatedEvent can be passed as a non null value')
 			return None
 		for question in self.form.formquestions :
 			field_name = "question"+str(question.id)
@@ -236,8 +231,6 @@ class EventManagerForm(forms.Form) :
 
 
 	def save(self) :
-		if self.hasError :
-			return None
 		for question in self.form.formquestions :
 			if self.cleaned_data["question"+str(question.id)] :
 				answer = self.cleaned_data["question"+str(question.id)]
