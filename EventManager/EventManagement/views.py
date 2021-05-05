@@ -3,8 +3,13 @@ from django.template import loader
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.db import connection
+from FormManagement.models import Form, Formtype, QuestionsForm, Questions, Multipleoptions, Questiontype, Answer
+from FormManagement.forms import EventManagerForm
+from Models.models import *
 
 from .models import *
+
+import datetime
 
 # Create your views here.
 def cancelregistration(request, RegistrationID = None) :
@@ -27,22 +32,35 @@ def consultar_participantes(request,eventid_event) :
         return redirect("index")
        
     
-def addregistration(request, formID = 1):
-    regis = Resgistration()
-    regis.eventid_event = Event.objects.get(id=1)
-    regis.participantuserid = request.user
-    if request.method == 'POST':
-        form = EventManagerForm(request.POST, eventManagerFormID=formID, associatedRegistration=regis, associatedEvent=None)
-        if form.is_valid():
-            regis.save()
-            answeredForm = form.save()
-            request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(answeredForm.formtypeid_formtype.id)
-            return redirect("checkFormLayout", answeredForm.id)
+def addregistration(request, EventID= None):
+    if not EventID or not Event.objects.filter(id=EventID) :
+        errorMessage = "Error: No Event given"
     
-    else:
-        form = EventManagerForm(eventManagerFormID=formID, associatedRegistration=regis, associatedEvent=None)
-    
-    
+    else :
+        eventToRegister = Event.objects.get(id=EventID)
+        regis = Resgistration()
+        regis.eventid_event = eventToRegister
+        regis.participantuserid = request.user
+        regis.waspresent = False
+        regis.dateofregistration = datetime.datetime.now()
+        if request.method == 'POST':
+            form = EventManagerForm(request.POST, eventManagerFormID=eventToRegister.formresgistrationid.id, associatedRegistration=regis, associatedEvent=None)
+            if form.is_valid():
+                regis.save()
+                answeredForm = form.save()
+                
+                errorMessage = "Registration Successfull"
+
+                template = loader.get_template('registersuc.html')
+                context = {
+                    'errorMessage' : errorMessage,
+                }
+                return HttpResponse(template.render(context, request))
+
+        else:
+            form = EventManagerForm(eventManagerFormID=eventToRegister.formresgistrationid.id, associatedRegistration=regis, associatedEvent=None)
+
+
 
 
     template = loader.get_template('template_test_form.html')
