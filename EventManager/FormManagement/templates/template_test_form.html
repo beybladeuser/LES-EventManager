@@ -1,0 +1,37 @@
+{% extends "template_base.html" %}
+
+{% block PageTittle %}
+	Test
+{% endblock %}
+
+{% block loggedInContent %}
+	{% load crispy_forms_tags %} 
+	<div class="row my-3">
+		 <div class="col-sm-3"></div>
+		<div class="col-sm-6">
+			<div class="card">
+				<div class="card-header">
+						Answer Form
+				</div>
+				<form method="post">
+					{% csrf_token %}
+					<div class="card-body">
+						{{form|crispy}}
+					</div>
+					<div class="card-footer">
+						<button class="btn btn-lg btn-block" type="submit">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block loggedOutContent %}
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}

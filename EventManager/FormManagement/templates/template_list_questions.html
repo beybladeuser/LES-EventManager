@@ -1,7 +1,7 @@
 {% extends "template_base.html" %}
 
 {% block PageTittle %}
-    Form Layout
+    Existing questions
 {% endblock %}
 
 {% block loggedInContent %}
@@ -18,19 +18,26 @@
             </div>
         </div>
     {% else %}
+        <!--
         <div class="row my-3">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <h2>Viewing form: {{form.formname}}</h2>
-                <b>Form type: </b>{{form.formtypeid_formtype.typename}}<br>
-                <b>Form designend for events of type: </b>{{form.eventtypeid.typename}}<br>
-                <b>Created by: </b>{{form.createdby.username}}<b> on: </b>{{form.dateofcreation}}<br>
-                <b>Last Edited by: </b>{{form.lasteditedby.username}}<b> on: </b>{{form.dateoflastedit}}<br><br>
-                    
-                <h4>Questions:</h4>
+                <a class="btn btn-lg" href="{% url 'createQuestion' 0 0 %}">
+                    <b>Create new question</b>
+                </a>
             </div>
         </div>
-
+        -->
+        {% if formToAssociate %}
+            <div class="row my-3">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <a class="btn btn-lg" href="{% url 'checkFormLayout' formToAssociate.id %}">
+                        <b>Return to Form {{formToAssociate.formname}}</b>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
         {% for question in questions %}
             <div class="row my-3">
                 <div class="col-sm-1"></div>
@@ -49,7 +56,7 @@
                                 <p>
 
                                     {% for option in question.options %}
-                                        {{option.option}} 
+                                        {{option.option}}
                                         {% if question.canEdit %}
                                             |
                                             <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
@@ -68,20 +75,36 @@
                                 <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
                                     <b>>>Add option</b>
                                 </a>
+                                <br><br>
+                            {% endif %}
+                            
+
+                            {% if question.associatedforms %}
+                                
+                                <b>Associated Forms:</b><br>
+                                {% for associatedform in question.associatedforms %}
+                                        {{associatedform.formname}} <br>
+                                {% endfor %}
                             {% endif %}
                         </div>
                         <div class="card-footer">
-                            {% if question.canEdit %}
-                                <a class="btn btn-lg" href="{% url 'createQuestion' question.id form.id %}">
-                                    Rename Question
+                            {% if formToAssociate %}
+                                <a class="btn btn-lg" href="{% url 'associateQuestion' question.id formToAssociate.id %}">
+                                    Associate to form {{formToAssociate.formname}}
                                 </a>
                                 |
-                                <a class="btn btn-lg" href="{% url 'deassociateQuestion' question.id form.id %}" onclick="return confirm('Are you sure?');">
-                                    Remove Question
-                                </a>
+                            {% endif %}
+                            {% if question.canEdit %}
+                            <a class="btn btn-lg" href="{% url 'createQuestion' question.id 0 %}">
+                                Rename Question
+                            </a>
+                            |
+                            <a class="btn btn-lg" href="{% url 'deleteQuestion' question.id%}" onclick="return confirm('Are you sure?');">
+                                Delete Question
+                            </a>
                             {% else %}
-                                <a class="btn btn-lg">
-                                    Can't edit question
+                                <a class="btn btn-lg" >
+                                    Can't Edit Question
                                 </a>
                             {% endif %}
                         </div>
@@ -89,44 +112,7 @@
                 </div>
             </div>
         {% endfor %}
-
-        {% if form.canEdit %}
-            <div class="row my-3" onclick="toggleAddQuestionOptions()">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <div class="btn btn-lg">
-                        Add Question
-                    </div>
-                </div>
-            </div>
-
-            <div class="row my-3" style="display: none;" id="addExis">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-8">
-                    <a class="btn btn-lg" href="{% url 'listQuestions' form.id %}">
-                        Add from existing questions
-                    </a>
-                </div>
-            </div>
-
-            <div class="row my-3" style="display: none;" id="addNew">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-8">
-                    <a class="btn btn-lg" href="{% url 'createQuestion' 0 form.id %}">
-                        Create New
-                    </a>
-                </div>
-            </div>
-        {% endif %}
-
     {% endif %}
-
-    <div class="row my-5">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-10">
-            <a class="btn btn-lg" href='{{return_addr}}'>Back to form listings</a><br>
-        </div>
-    </div>
 
 
 {% endblock %}
@@ -145,21 +131,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        function toggleAddQuestionOptions() {
-          var addExis = document.getElementById("addExis");
-          var addNew = document.getElementById("addNew");
-          if (addNew.style.display === "none") {
-            addNew.style.display = "flex";
-          } else {
-            addNew.style.display = "none";
-          }
 
-          if (addExis.style.display === "none") {
-            addExis.style.display = "flex";
-          } else {
-            addExis.style.display = "none";
-          }
-        }
-    </script>
 {% endblock %}
