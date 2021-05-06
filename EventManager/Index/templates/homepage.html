@@ -36,52 +36,9 @@
 <body class="body">  
     
     {% include 'navbar.html' %}
+    {% include 'welcome_screen.html' %}
 
-
- <!-- NAV BAR ANTIGA -->
- <div>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand" href="{% url 'index' %}"><h3>Event Manager</h3></a>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'assetHome' %}">Asset</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Event</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'formsHome' %}">Form</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">PreEvent</a>
-            </li>
-        </ul>
-
-        <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-                <!--Dropdown Options-->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="Options" data-toggle="dropdown">Account Options</a>
-            
-                    <div class="dropdown-menu bg-dark dropdown-menu-right">
-                        <a class="dropdown-item text-muted" href="">Account Information</a>
-                        <a class="dropdown-item text-muted" href="{% url 'logout' %}">Logout</a>
-                    </div>
-                </li>
-
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Sign in</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'signup' %}">Sign up</a>
-                </li>
-            {% endif %}
-        </ul>
-        
-    </nav>
-</div>
-<!-- END NAV BAR -->
+    
 <div class="container">
     {% if user.is_authenticated %}
         {% block loggedInContent %}
@@ -102,16 +59,16 @@
 </body>
 
 <!---------------------------------------- FOOTER ----------------------------------->
-<footer>
-    <div class="jumbotron text-center" style="margin-bottom:0">
-        <p>Follow us on:</p>
-        <p><a href="https://www.instagram.com/?hl=pt">Instagram</a></p>
-        <p><a href="https://www.facebook.com/">Facebook</a></p>
-        <p><a href="https://twitter.com/login?lang=en">Twitter</a></p>
+<footer class="footer">
+    <div style="margin: auto; width: max-content">
+      &#169; 2021 Event Manager 
     </div>
 </footer>
 
 {% block scripts %}
-
+<script type="text/javascript" src="{% static 'js/fontawesome.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/animated-arrows.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/js_custom.js' %}"></script>
 {% endblock %}
 </html>

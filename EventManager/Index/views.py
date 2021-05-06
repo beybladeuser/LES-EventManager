@@ -11,3 +11,11 @@ def index(request) :
     }
     return HttpResponse(template.render(context, request))
 
+def homepage(request) :
+
+    template = loader.get_template('homepage.html')
+    context = {
+        'isLoggedIn' : request.user.is_authenticated
+    }
+    return HttpResponse(template.render(context, request))
+
