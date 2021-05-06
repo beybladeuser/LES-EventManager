@@ -75,13 +75,15 @@
                                 <a class="btn btn-lg" href="{% url 'createQuestion' question.id form.id %}">
                                     Rename Question
                                 </a>
-                                |
-                                <a class="btn btn-lg" href="{% url 'deassociateQuestion' question.id form.id %}" onclick="return confirm('Are you sure?');">
-                                    Remove Question
-                                </a>
                             {% else %}
                                 <a class="btn btn-lg">
                                     Can't edit question
+                                </a>
+                            {% endif %}
+                            {% if form.canEdit %}
+                                |
+                                <a class="btn btn-lg" href="{% url 'deassociateQuestion' question.id form.id %}" onclick="return confirm('Are you sure?');">
+                                    Remove Question
                                 </a>
                             {% endif %}
                         </div>

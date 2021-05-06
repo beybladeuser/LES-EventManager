@@ -4,6 +4,7 @@
 from django.db import models, connection
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db.models import Q
 
 from PreEventManagement.models import *
 
@@ -48,8 +49,10 @@ class Form(models.Model):
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='CreatedBy', related_name='FormCreatedBy')
     lasteditedby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='LastEditedBy', related_name='FormLastEditedBy')
     published = models.BooleanField(db_column='published', default=False)
+    archived = models.BooleanField(db_column='Archived', default=False)
 
     canEdit = False
+    canDuplicate = False
     
     def __str__(self) :
         return self.formname
@@ -66,7 +69,7 @@ class Form(models.Model):
         return Questions_Associated_with_form
 
     def associateQuestion(self, question, user) :
-        if user.id == self.createdby.id or user.groups.filter(pk=1).exists() :
+        if self.canEdit(user) :
             if not QuestionsForm.objects.filter(questionsid_questions=question, formid_form=self):
                 form_question_association = QuestionsForm()
                 form_question_association.questionsid_questions = question
@@ -84,9 +87,49 @@ class Form(models.Model):
                 self.lasteditedby = user
                 self.save()
 
-    def canEdit(self, user) :
-        return user.id == self.createdby.id or user.groups.filter(pk=1).exists()
+    def getAssociatedEvents(self) :
+        return Event.objects.filter(Q(formproposalid=self) | Q(formresgistrationid=self) | Q(formfeedbackid=self))
 
+    def userHasEditPermitions(self, user) :
+        return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
+
+    def canEdit(self, user) :
+        return self.userHasEditPermitions(user) and not self.archived and not self.getAssociatedEvents()
+
+    def canDuplicate(self, user) :
+        return not user.groups.filter(pk=2).exists()
+
+    
+    def duplicate(self, user) :
+        result = Form()
+        result.eventtypeid = self.eventtypeid
+        result.formtypeid_formtype = self.formtypeid_formtype
+        if self.formtypeid_formtype == Formtype.getProposalType() :
+            result.formname = self.formname
+        else :
+            result.formname = self.formname + " (Copy)"
+        result.dateofcreation = datetime.datetime.now()
+        result.dateoflastedit = datetime.datetime.now()
+        result.createdby = user
+        result.lasteditedby = user
+        result.published = False
+        result.archived = False
+
+        if self.formtypeid_formtype.id == 1 :
+
+            for form in Form.objects.filter(formtypeid_formtype=Formtype.getProposalType(), eventtypeid=self.eventtypeid) :
+                form.archived = True
+                form.save()
+
+
+        result.save()
+        for question in self.formquestions :
+            result.associateQuestion(question, user)
+
+        return result
+
+
+    
 
     formquestions = property(getQuestions)
 
@@ -112,6 +155,14 @@ class Formtype(models.Model):
         else:
             return (("1", "No Database created"),)
 
+    @staticmethod
+    def getProposalType() :
+        if "formtype" in connection.introspection.table_names() :
+            return Formtype.objects.get(id=1)
+        else :
+            return False
+
+
     
 
     class Meta:
@@ -124,13 +175,14 @@ class Questions(models.Model):
     questiontypeid_questiontype = models.ForeignKey('Questiontype', models.DO_NOTHING, db_column='QuestionTypeID_QuestionType')  # Field name made lowercase.
     question = models.CharField(max_length=255)
     required = models.BooleanField(db_column='Required', default=False)
-    
+
     dateofcreation = models.DateTimeField(db_column='DateOfCreation')  # Field name made lowercase.
     dateoflastedit = models.DateTimeField(db_column='DateOfLastEdit')  # Field name made lowercase.
     createdby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='CreatedBy', related_name='QuestionCreatedBy')
     lasteditedby = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='LastEditedBy', related_name='QuestionLastEditedBy')
 
     canEdit = False
+    canDuplicate = False
 
     def __str__(self) :
         return "Q: " + self.question
@@ -161,8 +213,19 @@ class Questions(models.Model):
         associatedForms = [x.formid_form for x in questionsForms]
         return associatedForms
 
+    def userHasEditPermitions(self, user) :
+        return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
+
     def canEdit(self, user) :
-        return user.groups.filter(pk=1).exists() or self.createdby.id == user.id
+        userHasPermission = self.userHasEditPermitions(user)
+        isAssociated = self.associatedforms
+        expr = True
+        #if a question only has one form associated then it can be edited
+        if  isAssociated :
+            associationsCount =len(isAssociated)
+            if not (associationsCount == 1 and isAssociated[0].canEdit(user)):
+                expr = False
+        return userHasPermission and expr
     
     def notifyNewOption(self, user) :
         if self.questiontypeid_questiontype.id != 2 :
@@ -181,6 +244,32 @@ class Questions(models.Model):
         self.lasteditedby = user
         self.dateoflastedit = datetime.datetime.now()
         self.save()
+        
+    def canDuplicate(self, user) :
+        return not user.groups.filter(pk=2).exists()
+
+    
+    def duplicate(self, user) :
+        result = Questions()
+        result.questiontypeid_questiontype = self.questiontypeid_questiontype
+        result.question = self.question + ' (copy)'
+        result.required = self.required
+        result.archived = False
+
+        result.dateofcreation = datetime.datetime.now()
+        result.dateoflastedit = datetime.datetime.now()
+        result.createdby = user
+        result.lasteditedby = user
+
+        result.save()
+
+        for option in self.options :
+            newOption = Multipleoptions()
+            newOption.option = option.option
+            newOption.questionsid_questions = result
+            newOption.save()
+
+        return result
 
     options = property(getMultipleOptions)
 

@@ -29,7 +29,7 @@
                 <div class="col-sm-10">
                     <div class="card">
                         <div class="card-header">
-                            <h2>{{form.formname}}</h2>
+                            <h2>{{form.formname}} {% if form.archived %}(Archived){% endif %}</h2>
                         </div>
                         <div class="card-body">
                             <b>Form designend for events of type: </b>{{form.eventtypeid.typename}}<br>
@@ -41,14 +41,31 @@
                                 See Form Layout
                             </a>
                             {% if form.canEdit %}
-                            |
-                            <a class="btn btn-lg" href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
-                                Edit Form
-                            </a>
-                            |
-                            <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
-                                Delete Form
-                            </a>
+                                |
+                                <a class="btn btn-lg" href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
+                                    Edit Form
+                                </a>
+                                |
+                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
+                                    Delete Form
+                                </a>
+
+                            {% elif not form.archived %}    
+                                |
+                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
+                                    Archive Form
+                                </a>
+                            {% else %}
+                                |
+                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
+                                    Unarchive Form
+                                </a>
+                            {% endif %}
+                            {% if form.canDuplicate %}
+                                |
+                                <a class="btn btn-lg" href="{% url 'duplicateForm' form.id %}" onclick="return confirm('This action will archive the current proposal form for events of type {{form.eventtypeid.typename}}. Are you sure you want to continue?');">
+                                    Duplicate Form
+                                </a>
                             {% endif %}
                         </div>
                     </div>

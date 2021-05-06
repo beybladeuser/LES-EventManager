@@ -37,6 +37,7 @@ def checkFormLayout(request, formID = None, return_addr = '/forms/listformsfromt
 
     if form :
         form.canEdit = form.canEdit(request.user)
+        form.canDuplicate = form.canDuplicate(request.user)
         request.session["deleteOption_form_redirect"] = formID
         request.session["createOption_form_redirect"] = formID
 
@@ -49,6 +50,7 @@ def checkFormLayout(request, formID = None, return_addr = '/forms/listformsfromt
     questions = form.formquestions
     for question in questions :
         question.canEdit = question.canEdit(request.user)
+        question.canDuplicate = question.canDuplicate(request.user)
 
     template = loader.get_template('template_show_form_layout.html')
     context = {
@@ -114,6 +116,7 @@ def listFormsFromType(request, formTypeID = None) :
 
     for form in forms :
         form.canEdit = form.canEdit(request.user)
+        form.canDuplicate = form.canDuplicate(request.user)
 
     template = loader.get_template('template_list_forms.html')
     context = {
@@ -278,6 +281,7 @@ def listQuestions(request, formID=None) :
             questions = [x for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
         for question in questions :
             question.canEdit = question.canEdit(request.user)
+            question.canDuplicate = question.canDuplicate(request.user)
         
         if request.session.get("deleteOption_form_redirect") :
             del request.session["deleteOption_form_redirect"]
@@ -409,6 +413,25 @@ def deleteQuestion(request, questionID=None) :
 
 
     return redirect("listQuestions")
+
+
+def duplicateForm(request, formID=None) :
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToDuplicate = Form.objects.get(id=formID)
+        if formToDuplicate.canDuplicate(request.user) :
+            newForm = formToDuplicate.duplicate(request.user)
+            return redirect('createForm', newForm.formtypeid_formtype.id, newForm.id)
+        return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
+    return redirect('formsHome')
+
+def duplicateQuestion(request, questionID=None) :
+    if questionID and Questions.objects.filter(id=questionID).exists() :
+        questionToDuplicate = Questions.objects.get(id=questionID)
+        if questionToDuplicate.canDuplicate(request.user) :
+            newQuestion = questionToDuplicate.duplicate(request.user)
+            return redirect('createQuestion', newQuestion.id, 0)
+        return redirect('listQuestions')
+    return redirect('formsHome')
 
 def testForm(request, formID = 1):
     regis = Resgistration()
