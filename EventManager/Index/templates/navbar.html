@@ -1,0 +1,99 @@
+{% load static %}
+ 
+ <!-- NAV BAR NOVA-->
+
+ <nav role="navigation" aria-label="main navigation" class="navbar">
+    <div class="navbar-brand">
+        <a href="" aria-current="page" class="navbar-item logo router-link-exact-active router-link-active">
+            <img alt="Event Manager" href="{% static 'img/logo-navbar.png' %}">
+        </a>
+        <a role="button" aria-label="menu" class="navbar-burger burger">
+            <span aria-hidden="true"></span> 
+            <span aria-hidden="true"></span> 
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-start">
+            <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Asset</a>
+            <a href="" class="navbar-item is-tab router-link">Event</a>
+            <a href="{% url 'formsHome' %}" class="navbar-item is-tab router-link">Form</a>
+            <a href="" class="navbar-item is-tab router-link">PreEvent</a>
+        </div>
+        <div class="navbar-end">
+            <div  class="navbar-item">
+                <div class="dropdown dropdown-menu-animation is-bottom-left is-mobile-modal">
+                    <div role="button" aria-haspopup="true" class="dropdown-trigger">
+                        <span  role="button">
+                            <button  type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text" style="margin-right: 0.9rem;"><!----> 
+                                <span>
+                                    <span  class="icon">
+                                        <i class="mdi mdi-bell mdi-24px"></i>
+                                    </span>
+                                </span> <!---->
+                            </button>
+                        </span>
+                    </div> 
+                    <div aria-hidden="true" class="background" style="display: none;">
+
+                    </div> 
+                    <div aria-hidden="true" class="dropdown-menu" style="display: none;">
+                        <div role="menu" class="dropdown-content"> 
+                            <div  role="menuitem" tabindex="0" class="dropdown-item">
+                                <strong>Notificações</strong>
+                            </div> 
+                            <hr class="dropdown-divider">  
+                            <div>
+                                <div tabindex="0" class="dropdown-item">
+                                    <div class="has-text-grey">
+                                         Não tem novas notificações!
+                                    </div>
+                                </div> 
+                                <hr class="dropdown-divider">
+                            </div> 
+                            <a tabindex="0" class="dropdown-item">
+                                <u>Ver todas as notificações</u>
+                            </a>
+                        </div>
+                    </div>
+                </div> 
+                <div class="dropdown dropdown-menu-animation is-bottom-left is-mobile-modal">
+                    <div role="button" aria-haspopup="true" class="dropdown-trigger">
+                        <button type="button" class="button is-text" style="margin-right: 0.9rem;"><!----> 
+                            <span>
+                                <span class="icon">
+                                    <i class="mdi mdi-account-circle mdi-24px"></i>
+                                </span>
+                            </span> 
+                        </button>
+                    </div> 
+                    <div aria-hidden="true" class="background" style="display: none;">
+
+                    </div> 
+                    <div aria-hidden="true" class="dropdown-menu" style="display: none;">
+                        <div role="list" class="dropdown-content"> 
+                            <a role="listitem" tabindex="0" class="dropdown-item is-disabled">Participante Individual</a> 
+                            <a role="listitem" tabindex="0" class="dropdown-item">Professor Secundário</a> 
+                            <a role="listitem" tabindex="0" class="dropdown-item is-disabled">Colaborador</a> 
+                            <a role="listitem" tabindex="0" class="dropdown-item">Professor Universitário</a> 
+                            <a role="listitem" tabindex="0" class="dropdown-item">Coordenador</a> 
+                            <a role="listitem" tabindex="0" class="dropdown-item">Administrador</a>
+                        </div>
+                    </div>
+                </div> 
+                <button  type="button" class="button">
+                    <span class="icon is-small">
+                        <i class="mdi mdi-logout-variant"></i>
+                    </span> 
+                    <span>
+                        Sair
+                    </span> <!---->
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- END NAVBAR NOVA -->
+
+</div>
+<!-- END NAV BAR -->

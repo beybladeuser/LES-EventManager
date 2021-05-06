@@ -41,6 +41,52 @@
   margin-bottom: 1.5rem;
 }
 
+body, html {
+      min-height: 100%;
+      background-size: cover;
+      background: linear-gradient(to bottom, #ffffff, #eeeeff) no-repeat fixed center center;
+    }
+
+    * {
+      outline: none;
+    }
+
+    #app {
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 5rem
+    }
+
+    #top-hero-body {
+      height: 45vh;
+    }
+
+    #page-content {
+      margin: -37vh 5vw 0
+    }
+
+    #page-content .card {
+      min-height: 70vh
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: #fafafa;
+      padding: 1rem 3rem;
+    }
+
+    .step-item.is-completed {
+      cursor: pointer;
+    }
+
+    .step-item.is-active {
+      cursor: pointer;
+    }
+
+
+
 .modal-close, .delete {
   -moz-appearance: none;
   -webkit-appearance: none;

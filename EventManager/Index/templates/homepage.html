@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- ============================================================= HEAD =======================================================================-->
+<head>
+
+    <title>
+        {% block PageTittle %}
+
+        {% endblock %}
+    </title>
+    <meta charset="utf-8">
+    <meta  http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    
+    <link href="{% static 'img/favicon.ico' %}" rel="icon" />
+    <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive-tables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animated-arrows.css' %}">
+    <link rel="icon" href="{% static 'img/logo.png' %}" />
+
+
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<!--------------------------------------- BODY ------------------------------------>
+<body class="body">  
+    
+    {% include 'navbar.html' %}
+
+
+ <!-- NAV BAR ANTIGA -->
+ <div>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="{% url 'index' %}"><h3>Event Manager</h3></a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'assetHome' %}">Asset</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Event</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'formsHome' %}">Form</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">PreEvent</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+                <!--Dropdown Options-->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="Options" data-toggle="dropdown">Account Options</a>
+            
+                    <div class="dropdown-menu bg-dark dropdown-menu-right">
+                        <a class="dropdown-item text-muted" href="">Account Information</a>
+                        <a class="dropdown-item text-muted" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </li>
+
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Sign in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Sign up</a>
+                </li>
+            {% endif %}
+        </ul>
+        
+    </nav>
+</div>
+<!-- END NAV BAR -->
+<div class="container">
+    {% if user.is_authenticated %}
+        {% block loggedInContent %}
+    
+        {% endblock %}
+
+    {% else %}
+        {% block loggedOutContent %}
+
+        {% endblock %}
+    {% endif %}
+</div>
+
+
+
+
+
+</body>
+
+<!---------------------------------------- FOOTER ----------------------------------->
+<footer>
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>Follow us on:</p>
+        <p><a href="https://www.instagram.com/?hl=pt">Instagram</a></p>
+        <p><a href="https://www.facebook.com/">Facebook</a></p>
+        <p><a href="https://twitter.com/login?lang=en">Twitter</a></p>
+    </div>
+</footer>
+
+{% block scripts %}
+
+{% endblock %}
+</html>
