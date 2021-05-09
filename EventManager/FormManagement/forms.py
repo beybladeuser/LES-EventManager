@@ -148,7 +148,11 @@ class openEndedQuestionCreation(forms.Form):
 		if not self.questionToEdit :
 			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
 			wasChanged = True
-		newQuestion.required = self.cleaned_data.get("required")
+
+		required = self.cleaned_data.get("required")
+		if not self.questionToEdit or self.questionToEdit.required != required :
+			newQuestion.required = required
+			wasChanged = True
 
 		if not self.questionToEdit :
 			newQuestion.createdby = self.user
