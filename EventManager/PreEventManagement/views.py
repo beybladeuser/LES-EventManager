@@ -7,7 +7,7 @@ def preEventHome(request) :
     context = {}
     return HttpResponse(template.render(context, request))
     
-def preEvent(request) :
-    template = loader.get_template('preEvent.html')
+def eventList(request) :
+    template = loader.get_template('eventList.html')
     context = {}
     return HttpResponse(template.render(context, request))    
