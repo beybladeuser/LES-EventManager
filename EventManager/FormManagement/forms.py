@@ -104,6 +104,8 @@ class openEndedQuestionCreation(forms.Form):
 	form = None
 	questionToEdit = None
 	question = forms.CharField(label='Question', max_length=255, required=True)
+	options = ((True, 'Yes'), (False, 'No'))
+	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="Is Required", required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -146,6 +148,7 @@ class openEndedQuestionCreation(forms.Form):
 		if not self.questionToEdit :
 			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
 			wasChanged = True
+		newQuestion.required = self.cleaned_data.get("required")
 
 		if not self.questionToEdit :
 			newQuestion.createdby = self.user

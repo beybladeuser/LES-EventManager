@@ -254,7 +254,7 @@ def createQuestion(request, questionID=None,formID=None):
         else:
             if questionToEdit :
                 questionCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit,initial={
-                    'question': questionToEdit.question,
+                    'question': questionToEdit.question, 'required': questionToEdit.required,
                 })
             else :
                 questionCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit)
