@@ -29,6 +29,7 @@
                     </div>
                     <div class="card-body">
                         <b>Question of type: </b>{{question.questiontypeid_questiontype.typename}}<br>
+                        <b>Is Required: </b>{% if question.required %}Yes{% else %}No{% endif %}<br>
                         <b>Created by: </b>{{question.createdby.username}}<b> on: </b>{{question.dateofcreation}}<br>
                         <b>Last Edited by: </b>{{question.lasteditedby.username}}<b> on: </b>{{question.dateoflastedit}}<br><br>
                         {% if question.options %}
@@ -86,7 +87,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row my-3" style="display: none;" id="addExis">
             <div class="col-sm-2"></div>
             <div class="col-sm-8">
