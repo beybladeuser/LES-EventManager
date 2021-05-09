@@ -93,8 +93,17 @@ class Form(models.Model):
     def userHasEditPermitions(self, user) :
         return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
 
+    def wasAnswered(self) :
+        for question in self.formquestions :
+            for answer in question.allanswers :
+                if answer.associatedformid == self :
+                    return True
+        
+        return False
+        
+
     def canEdit(self, user) :
-        return self.userHasEditPermitions(user) and not self.archived and not self.getAssociatedEvents()
+        return self.userHasEditPermitions(user) and not self.archived and not self.getAssociatedEvents() and not self.wasAnswered()
 
     def canDuplicate(self, user) :
         return not user.groups.filter(pk=2).exists()
@@ -128,7 +137,9 @@ class Form(models.Model):
 
         return result
 
-
+    @staticmethod
+    def getFilterOptions() :
+        return ("Event Type", "Creator", "Last Editor")
     
 
     formquestions = property(getQuestions)
@@ -219,9 +230,9 @@ class Questions(models.Model):
     def canEdit(self, user) :
         userHasPermission = self.userHasEditPermitions(user)
         isAssociated = self.associatedforms
-        expr = True
+        expr = not self.allanswers
         #if a question only has one form associated then it can be edited
-        if  isAssociated :
+        if expr and isAssociated :
             associationsCount =len(isAssociated)
             if not (associationsCount == 1 and isAssociated[0].canEdit(user)):
                 expr = False
@@ -270,6 +281,10 @@ class Questions(models.Model):
             newOption.save()
 
         return result
+
+    @staticmethod
+    def getFilterOptions() :
+        return ("Question Type", "Creator", "Last Editor")
 
     options = property(getMultipleOptions)
 

@@ -21,16 +21,18 @@ def formsHome(request) :
     }
     return HttpResponse(template.render(context, request))
 
-def checkFormLayout(request, formID = None, return_addr = '/forms/listformsfromtype/') :
+def checkFormLayout(request, formID = None) :
     errorMessage = None
     form = None
     canEdit = False
+    return_addr = '/forms/listformsfromtype/'
     if formID :
         form_query = Form.objects.filter(id=formID)
         if not form_query :
             errorMessage = "Error: Form doesn't exist"
         else :
             form = form_query[0]
+            return_addr = return_addr + str(form.formtypeid_formtype.id)
     
     else :
         errorMessage = "Error: No Form ID given"
@@ -118,8 +120,13 @@ def listFormsFromType(request, formTypeID = None) :
         form.canEdit = form.canEdit(request.user)
         form.canDuplicate = form.canDuplicate(request.user)
 
+    filterOptions = Form.getFilterOptions()
+    eventTypes = Eventtype.objects.all()
+
     template = loader.get_template('template_list_forms.html')
     context = {
+        'filterOptions' : filterOptions,
+        'eventTypes' : eventTypes,
         'forms' : forms,
         'formType' : formType[0],
         'errorMessage' : errorMessage,
@@ -277,7 +284,9 @@ def listQuestions(request, formID=None) :
         errorMessage = "Error: participant cant view all questions"
     else :
         questions = Questions.objects.all()
-        if formToAssociate :
+        if not questions :
+            errorMessage = "Error: No existing question saved"
+        elif formToAssociate :
             questions = [x for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
         for question in questions :
             question.canEdit = question.canEdit(request.user)
@@ -288,9 +297,13 @@ def listQuestions(request, formID=None) :
         if request.session.get("createOption_form_redirect") :
             del request.session["createOption_form_redirect"]
         request.session.modified = True
-
+    request.session["form_return_redirect"] = "/forms/listquestions/"
+    filterOptions = Questions.getFilterOptions()
+    questionTypes = Questiontype.objects.all()
     template = loader.get_template('template_list_questions.html')
     context = {
+        'filterOptions' : filterOptions,
+        'questionTypes' : questionTypes,
         'errorMessage' : errorMessage,
         'questions' : questions,
         'formToAssociate' : formToAssociate,

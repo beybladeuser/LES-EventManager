@@ -1,147 +1,115 @@
-{% extends "template_base.html" %}
+{% extends "template_listings_base.html" %}
 
 {% block PageTittle %}
     Existing questions
 {% endblock %}
 
-{% block loggedInContent %}
-    
-    {% if errorMessage %}
-        <div class="row my-5">
+{% block preListingTittle %}
+    {% if formToAssociate %}
+    <div class="row my-3">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <a class="btn btn-lg" href="{% url 'checkFormLayout' formToAssociate.id %}">
+                <b>Return to Form {{formToAssociate.formname}}</b>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block listingTittle %}Questions{% endblock %}
+
+{% block filterOptions %}
+    {% for filterOption in filterOptions %}
+        <option>{{filterOption}}</option>
+    {% endfor %}
+{% endblock %}
+
+{% block filterTypes %}
+    {% for questionType in questionTypes %}
+        <option>{{questionType.typename}}</option>
+    {% endfor %}
+{% endblock %}
+
+{% block listings %}
+    {% for question in questions %}
+        <div class="row my-3" id="row{{ forloop.counter }}">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
                 <div class="card">
                     <div class="card-header">
-                        <h2>{{errorMessage}}</h2>
+                        <h2 id="name{{ forloop.counter }}">{{question.question}}</h2>
                     </div>
-                </div>
-            </div>
-        </div>
-    {% else %}
-        <!--
-        <div class="row my-3">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <a class="btn btn-lg" href="{% url 'createQuestion' 0 0 %}">
-                    <b>Create new question</b>
-                </a>
-            </div>
-        </div>
-        -->
-        {% if formToAssociate %}
-            <div class="row my-3">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <a class="btn btn-lg" href="{% url 'checkFormLayout' formToAssociate.id %}">
-                        <b>Return to Form {{formToAssociate.formname}}</b>
-                    </a>
-                </div>
-            </div>
-        {% endif %}
-        <div class="row my-3">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <h2>Questions</h2>
-            </div>
-        </div>
-        {% for question in questions %}
-            <div class="row my-3">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>{{question.question}}</h2>
-                        </div>
-                        <div class="card-body">
-                            <b>Question of type: </b>{{question.questiontypeid_questiontype.typename}}<br>
-                            <b>Created by: </b>{{question.createdby.username}}<b> on: </b>{{question.dateofcreation}}<br>
-                            <b>Last Edited by: </b>{{question.lasteditedby.username}}<b> on: </b>{{question.dateoflastedit}}<br><br>
-
-                            {% if question.options %}
-                                <b>Options:</b>
-                                <p>
-
-                                    {% for option in question.options %}
-                                        {{option.option}}
-                                        {% if question.canEdit %}
-                                            |
-                                            <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
-                                                <b>Edit</b>
-                                            </a>
-                                            |
-                                            <a class="btn btn-sm" href="{% url 'deleteOption' question.id option.id %}">
-                                                <b>Remove</b>
-                                            </a>
-                                        {% endif %}
-                                        <br>
-                                    {% endfor %}
-                                </p>
-                            {% endif %}
-                            {% if question.canEdit %}
-                                <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
-                                    <b>>>Add option</b>
-                                </a>
-                                <br><br>
-                            {% endif %}
-                            
-
-                            {% if question.associatedforms %}
-                                
-                                <b>Associated Forms:</b><br>
-                                {% for associatedform in question.associatedforms %}
-                                        {{associatedform.formname}} <br>
+                    <div class="card-body">
+                        <b>Question of type: </b><span id="questiontype{{ forloop.counter }}">{{question.questiontypeid_questiontype.typename}}</span><br>
+                        <b>Created by: </b><span id="creator{{ forloop.counter }}">{{question.createdby.username}}</span><b> on: </b>{{question.dateofcreation}}<br>
+                        <b>Last Edited by: </b><span id="lasteditor{{ forloop.counter }}">{{question.lasteditedby.username}}</span><b> on: </b>{{question.dateoflastedit}}<br><br>
+                        {% if question.options %}
+                            <b>Options:</b>
+                            <p>
+                                {% for option in question.options %}
+                                    {{option.option}}
+                                    {% if question.canEdit %}
+                                        |
+                                        <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
+                                            <b>Edit</b>
+                                        </a>
+                                        |
+                                        <a class="btn btn-sm" href="{% url 'deleteOption' question.id option.id %}">
+                                            <b>Remove</b>
+                                        </a>
+                                    {% endif %}
+                                    <br>
                                 {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="card-footer">
-                            {% if formToAssociate %}
-                                <a class="btn btn-lg" href="{% url 'associateQuestion' question.id formToAssociate.id %}">
-                                    Associate to form {{formToAssociate.formname}}
-                                </a>
-                                |
-                            {% endif %}
-                            {% if question.canEdit %}
-                            <a class="btn btn-lg" href="{% url 'createQuestion' question.id 0 %}">
-                                Rename Question
+                            </p>
+                        {% endif %}
+                        {% if question.canEdit %}
+                            <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
+                                <b>>>Add option</b>
+                            </a>
+                            <br><br>
+                        {% endif %}
+                        
+                        {% if question.associatedforms %}
+                            
+                            <b>Associated Forms:</b><br>
+                            {% for associatedform in question.associatedforms %}
+                                    {{associatedform.formname}} |
+                                    <a class="btn btn-sm" href="{% url 'checkFormLayout' associatedform.id %}">
+                                        <b>Check Layout</b>
+                                    </a><br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        {% if formToAssociate %}
+                            <a class="btn btn-lg" href="{% url 'associateQuestion' question.id formToAssociate.id %}">
+                                Associate to form {{formToAssociate.formname}}
                             </a>
                             |
-                            <a class="btn btn-lg" href="{% url 'deleteQuestion' question.id%}" onclick="return confirm('Are you sure?');">
-                                Delete Question
+                        {% endif %}
+                        {% if question.canEdit %}
+                        <a class="btn btn-lg" href="{% url 'createQuestion' question.id 0 %}">
+                            Rename Question
+                        </a>
+                        |
+                        <a class="btn btn-lg" href="{% url 'deleteQuestion' question.id%}" onclick="return confirm('Are you sure?');">
+                            Delete Question
+                        </a>
+                        {% else %}
+                            <a class="btn btn-lg" >
+                                Can't Edit Question
                             </a>
-                            {% else %}
-                                <a class="btn btn-lg" >
-                                    Can't Edit Question
-                                </a>
-                            {% endif %}
-                            {% if question.canDuplicate %}
-                                |
-                                <a class="btn btn-lg" href="{% url 'duplicateQuestion' question.id%}">
-                                    Duplicate Question
-                                </a>
-                            {% endif %}
-                        </div>
+                        {% endif %}
+                        {% if question.canDuplicate %}
+                            |
+                            <a class="btn btn-lg" href="{% url 'duplicateQuestion' question.id%}">
+                                Duplicate Question
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    {% endif %}
-
-
-{% endblock %}
-
-{% block loggedOutContent %}
-    <div class="row my-3">
-        <div class="col-sm-1"></div>
-       <div class="col-sm-10">
-           <div class="card">
-               <div class="card-header">
-                   <h2>You must be signed in to access this page</h2>
-               </div>
-           </div>
-       </div>
-    </div>
-{% endblock %}
-
-{% block scripts %}
-
+        </div>
+    {% endfor %}
 {% endblock %}
