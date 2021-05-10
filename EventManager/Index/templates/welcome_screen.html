@@ -1,5 +1,8 @@
+{% extends 'homepage.html' %}
+{% block title %}- Welcome Page{% endblock title %}
+{% block content %}
+{% load configuracao_tags %}
 {% load static %}
-
 <div>
     <div class="section">
       <div class="columns">
@@ -14,7 +17,7 @@
           </p>
         </div>
         <div class="column is-4">
-          <img alt="Logo" src="{% static '/img/logo-large.png' %}" />
+          <img src= "{% static 'img/logo-large.png' %}">
         </div>
       </div>
     </div>
@@ -29,7 +32,7 @@
             </small>
           </div>
           <div class="column">
-            <img src="{% static '/img/ualg-logo.png' %}" alt="Dia Aberto" />
+            <img src="{% static 'img/ualg-logo.png' %}" alt="Dia Aberto" >
           </div>
           <div class="column is-1">
           </div>
@@ -37,3 +40,4 @@
       </div>
     </div>
   </div>
+  {% endblock content%}

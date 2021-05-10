@@ -1,13 +1,12 @@
 {% load static %}
- 
- <!-- NAV BAR NOVA-->
 
- <nav role="navigation" aria-label="main navigation" class="navbar">
+
+ <nav id="main-navbar" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a href="{% url 'homepage' %}" aria-current="page" class="navbar-item logo router-link-exact-active router-link-active">
-            <img alt="Event Manager" href="{% static 'img/logo-navbar.png' %}">
+        <a href="{% url 'homepage' %}" class="navbar-item logo">
+            <img alt="Event Manager" scr="{% static 'img/logo-navbar.png' %}">
         </a>
-        <a role="button" aria-label="menu" class="navbar-burger burger">
+        <a role="button" class="navbar-burger burger" onclick="onclick_burger(event)" data-target="navbarBasicExample">
             <span aria-hidden="true"></span> 
             <span aria-hidden="true"></span> 
             <span aria-hidden="true"></span>
@@ -30,7 +29,7 @@
                                     <span  class="icon">
                                         <i class="mdi mdi-bell mdi-24px"></i>
                                     </span>
-                                </span> <!---->
+                                </span> <!
                             </button>
                         </span>
                     </div> 
@@ -92,8 +91,7 @@
             </div>
         </div>
     </div>
+    
 </nav>
 <!-- END NAVBAR NOVA -->
 
-</div>
-<!-- END NAV BAR -->
