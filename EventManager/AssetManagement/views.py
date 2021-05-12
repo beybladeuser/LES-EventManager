@@ -42,3 +42,13 @@ def consultar_rooms(request):
         'Rooms': Rooms.objects.all()
     }
     return HttpResponse(template.render(context, request))    
+
+
+
+def insert_assets(request):
+    template = loader.get_template('InsertAssets.html')
+    context = {
+       
+    }
+    return HttpResponse(template.render(context, request))    
+
