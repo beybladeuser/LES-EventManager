@@ -1,146 +1,120 @@
-{% extends "template_base.html" %}
+{% extends "template_form_base.html" %}
 
 {% block PageTittle %}
     Form Layout
 {% endblock %}
 
-{% block loggedInContent %}
+{% block NonErrorContent %}
     
-    {% if errorMessage %}
-        <div class="row my-5">
+    <div class="row my-3">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <h2>Viewing form: {{form.formname}}</h2>
+            <b>Form type: </b>{{form.formtypeid_formtype.typename}}<br>
+            <b>Form designend for events of type: </b>{{form.eventtypeid.typename}}<br>
+            <b>Created by: </b>{{form.createdby.username}}<b> on: </b>{{form.dateofcreation}}<br>
+            <b>Last Edited by: </b>{{form.lasteditedby.username}}<b> on: </b>{{form.dateoflastedit}}<br><br>
+                
+            <h4>Questions:</h4>
+        </div>
+    </div>
+
+    {% for question in questions %}
+        <div class="row my-3">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
                 <div class="card">
                     <div class="card-header">
-                        <h2>{{errorMessage}}</h2>
+                        <h2>{{question.question}}</h2>
+                    </div>
+                    <div class="card-body">
+                        <b>Question of type: </b>{{question.questiontypeid_questiontype.typename}}<br>
+                        <b>Is Required: </b>{% if question.required %}Yes{% else %}No{% endif %}<br>
+                        <b>Created by: </b>{{question.createdby.username}}<b> on: </b>{{question.dateofcreation}}<br>
+                        <b>Last Edited by: </b>{{question.lasteditedby.username}}<b> on: </b>{{question.dateoflastedit}}<br><br>
+                        {% if question.options %}
+                            <b>Options:</b>
+                            <p>
+                                {% for option in question.options %}
+                                    {{option.option}} 
+                                    {% if question.canEdit %}
+                                        |
+                                        <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
+                                            <b>Edit</b>
+                                        </a>
+                                        |
+                                        <a class="btn btn-sm" href="{% url 'deleteOption' question.id option.id %}">
+                                            <b>Remove</b>
+                                        </a>
+                                    {% endif %}
+                                    <br>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        {% if question.canEdit %}
+                            <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
+                                <b>>>Add option</b>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        {% if question.canEdit %}
+                            <a class="btn btn-lg" href="{% url 'createQuestion' question.id form.id %}">
+                                Rename Question
+                            </a>
+                        {% else %}
+                            <a class="btn btn-lg">
+                                Can't edit question
+                            </a>
+                        {% endif %}
+                        {% if form.canEdit %}
+                            |
+                            <a class="btn btn-lg" href="{% url 'deassociateQuestion' question.id form.id %}" onclick="return confirm('Are you sure?');">
+                                Remove Question
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-    {% else %}
-        <div class="row my-3">
+    {% endfor %}
+    {% if form.canEdit %}
+        <div class="row my-3" onclick="toggleAddQuestionOptions()">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <h2>Viewing form: {{form.formname}}</h2>
-                <b>Form type: </b>{{form.formtypeid_formtype.typename}}<br>
-                <b>Form designend for events of type: </b>{{form.eventtypeid.typename}}<br>
-                <b>Created by: </b>{{form.createdby.username}}<b> on: </b>{{form.dateofcreation}}<br>
-                <b>Last Edited by: </b>{{form.lasteditedby.username}}<b> on: </b>{{form.dateoflastedit}}<br><br>
-                    
-                <h4>Questions:</h4>
+                <div class="btn btn-lg">
+                    Add Question
+                </div>
             </div>
         </div>
 
-        {% for question in questions %}
-            <div class="row my-3">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>{{question.question}}</h2>
-                        </div>
-                        <div class="card-body">
-                            <b>Question of type: </b>{{question.questiontypeid_questiontype.typename}}<br>
-                            <b>Created by: </b>{{question.createdby.username}}<b> on: </b>{{question.dateofcreation}}<br>
-                            <b>Last Edited by: </b>{{question.lasteditedby.username}}<b> on: </b>{{question.dateoflastedit}}<br><br>
-
-                            {% if question.options %}
-                                <b>Options:</b>
-                                <p>
-
-                                    {% for option in question.options %}
-                                        {{option.option}} 
-                                        {% if question.canEdit %}
-                                            |
-                                            <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
-                                                <b>Edit</b>
-                                            </a>
-                                            |
-                                            <a class="btn btn-sm" href="{% url 'deleteOption' question.id option.id %}">
-                                                <b>Remove</b>
-                                            </a>
-                                        {% endif %}
-                                        <br>
-                                    {% endfor %}
-                                </p>
-                            {% endif %}
-                            {% if question.canEdit %}
-                                <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
-                                    <b>>>Add option</b>
-                                </a>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer">
-                            {% if question.canEdit %}
-                                <a class="btn btn-lg" href="{% url 'createQuestion' question.id form.id %}">
-                                    Rename Question
-                                </a>
-                                |
-                                <a class="btn btn-lg" href="{% url 'deassociateQuestion' question.id form.id %}" onclick="return confirm('Are you sure?');">
-                                    Remove Question
-                                </a>
-                            {% else %}
-                                <a class="btn btn-lg">
-                                    Can't edit question
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+        <div class="row my-3" style="display: none;" id="addExis">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <a class="btn btn-lg" href="{% url 'listQuestions' form.id %}">
+                    Add from existing questions
+                </a>
             </div>
-        {% endfor %}
+        </div>
 
-        {% if form.canEdit %}
-            <div class="row my-3" onclick="toggleAddQuestionOptions()">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <div class="btn btn-lg">
-                        Add Question
-                    </div>
-                </div>
+        <div class="row my-3" style="display: none;" id="addNew">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <a class="btn btn-lg" href="{% url 'createQuestion' 0 form.id %}">
+                    Create New
+                </a>
             </div>
-
-            <div class="row my-3" style="display: none;" id="addExis">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-8">
-                    <a class="btn btn-lg" href="{% url 'listQuestions' form.id %}">
-                        Add from existing questions
-                    </a>
-                </div>
-            </div>
-
-            <div class="row my-3" style="display: none;" id="addNew">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-8">
-                    <a class="btn btn-lg" href="{% url 'createQuestion' 0 form.id %}">
-                        Create New
-                    </a>
-                </div>
-            </div>
-        {% endif %}
-
+        </div>
     {% endif %}
 
+{% endblock %}
+
+{% block afterErrorMessage %}
     <div class="row my-5">
         <div class="col-sm-1"></div>
         <div class="col-sm-10">
             <a class="btn btn-lg" href='{{return_addr}}'>Back to form listings</a><br>
         </div>
-    </div>
-
-
-{% endblock %}
-
-{% block loggedOutContent %}
-    <div class="row my-3">
-        <div class="col-sm-1"></div>
-       <div class="col-sm-10">
-           <div class="card">
-               <div class="card-header">
-                   <h2>You must be signed in to access this page</h2>
-               </div>
-           </div>
-       </div>
     </div>
 {% endblock %}
 
