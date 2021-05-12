@@ -4,7 +4,7 @@
  <nav id="main-navbar" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a href="{% url 'homepage' %}" class="navbar-item logo">
-            <img alt="Event Manager" scr="{% static 'img/evento' %}">
+            <img src="{% static 'img/logonavbar.png' %}" alt="Event Manager" />
         </a>
         <a role="button" class="navbar-burger burger" onclick="onclick_burger(event)" data-target="navbarBasicExample">
             <span aria-hidden="true"></span> 
@@ -24,7 +24,7 @@
         <div class="navbar-end">
             <div  class="navbar-item">
 
-                {% if isLoggedIn %}
+                {% if user.is_authenticated %}
                 <div class="dropdown is-bottom-left is-mobile-modal">
                     
                     <div onclick="notificacoes()">
@@ -34,8 +34,7 @@
                               <span>
                                 <span class="icon">
                                   <span id="badge-inject" style="display:none;" title="Badge top right"class="badge is-warning"></span>
-                                  
-                               
+                           
                                   <i class=" mdi mdi-bell mdi-24px"></i>
                                 </span>
                               </span>
@@ -43,7 +42,6 @@
                           </span>
                         </div>
                     </div>
-
 
                     <div onclick="definicoes()">
                         <div id="dropdown_definicoes" class="dropdown is-right">
@@ -79,48 +77,12 @@
                           </div>
                         </div>
                     </div>
-
-
-
-
-
-                    <div role="button" aria-haspopup="true" class="dropdown-trigger">
-                        <span  role="button">
-                            <button  type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text" style="margin-right: 0.9rem;"><!----> 
-                                <span>
-                                    <span  class="icon">
-                                        <i class="mdi mdi-bell mdi-24px"></i>
-                                    </span>
-                                </span> <!
-                            </button>
-                        </span>
-                    </div> 
-                    <div aria-hidden="true" class="background" style="display: none;">
-
-                    </div> 
-                    <div aria-hidden="true" class="dropdown-menu" style="display: none;">
-                        <div role="menu" class="dropdown-content"> 
-                            <div  role="menuitem" tabindex="0" class="dropdown-item">
-                                <strong>Notificações</strong>
-                            </div> 
-                            <hr class="dropdown-divider">  
-                            <div>
-                                <div tabindex="0" class="dropdown-item">
-                                    <div class="has-text-grey">
-                                         Não tem novas notificações!
-                                    </div>
-                                </div> 
-                                <hr class="dropdown-divider">
-                            </div> 
-                            <a tabindex="0" class="dropdown-item">
-                                <u>Ver todas as notificações</u>
-                            </a>
-                        </div>
-                    </div>
                 </div> 
+
+
                 {% endif %}
                 
-                {% if isLoggedIn %}
+                {% if user.is_authenticated %}
                 <a href="">
                   <div type="button" class="button">
                     <span class="icon is-small">

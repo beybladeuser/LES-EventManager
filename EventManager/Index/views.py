@@ -2,18 +2,10 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 
-# Create your views here.
-def index(request) :
-
-    template = loader.get_template('template_index.html')
-    context = {
-        'isLoggedIn' : request.user.is_authenticated
-    }
-    return HttpResponse(template.render(context, request))
 
 def homepage(request) :
 
-    template = loader.get_template('homepage.html')
+    template = loader.get_template('template_base.html')
     context = {
         'isLoggedIn' : request.user.is_authenticated
     }
@@ -28,10 +20,12 @@ def narbar(request) :
     return HttpResponse(template.render(context, request))
 
 
-def homepage(request) :
+def welcome_screen(request) :
 
     template = loader.get_template('welcome_screen.html')
     context = {
         'isLoggedIn' : request.user.is_authenticated
     }
     return HttpResponse(template.render(context, request))
+
+    
