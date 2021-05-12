@@ -34,6 +34,7 @@ class AssetLogistics(models.Model):
 class Event(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     eventtypeid = models.ForeignKey('Eventtype', models.DO_NOTHING, db_column='EventTypeID')  # Field name made lowercase.
+    formproposalid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormProposalID', related_name='Event2proposalForm')
     formresgistrationid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormResgistrationID', related_name='Event2registerForm')  # Field name made lowercase.
     formfeedbackid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormFeedBackID', related_name='Event2feedbackForm')  # Field name made lowercase.
     campusid = models.ForeignKey(Campus, models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.

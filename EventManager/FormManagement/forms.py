@@ -38,14 +38,18 @@ class formCreation(forms.Form):
 
 		formType = self.cleaned_data.get("formType")
 		formName = self.cleaned_data.get("formName")
-		if Form.objects.filter(formname=formName, formtypeid_formtype=formType).exists() :
-			self.add_error("formName", 'Can\'t have duplicate form names of forms of same type')
+		if not formId :
+			if Form.objects.filter(formname=formName, formtypeid_formtype=formType, archived=False).exists() :
+				self.add_error("formName", 'Can\'t have duplicate form names of forms of same type')
+		else :
+			if Form.objects.filter(formname=formName, formtypeid_formtype=formType, archived=False).exclude(id=formId).exists() :
+				self.add_error("formName", 'Can\'t have duplicate form names of forms of same type')
 
 	def clean_eventType(self, *args, **kwargs):
 		formType = self.cleaned_data.get("formType")
 		eventType = self.cleaned_data.get("eventType")
 		formId = self.cleaned_data.get("formId")
-		temp = Form.objects.filter(eventtypeid=eventType, formtypeid_formtype=formType)
+		temp = Form.objects.filter(eventtypeid=eventType, formtypeid_formtype=formType, archived=False)
 		if not formId:
 			if formType == "1" and temp.exists() :
 				raise forms.ValidationError("Cannot have two proposal forms for the same event type")
@@ -60,29 +64,38 @@ class formCreation(forms.Form):
 	def save(self, FormID = None):
 		if FormID and Form.objects.filter(id=FormID).exists():
 			newForm = Form.objects.get(pk=FormID)
+			isEdit = True
 		else :
 			newForm = Form()
+			isEdit = False
+		wasChanged = False
+		if not isEdit or newForm.formname != self.cleaned_data['formName'] :
+			newForm.formname = self.cleaned_data['formName']
+			wasChanged = True
 		
-		newForm.formname = self.cleaned_data['formName']
+		
+		if not isEdit or newForm.formtypeid_formtype.id == self.cleaned_data['formType'] :
+			formType = Formtype.objects.get(pk=self.cleaned_data['formType'])
+			newForm.formtypeid_formtype = formType
+			wasChanged = True
 
-		formType = Formtype.objects.get(pk=self.cleaned_data['formType'])
-		newForm.formtypeid_formtype = formType
-
-		eventType = Eventtype.objects.get(pk=self.cleaned_data['eventType'])
-		newForm.eventtypeid = eventType
+		if not isEdit or newForm.eventtypeid.id == self.cleaned_data['eventType'] :
+			eventType = Eventtype.objects.get(pk=self.cleaned_data['eventType'])
+			newForm.eventtypeid = eventType
+			wasChanged = True
 
 		if not FormID :
 			newForm.dateofcreation = datetime.datetime.now()
 
-		newForm.dateoflastedit = datetime.datetime.now()
+		if wasChanged :
+			newForm.dateoflastedit = datetime.datetime.now()
 
 		if not FormID :
 			newForm.createdby = self.user
 		
-		newForm.lasteditedby = self.user
-		
-
-		newForm.save()
+		if wasChanged :
+			newForm.lasteditedby = self.user
+			newForm.save()
 		return newForm
 
 
@@ -91,6 +104,8 @@ class openEndedQuestionCreation(forms.Form):
 	form = None
 	questionToEdit = None
 	question = forms.CharField(label='Question', max_length=255, required=True)
+	options = ((True, 'Yes'), (False, 'No'))
+	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="Is Required", required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -105,13 +120,17 @@ class openEndedQuestionCreation(forms.Form):
 			self.add_error("question", 'Must be logged in to perform this action')
 			return
 		
-		if self.questionToEdit and self.questionToEdit.createdby.id != self.user.id and not self.user.groups.filter(pk=1).exists():
+		if self.questionToEdit and not self.questionToEdit.canEdit(self.user):
 			self.add_error("question", 'Not allowed to edit this form')
 			return
 
 		question = self.cleaned_data.get("question")
-		if Questions.objects.filter(question=question).exists() :
-			self.add_error("question", 'Can\'t have duplicate questions')
+		if self.questionToEdit :
+			if Questions.objects.filter(question=question).exclude(id=self.questionToEdit.id).exists() :
+				self.add_error("question", 'Can\'t have duplicate questions')
+		else :
+			if Questions.objects.filter(question=question).exists() :
+				self.add_error("question", 'Can\'t have duplicate questions')
 
 	def save(self) :
 		newQuestion = None
@@ -120,18 +139,30 @@ class openEndedQuestionCreation(forms.Form):
 		else :
 			newQuestion = Questions()
 
+		wasChanged = False
 		question = self.cleaned_data.get("question")
-		newQuestion.question = question
-		newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
+		if not self.questionToEdit or self.questionToEdit.question != question :
+			newQuestion.question = question
+			wasChanged = True
+		
+		if not self.questionToEdit :
+			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
+			wasChanged = True
+
+		required = self.cleaned_data.get("required")
+		if not self.questionToEdit or self.questionToEdit.required != required :
+			newQuestion.required = required
+			wasChanged = True
 
 		if not self.questionToEdit :
 			newQuestion.createdby = self.user
 			newQuestion.dateofcreation = datetime.datetime.now()
 		
-		newQuestion.lasteditedby = self.user
-		newQuestion.dateoflastedit = datetime.datetime.now()
-
-		newQuestion.save()
+		if wasChanged :
+			newQuestion.lasteditedby = self.user
+			newQuestion.dateoflastedit = datetime.datetime.now()
+	
+			newQuestion.save()
 
 		if self.form :
 			self.form.associateQuestion(newQuestion, self.user)
