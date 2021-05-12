@@ -1,7 +1,5 @@
 {% extends 'homepage.html' %}
-{% block title %}- Welcome Page{% endblock title %}
-{% block content %}
-{% load configuracao_tags %}
+{% block loggedOutContent %}
 {% load static %}
 <div>
     <div class="section">
@@ -40,4 +38,4 @@
       </div>
     </div>
   </div>
-  {% endblock content%}
+{% endblock %}

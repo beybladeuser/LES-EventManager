@@ -19,3 +19,19 @@ def homepage(request) :
     }
     return HttpResponse(template.render(context, request))
 
+def narbar(request) :
+
+    template = loader.get_template('navbar.html')
+    context = {
+        'isLoggedIn' : request.user.is_authenticated
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def homepage(request) :
+
+    template = loader.get_template('welcome_screen.html')
+    context = {
+        'isLoggedIn' : request.user.is_authenticated
+    }
+    return HttpResponse(template.render(context, request))
