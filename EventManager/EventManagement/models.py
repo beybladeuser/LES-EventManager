@@ -9,13 +9,18 @@ from FormManagement.models import *
 class Resgistration(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     eventid_event = models.ForeignKey('PreEventManagement.Event', models.DO_NOTHING, db_column='EventID_Event')  # Field name made lowercase.
-    date = models.IntegerField(db_column='Date', blank=True, null=True)  # Field name made lowercase.
-    waspresent = models.IntegerField(db_column='WasPresent', blank=True, null=True)  # Field name made lowercase.
+    dateofregistration = models.DateTimeField(db_column='dateOfRegistration')  # Field name made lowercase.
+    waspresent = models.BooleanField(db_column='WasPresent', default=False)  # Field name made lowercase.
     participantuserid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
 
-    def cancelregistrations(self, user) :
-        Answer.objects.filter(resgistrationid=self.id).delete()
-        return True
+    def canCancel(self, user) :
+        return user == participantuserid or user.groups.filter(pk=1).exists()
+
+
+    def cancelregistration(self, user) :
+        if self.canCancel(user) :
+            Answer.objects.filter(resgistrationid=self.id).delete()
+            self.delete()
 
    
 
