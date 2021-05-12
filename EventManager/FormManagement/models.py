@@ -103,7 +103,7 @@ class Form(models.Model):
         
 
     def canEdit(self, user) :
-        return self.userHasEditPermitions(user) and not self.archived and not self.getAssociatedEvents() and not self.wasAnswered()
+        return self.userHasEditPermitions(user) and not self.archived and not self.getAssociatedEvents()
 
     def canDuplicate(self, user) :
         return not user.groups.filter(pk=2).exists()
