@@ -14,7 +14,7 @@ class Resgistration(models.Model):
     participantuserid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
 
     def canCancel(self, user) :
-        return user == participantuserid or user.groups.filter(pk=1).exists()
+        return user == self.participantuserid or user.groups.filter(pk=1).exists()
 
 
     def cancelregistration(self, user) :
