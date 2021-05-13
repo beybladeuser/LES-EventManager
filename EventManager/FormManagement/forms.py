@@ -9,11 +9,11 @@ import datetime
 class formCreation(forms.Form):
 	user = None
 	formId = forms.CharField(widget=forms.HiddenInput, max_length=255, required=False)
-	formName = forms.CharField(label='Form Name', max_length=255, required=True)
+	formName = forms.CharField(label='Form Name', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 	OPTIONS_formType = Formtype.makeOptions()
-	formType = forms.CharField(widget=forms.Select(choices=OPTIONS_formType), label='Form Type', required=True)
+	formType = forms.CharField(widget=forms.Select(choices=OPTIONS_formType, attrs={'class' : 'input'}), label='Form Type', required=True)
 	OPTIONS_eventType = Eventtype.makeOptions()
-	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType), label='Event Type', required=True)
+	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType, attrs={'class' : 'input'}), label='Event Type', required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
