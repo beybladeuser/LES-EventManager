@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from PreEventManagement.models import *
+from PreEventManagement.models import Event
 from FormManagement.models import *
 
 
@@ -12,13 +12,20 @@ class Resgistration(models.Model):
     dateofregistration = models.DateTimeField(db_column='dateOfRegistration')  # Field name made lowercase.
     waspresent = models.BooleanField(db_column='WasPresent', default=False)  # Field name made lowercase.
     participantuserid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
+     
+
 
     def canCancel(self, user) :
-        return user == self.participantuserid or user.groups.filter(pk=1).exists()
+        return (user == self.participantuserid or user.groups.filter(pk=1).exists()) and self.waspresent != True
 
+    @staticmethod
+    def canRegister(event, user) :
+        return not Resgistration.objects.filter(participantuserid=user, eventid_event=event).exists()
 
-    def cancelregistration(self, user) :
-        if self.canCancel(user) :
+    
+
+    def cancelregistrations(self, user) :
+        if self.canCancel(user)  :
             Answer.objects.filter(resgistrationid=self.id).delete()
             self.delete()
 
