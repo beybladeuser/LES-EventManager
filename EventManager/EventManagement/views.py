@@ -13,15 +13,31 @@ import datetime
 
 # Create your views here.
 def cancelregistration(request, RegistrationID = None) :
-    if Resgistration.objects.filter(pk=RegistrationID).exists() :
+    registration=None
+    if Resgistration.objects.filter(pk=RegistrationID).exists()  :
         registration = Resgistration.objects.get(pk=RegistrationID)
+        
+    if  registration and registration.canCancel() :
+        registration.cancelregistrations(request.user)
+        errorMessage = "Cancel registration successful"
+        template = loader.get_template('message.html')
+        context = {
+        'errorMessage' : errorMessage,
+        }
+        return HttpResponse(template.render(context, request))  
+    else:
+        errorMessage = "Already checked in"
+        template = loader.get_template('message.html')
+        context = {
+        'errorMessage' : errorMessage,
+        }
+    return HttpResponse(template.render(context, request))
     
-    registration.cancelregistrations(request.user)
-    return redirect("index")
+        
 
 
 def consultar_participantes(request,eventid_event) :
-    if Event.objects.filter(pk=eventid_event).exists() :
+    if Event.objects.filter(pk=eventid_event).exists()  :
         event = Event.objects.get(pk=eventid_event)
         template = loader.get_template('participant.html')
         context = {
@@ -30,8 +46,24 @@ def consultar_participantes(request,eventid_event) :
         }
         return HttpResponse(template.render(context, request))
     else:
-        return redirect("index")
-       
+        errorMessage = "Event does not exist"
+        template = loader.get_template('message.html')
+        context = {
+            'errorMessage' : errorMessage,
+        }
+        return HttpResponse(template.render(context, request))
+
+def viewanswer(request, RegistrationID = None ):
+        viewanswer = Answer.objects.all()
+        template = loader.get_template('test.html')
+        context = {
+            'Answer': Answer.objects.filter(resgistrationid = RegistrationID),
+            'viewanswer' : viewanswer
+        }
+        return HttpResponse(template.render(context, request))
+    
+
+
     
 def addregistration(request, EventID= None):
     errorMessage = None
@@ -41,7 +73,7 @@ def addregistration(request, EventID= None):
     
     else :
         eventToRegister = Event.objects.get(id=EventID)
-        if not eventToRegister.canRegister(request.user) :
+        if not Resgistration.canRegister(eventToRegister, request.user) :
             errorMessage= "Already subscribed in this event"
         else :
             regis = Resgistration()
@@ -57,7 +89,7 @@ def addregistration(request, EventID= None):
 
                     errorMessage = "Registration Successfull"
 
-                    template = loader.get_template('registersuc.html')
+                    template = loader.get_template('message.html')
                     context = {
                         'errorMessage' : errorMessage,
                     }
@@ -65,10 +97,6 @@ def addregistration(request, EventID= None):
 
             else:
                 form = EventManagerForm(eventManagerFormID=eventToRegister.formresgistrationid.id, associatedRegistration=regis, associatedEvent=None)
-
-
-
-
     template = loader.get_template('template_registration_form.html')
     context = {
         'form' : form,
@@ -77,12 +105,3 @@ def addregistration(request, EventID= None):
     return HttpResponse(template.render(context, request))
 
 
-# def checkboxvalues(request)
-    
-#             template = loader.get_template('template_show_form_layout.html')
-#     context = {
-#         'form' : form,
-#         'return_addr' : return_addr,
-#         'errorMessage' : errorMessage,
-#     }
-#     return HttpResponse(template.render(context, request))
