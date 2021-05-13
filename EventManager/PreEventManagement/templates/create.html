@@ -1,0 +1,68 @@
+
+<script type="text/javascript">
+	function eventtype_change(){
+		console.log(this.value);
+		for(subform of document.getElementsByClassName("subforms")){
+			console.log(subform.id.substring(7) + " vs " + this.value + " ==> " + (subform.id.substring(7) == this.value))
+			subform.style.display = (
+				(subform.id.substring(7) == this.value)
+				?"block"
+				:"none"
+			);
+
+		}
+	}
+
+	function prepare_form(){
+		for(subform of document.getElementsByClassName("subforms")){
+			if(subform.style.display == "none")subform.remove();
+		}
+		return true;
+	}
+</script>
+
+<form action="" method="POST">{% csrf_token %}
+	<label for="name">Name: </label>
+	<input type="text" name="name"><br>
+
+
+	<label for="event_type">Campus:</label>
+	<select name="campus">
+		{% for campus in campuses %}
+			<option value="{{campus.id}}">{{campus.campusname}}</option>
+		{% endfor %}
+	</select><br>
+
+
+	<label for="event_type">Event type:</label>
+	<select onchange="eventtype_change.call(this)" name="event_type">
+		{% for event_type in event_types %}
+			<option value="{{event_type.id}}">{{event_type.typename}}</option>
+		{% endfor %}
+	</select>
+	<br>
+
+	<br><hr><br>
+
+	{% for form in forms %}
+		<div class="subforms" id="subform{{form.eventtypeid.id}}" style="display: {% if form.eventtypeid == default_event_type %}block{% else %}none{% endif %};">
+			<input type="hidden" name="form_id" value="{{form.id}}">
+			{% for question in form.formquestions %}
+				<label>{{question.question}}</label>
+				{% if question.questiontypeid_questiontype.typename == "Open Ended" %}
+					<input type="text" name="val{{question.id}}">
+				{% elif question.questiontypeid_questiontype.typename == "Multiple Choice" %}
+					<select name="val{{question.id}}">
+						{% for option in question.options %}
+							<option value="{{option.id}}">{{option.option}}</option>
+						{% endfor %}
+					</select>
+				{% endif %}
+				<br>
+			{% endfor %}
+		</div>
+	{% endfor %}
+
+	<br><br>
+	<input type="submit" value="Submit" onclick="return prepare_form();">
+</form>
