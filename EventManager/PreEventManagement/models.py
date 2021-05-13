@@ -5,7 +5,7 @@ from django.conf import settings
 
 from FormManagement.models import *
 from AssetManagement.models import *
-from Sessions.models import *
+#from Sessions.models import *
 
 # Create your models here.
 class AssetEvent(models.Model):
