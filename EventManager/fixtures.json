@@ -77,21 +77,21 @@
 	  "model": "auth.group",
 	  "pk": 1,
 	  "fields": {
-		"name": "Administrator"
+		"name": "Administrador"
 	  }
 	},
 	{
 	  "model": "auth.group",
 	  "pk": 2,
 	  "fields": {
-		"name": "Participant"
+		"name": "Participante"
 	  }
 	},
 	{
 	  "model": "auth.group",
 	  "pk": 3,
 	  "fields": {
-		"name": "Proponent"
+		"name": "Proponente"
 	  }
 	}
 
@@ -106,9 +106,26 @@
 		"username": "admin",
 		"password": "pbkdf2_sha256$260000$4Lrofq0ph8eiPdSujjwHqN$BzpAjUHIUI+o3aTev9VWiPd4a79OV89BtyzapklwiZI=",
 		"is_superuser": "1",
-		"is_staff":"1"
+		"is_staff":"1",
+		"groups": [1]
 	  }
 	},
+	{
+		"model": "utilizadores.Utilizador",
+		"fields": {
+		  "user_ptr_id": 1,
+		  "contacto": "69696969",
+		  "valido": "True"
+		}
+	},
+	{
+		"model": "utilizadores.Administrador",
+		"fields": {
+		  "utilizador_ptr_id": 1,
+		  "gabinete": "A Vida"
+		}
+	},
+
 
 
 
