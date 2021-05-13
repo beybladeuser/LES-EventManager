@@ -6,7 +6,7 @@ EventManager/Index/__pycache__
 EventManager/Models/__pycache__
 EventManager/PreEventManagement/__pycache__
 EventManager/Schedules/__pycache__
-EventManager/Sessions/__pycache__
+EventManager/utilizadores/__pycache__
 
 
 
@@ -24,5 +24,5 @@ EventManager/PreEventManagement/migrations/*
 !/EventManager/PreEventManagement/migrations/__init__.py
 EventManager/Schedules/migrations/*
 !/EventManager/Schedules/migrations/__init__.py
-EventManager/Sessions/migrations/*
-!/EventManager/Sessions/migrations/__init__.py
+EventManager/utilizadores/migrations/*
+!/EventManager/utilizadores/migrations/__init__.py
