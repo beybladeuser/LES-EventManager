@@ -37,3 +37,5 @@ FOR /d %%i in ("%folder%\*") do (
 	)
 
 )
+
+cd %folder%
