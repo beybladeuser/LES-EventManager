@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{% static 'css/materialdesignicons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive-tables.css' %}">
     <link rel="stylesheet" href="{% static 'css/animated-arrows.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buefy.css' %}">
+    
     <link rel="icon" href="{% static 'img/evento.png' %}" />
 
 
@@ -94,6 +96,9 @@
               {% block loggedOutContent %}
               {% endblock %}
           {% endif %}
+          
+          {% block loggedInOutContent %}
+          {% endblock %}
         </div>
       </div>
     </div>
@@ -110,6 +115,7 @@
   <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/animated-arrows.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/js_custom.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/notificacoes.js' %}"></script>
 
   {% block scripts %}
   {% endblock %}

@@ -17,6 +17,10 @@ How to run this:
   (Django) c:\folder_example> python -m pip install django-crispy-forms
   
   (Django) c:\folder_example> python -m pip install mysqlclient
+
+  (Django) c:\folder_example> python -m pip install django-tables2
+
+  (Django) c:\folder_example> python -m pip install django-filter
 ```
 
 2º clone this rep:
