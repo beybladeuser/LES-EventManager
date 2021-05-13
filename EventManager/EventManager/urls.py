@@ -22,7 +22,7 @@ urlpatterns = [
     path('preEvent/', include('PreEventManagement.urls')),
     path('event/', include('EventManagement.urls')),
     path('asset/', include('AssetManagement.urls')),
-    path('usr/', include('Sessions.urls')),
+    path('utilizadores/', include('utilizadores.urls')),
     path('schedules/', include('Schedules.urls')),
     path('', include('Index.urls')),
     path('admin/', admin.site.urls),

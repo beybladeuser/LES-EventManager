@@ -8,7 +8,7 @@
 from django.db import models, connection
 from FormManagement.models import *
 from AssetManagement.models import *
-from Sessions.models import *
+#from Sessions.models import *
 
 
 class Informacaomensagem(models.Model):
