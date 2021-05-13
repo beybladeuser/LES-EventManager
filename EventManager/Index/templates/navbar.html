@@ -1,0 +1,124 @@
+{% load static %}
+
+
+ <nav id="main-navbar" class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a href="{% url 'homepage' %}" class="navbar-item logo">
+            <img src="{% static 'img/logonavbar.png' %}" alt="Event Manager" />
+        </a>
+        <a role="button" class="navbar-burger burger" onclick="onclick_burger(event)" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span> 
+            <span aria-hidden="true"></span> 
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-start">
+            <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Asset</a>
+            <a href="" class="navbar-item is-tab router-link">Event</a>
+            <a href="{% url 'formsHome' %}" class="navbar-item is-tab router-link">Form</a>
+            <a href="" class="navbar-item is-tab router-link">PreEvent</a>
+        </div>
+        
+        
+        <div class="navbar-end">
+            <div  class="navbar-item">
+
+                {% if user.is_authenticated %}
+                <div class="dropdown is-bottom-left is-mobile-modal">
+                    
+                    <div onclick="notificacoes()">
+                        <div id="notificacoes_trigger" role="button" class="dropdown-trigger">
+                          <span role="button">
+                            <div type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text"style="margin-right: 0.9rem">
+                              <span>
+                                <span class="icon">
+                                  <span id="badge-inject" style="display:none;" title="Badge top right"class="badge is-warning"></span>
+                           
+                                  <i class=" mdi mdi-bell mdi-24px"></i>
+                                </span>
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                    </div>
+
+                    <div onclick="definicoes()">
+                        <div id="dropdown_definicoes" class="dropdown is-right">
+                          <div role="button" class="dropdown-trigger">
+                            <span role="button">
+                              <div type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text" style="margin-right: 0.9rem">
+                                <span>
+                                  <span class="icon">
+                                    <i class="mdi mdi-account-circle mdi-24px"></i>
+                                  </span>
+                                </span>
+                              </div>
+                            </span>
+                          </div>
+                          <div class="background" aria-hidden="true"></div>
+                          <div class="dropdown-menu" aria-hidden="true">
+                            <div role="menu" class="dropdown-content">
+                                <div role="menuitem" tabindex="0" class="dropdown-item">
+                                    <a href="" role="listitem" tabindex="0" class="dropdown-item is-disabled">
+                                        <span class="icon">
+                                            <i class="mdi mdi-account-edit mdi-24px"></i>
+                                        </span>
+                                        <strong>Alterar dados de conta</strong>
+                                    </a>
+                                    <a href="" role="listitem" tabindex="0" class="dropdown-item is-disabled">
+                                        <span class="icon">
+                                            <i class="mdi mdi-key-variant mdi-24px"></i>
+                                        </span>
+                                        <strong>Alterar palavra-passe</strong>        
+                                    </a>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div> 
+
+
+                {% endif %}
+                
+                {% if user.is_authenticated %}
+                <a href="">
+                  <div type="button" class="button">
+                    <span class="icon is-small">
+                      <i class="mdi mdi-login-variant"></i>
+                    </span>
+                    <span>Sair</span>
+                  </div>
+                </a>
+                {% else %}
+      
+      
+                <div class="navbar-end">
+                  <div class="navbar-item">
+                    <div class="buttons">
+                      <a href="">
+                        <bottom class="button is-primary">
+                          <strong>Registar</strong>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+      
+      
+                <a href="">
+                  <div type="button" class="button">
+                    <span class="icon is-small">
+                      <i class="mdi mdi-login-variant"></i>
+                    </span>
+                    <span>Entrar</span>
+                  </div>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+</nav>
+<!-- END NAVBAR NOVA -->
+

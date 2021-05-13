@@ -1,54 +1,67 @@
-{% extends "template_base.html" %}
+{% extends "template_listings_base.html" %}
 
 {% block PageTittle %}
     Form Listings
 {% endblock %}
 
-{% block loggedInContent %}
-    {% if errorMessage %}
-        <div class="row my-5">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>{{errorMessage}}</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% else %}
-        <div class="row my-3">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <h2>{{formType.typename}} Forms</h2>
-            </div>
-        </div>
+{% block listingTittle %}{{formType.typename}} Forms{% endblock %}
+
+{% block filterOptions %}
+    {% for filterOption in filterOptions %}
+        <option>{{filterOption}}</option>
+    {% endfor %}
+{% endblock %}
+
+{% block filterTypes %}
+    {% for eventType in eventTypes %}
+        <option>{{eventType.typename}}</option>
+    {% endfor %}	
+{% endblock %}
+
+{% block listings %}
         {% for form in forms %}
-            <div class="row my-3">
+            <div class="row my-3" id="row{{ forloop.counter }}">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
                     <div class="card">
                         <div class="card-header">
-                            <h2>{{form.formname}}</h2>
+                            <h2 id="name{{ forloop.counter }}">{{form.formname}} {% if form.archived %}(Archived){% endif %}</h2>
                         </div>
                         <div class="card-body">
-                            <b>Form designend for events of type: </b>{{form.eventtypeid.typename}}<br>
-                            <b>Created by: </b>{{form.createdby.username}}<b> on: </b>{{form.dateofcreation}}<br>
-                            <b>Last Edited by: </b>{{form.lasteditedby.username}}<b> on: </b>{{form.dateoflastedit}}
+                            <b>Form designend for events of type: </b><span id="eventtype{{ forloop.counter }}">{{form.eventtypeid.typename}}</span><br>
+                            <b>Created by: </b><span id="creator{{ forloop.counter }}">{{form.createdby.username}}</span><b> on: </b>{{form.dateofcreation}}<br>
+                            <b>Last Edited by: </b><span id="lasteditor{{ forloop.counter }}">{{form.lasteditedby.username}}</span><b> on: </b>{{form.dateoflastedit}}
                         </div>
                         <div class="card-footer">
                             <a class="btn btn-lg" href="{% url 'checkFormLayout' form.id %}">
                                 See Form Layout
                             </a>
                             {% if form.canEdit %}
-                            |
-                            <a class="btn btn-lg" href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
-                                Edit Form
-                            </a>
-                            |
-                            <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
-                                Delete Form
-                            </a>
+                                |
+                                <a class="btn btn-lg" href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
+                                    Edit Form
+                                </a>
+                                |
+                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
+                                    Delete Form
+                                </a>
+
+                            {% elif not form.archived %}    
+                                |
+                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
+                                    Archive Form
+                                </a>
+                            {% else %}
+                                |
+                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
+                                    Unarchive Form
+                                </a>
+                            {% endif %}
+                            {% if form.canDuplicate %}
+                                |
+                                <a class="btn btn-lg" href="{% url 'duplicateForm' form.id %}" onclick="return confirm('This action will archive the current proposal form for events of type {{form.eventtypeid.typename}}. Are you sure you want to continue?');">
+                                    Duplicate Form
+                                </a>
                             {% endif %}
                         </div>
                     </div>
@@ -56,18 +69,4 @@
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
-{% endblock %}
-
-{% block loggedOutContent %}
-    <div class="row my-3">
-        <div class="col-sm-1"></div>
-       <div class="col-sm-10">
-           <div class="card">
-               <div class="card-header">
-                   <h2>You must be signed in to access this page</h2>
-               </div>
-           </div>
-       </div>
-    </div>
 {% endblock %}

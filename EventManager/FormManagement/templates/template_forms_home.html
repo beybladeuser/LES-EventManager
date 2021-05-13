@@ -1,76 +1,48 @@
-{% extends "template_base.html" %}
+{% extends "template_form_base.html" %}
 
 {% block PageTittle %}
     Form Manager
 {% endblock %}
 
-{% block loggedInContent %}
-    {% if errorMessage %}
-        <div class="row my-5">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>{{errorMessage}}</h2>
-                    </div>
+{% block NonErrorContent %}
+    <div class="row my-3">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Questions</h2>
+                </div>
+                <div class="card-body">
+                    <a class="btn btn-lg" href="{% url 'listQuestions' %}">
+                        See Existing Questions
+                    </a>
+                    |
+                    <a class="btn btn-lg" href="{% url 'createQuestion' 0 0 %}">
+                        Create New
+                    </a>
                 </div>
             </div>
         </div>
-    {% else %}
+    </div>
+    {% for formType in formTypes %}
         <div class="row my-3">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Questions</h2>
+                        <h2>{{formType.typename}} Forms</h2>
                     </div>
                     <div class="card-body">
-                        <a class="btn btn-lg" href="{% url 'listQuestions' %}">
-                            See Existing Questions
+                        <a class="btn btn-lg" href="{% url 'listFormsFromType' formType.id %}">
+                            See Existing Forms
                         </a>
                         |
-                        <a class="btn btn-lg" href="{% url 'createQuestion' 0 0 %}">
+                        <a class="btn btn-lg" href="{% url 'createForm' formType.id %}">
                             Create New
                         </a>
                     </div>
-
                 </div>
             </div>
         </div>
-        {% for formType in formTypes %}
-            <div class="row my-3">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>{{formType.typename}} Forms</h2>
-                        </div>
-                        <div class="card-body">
-                            <a class="btn btn-lg" href="{% url 'listFormsFromType' formType.id %}">
-                                See Existing Forms
-                            </a>
-                            |
-                            <a class="btn btn-lg" href="{% url 'createForm' formType.id %}">
-                                Create New
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-{% endblock %}
-
-{% block loggedOutContent %}
-    <div class="row my-3">
-        <div class="col-sm-1"></div>
-       <div class="col-sm-10">
-           <div class="card">
-               <div class="card-header">
-                   <h2>You must be signed in to access this page</h2>
-               </div>
-           </div>
-       </div>
-    </div>
+    {% endfor %}
 {% endblock %}
