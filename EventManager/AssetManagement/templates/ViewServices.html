@@ -1,4 +1,5 @@
-
+{% extends "template_base.html" %}
+{% block loggedInContent %}
   <table style="width:100%">
     <tr>
       <th>Service Name</th>
@@ -11,4 +12,4 @@
         </tr>
     {% endfor %}
   </table>
-
+{% endblock %}

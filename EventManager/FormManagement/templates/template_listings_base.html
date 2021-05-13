@@ -1,0 +1,113 @@
+{% extends "template_form_base.html" %}
+
+{% block NonErrorContent %}
+		{% block preListingTittle %}
+    	
+		{% endblock %}
+        <div class="row my-3">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <h2>{% block listingTittle %} {% endblock %}</h2>
+            </div>
+        </div>
+		<div class="row my-3">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <b>Filter by:</b>
+				<select  class="form-select" id="FilterBy" onchange="updateFilter();">
+					<option selected>Name</option>
+					{% block filterOptions %}
+					
+					{% endblock %}
+				</select>
+
+				<input type="text" id="FilterBar" placeholder="Insert name here" onkeyup="filter();" />
+				<select  class="form-select" id="FilterSelect" onchange="filter();" style="display: none;">
+					<option selected>Select</option>
+					{% block filterTypes %}
+					
+					{% endblock %}
+				</select>
+            </div>
+        </div>
+        {% block listings %}
+    	
+		{% endblock %}
+{% endblock %}
+
+{% block scripts %}
+		<script>
+			function updateFilter() {
+				var selectedFilterOption = getSelectedFieldSpaced();
+				
+				var FilterBar = document.getElementById("FilterBar");
+				if ( FilterBar.style.display == "none" | selectedFilterOption.indexOf("type")>-1) {
+					toggleFilterInputs();
+				}
+				
+				FilterBar.placeholder = "Insert " + selectedFilterOption + " here";
+				
+				
+			}
+
+			function toggleFilterInputs() {
+				var FilterBar = document.getElementById("FilterBar");
+				var FilterSelect = document.getElementById("FilterSelect");
+				if (FilterBar.style.display === "none") {
+					FilterSelect.style.display = "none";
+					FilterBar.style.display = "";
+				}
+				else {
+					FilterBar.style.display = "none";
+					FilterSelect.style.display = "";
+				}
+				FilterBar.value = "";
+				FilterSelect.selectedIndex = 0;
+				
+				FilterSelect[0].text = "Select " + getSelectedFieldSpaced();
+				filter();
+			}
+			function getSelectedFieldSpaced() {
+				var FilterAttr = document.getElementById("FilterBy");
+				return FilterAttr.options[FilterAttr.selectedIndex].text.toLowerCase();
+			}
+
+			function getSelectedField() {
+				return getSelectedFieldSpaced().replace(" ", "");
+			}
+
+        	function filter()
+        	{
+        	    var FilterBar = document.getElementById("FilterBar");
+        	    var FilterSelect = document.getElementById("FilterSelect");
+        	    var filter;
+        	    if (FilterBar.style.display == "none") {
+        	        filter = FilterSelect.options[FilterSelect.selectedIndex].text.toLowerCase();
+        	    }
+        	    else {
+        	        filter = FilterBar.value.toLowerCase();
+        	    }
+
+        	    var id = 1;
+        	    while (document.getElementById("row" + id)){
+        	        var field = getSelectedField();
+
+        	        var fieldVal = document.getElementById(field + id).textContent.toLowerCase();
+        	        if (FilterBar.style.display == "none" && filter.indexOf("select")>-1) {
+        	            filter = "";
+        	        }
+
+
+        	        if ( fieldVal.indexOf(filter)>-1 ) {
+        	            document.getElementById("row" + id).style.display = "";
+        	        }
+        	        else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	        }
+        	        id++;
+        	    }
+
+        	}
+		</script>
+    	
+{% endblock %}

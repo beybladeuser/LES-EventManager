@@ -33,6 +33,10 @@ urlpatterns = [
 
     path('deletequestion/<int:questionID>/', views.deleteQuestion, name='deleteQuestion'),
 
+    path('duplicateForm/<int:formID>/', views.duplicateForm, name='duplicateForm'),
+    
+    path('duplicateQuestion/<int:questionID>/', views.duplicateQuestion, name='duplicateQuestion'),
+
 
     path('test/', views.testForm, name='test'),
 ]

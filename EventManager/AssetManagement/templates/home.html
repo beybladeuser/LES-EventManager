@@ -1,11 +1,16 @@
-{% extends "template_base.html" %}
+{% extends 'template_base.html' %}
+
 
 {% block loggedInContent %}
   <p><a href="ViewAssets">Consultar Assets</a></p>
   <p><a href="ViewServices">Consultar Serviços</a></p>
   <p><a href="ViewEquipments">Consultar Equipamentos</a></p>
   <p><a href="ViewRooms">Consultar Salas</a></p>
-{% endblock %}
+  <p></p>
+  <p></p>
 
+  <p><a href="InsertAssets">Inserir Assets</a></p>  
+  
+{% endblock %}
 {% block loggedOutContent %}
 {% endblock %}
