@@ -6,13 +6,10 @@
 
 {% block loggedInContent %}
     {% if errorMessage %}
-        <div class="row my-5">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>{{errorMessage}}</h2>
-                    </div>
+        <div class="columns">
+            <div class="column is-12">
+                <div class="box">
+                    <h2 style="text-align: center;">{{errorMessage}}</h2>
                 </div>
             </div>
         </div>
