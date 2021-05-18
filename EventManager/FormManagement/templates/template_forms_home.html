@@ -5,8 +5,19 @@
 {% endblock %}
 
 {% block NonErrorContent %}
+    <div class="columns">
+        <div class="column is-12" >
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'homepage' %}">Início</a></li>
+                    <li class="is-active"><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <hr>
     <div class="columns" >
-        <div class="column is-4" >
+        <div class="column is-3" >
             <div class="box">
                 <header >
                     <p class="card-header-title">Questões</p>
@@ -24,15 +35,17 @@
 
     <div class="columns" >
         {% for formType in formTypes %}
-            {% if forloop.counter == 4 %}
+            {% if forloop.counter == 5 %}
                 </div>
                 <div class="columns" >
             {% endif %}
-            <div class="column is-4" >
+            <div class="column is-3" >
                 <div class="box">
                     <header >
                         <p class="card-header-title">Formulário de {{formType.typename}}</p>
                     </header>
+                    <br>
+                    <br>
                     <footer class="card-footer">
                         <a href="{% url 'listFormsFromType' formType.id %}" class="card-footer-item">Ver formulários existentes</a>
                         <a href="{% url 'createForm' formType.id %}" class="card-footer-item">Criar Novo</a>

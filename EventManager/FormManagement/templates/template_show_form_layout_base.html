@@ -1,11 +1,31 @@
 {% extends "template_form_base.html" %}
 
+{% block PageTittle %}
+    Form Layout
+{% endblock %}
+
 {% block NonErrorContent %}
 	<div class="columns">
 		<div class="column is-3">
+
+            <div class="menu">
+				<div class="menu-label">
+					Formulário
+				</div>
+				<ul class="menu-list" style="margin-left: 20px;">
+                    <li><b>Nome: </b>{{form.formname}}</li>
+                    <li><b>Tipo de formulário: </b>{{form.formtypeid_formtype.typename}}</li>
+                    <li><b>Tipo de evento: </b>{{form.eventtypeid.typename}}</li>
+                    <li><b>Criado por: </b>{{form.createdby.username}}<b> em: </b>{{form.dateofcreation}}</li>
+                    <li><b>Editado por: </b>{{form.lasteditedby.username}}<b> em: </b>{{form.dateoflastedit}}</li>
+				</ul>
+			</div>
+
+            <br>
+
 			<div class="menu">
 				<div class="menu-label">
-					Filtros
+					Filtros de Questões
 				</div>
 				<ul class="menu-list">
 					<div class="field">
@@ -57,18 +77,31 @@
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
 					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
-					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
+                    <li><a href="{% url 'listFormsFromType' form.formtypeid_formtype.id %}">Formulários de {{form.formtypeid_formtype.typename}}</a></li>
+					<li class="is-active"><a href="{% url 'checkFormLayout' form.id %}">Ver Formulário</a>
 					</li>
 				</ul>
 			</nav>
-			<a href="{% block addAction %} {% endblock %}">
-				<button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
-						class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar {% block addButton %} {% endblock %}</span>
-				</button>
-			</a>
-			{% block preListingBlock %}
 
-			{% endblock %}
+            {% if form.canEdit %}
+			    <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;" onclick="toggle('ExistingQuestion');toggle('NewQuestion');">
+                    <span>Adicionar Questão</span>
+                    <span class="icon is-small"><i class="fas fa-arrow-right"></i></span>
+			    </button>
+                <a href="{% url 'listQuestions' form.id %}">
+                    <button id="ExistingQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
+                        <span class="icon is-small"><i class="fas fa-link"></i></span>
+                        <span>Adicionar Questão Existente</span>
+                    </button>
+                </a>
+                <a href="{% url 'createQuestion' 0 form.id %}">
+                    <button id="NewQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
+                        <span class="icon is-small"><i class="mdi mdi-plus"></i></span>
+                        <span>Criar Nova Questão</span>
+			        </button>
+                </a>
+            {% endif %}
+			
 			<table class="table">
 				<thead>
 					<tr>
@@ -87,84 +120,53 @@
 			</table>
 		</div>
 	</div>
-	
-	<div class="level">
-		<div class="level-left"></div>
-		<div class="level-right">
-			<div class="level-item">
-				<nav class="pagination" role="navigation" aria-label="pagination">
-					
-					
-					<ul class="pagination-list">
-						<li>
-							
-							<a class="pagination-link is-current" id="CurrentPage">1</a>
-							
-						</li>
-					</ul>
-					<button id="BackPage" role="button" class="pagination-previous" onclick="pagging(currentPage-1)">
-						<span class="icon" aria-hidden="true">
-							<i class="mdi mdi-chevron-left mdi-24px"></i>
-						</span>
-					</button>
-					
-					<button id="NextPage" role="button" class="pagination-next" onclick="pagging(currentPage+1)">
-						<span class="icon" aria-hidden="true">
-							<i class="mdi mdi-chevron-right mdi-24px"></i>
-						</span>
-					</button>
-					
-				</nav>
-			</div>
-		</div>
-	</div>
 		
 {% endblock %}
 
 {% block scripts %}
 		<script>
-        	function filter(filterName, isDropDown)
+
+			
+			function filter(filterName, isDropDown)
         	{
-        	    var FilterOBJ = document.getElementById(filterName);
+				var FilterOBJ = document.getElementById(filterName);
         	    var filter;
         	    if (isDropDown) {
-        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+					filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
         	    }
         	    else {
-        	        filter = FilterOBJ.value.toLowerCase();
+					filter = FilterOBJ.value.toLowerCase();
         	    }
-
+				
 				if (isDropDown && filter.indexOf("selecione")>-1) {
 					filter = "";
         	    }
 				
 				var id = 1;
         	    while (document.getElementById("row" + id)){
-
-        	        var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
+					
+					var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
         	        
-
-
+					
+					
         	        if ( fieldVal.indexOf(filter)>-1 ) {
-        	            document.getElementById("row" + id).style.display = "";
+						document.getElementById("row" + id).style.display = "";
         	        }
         	        else {
-        	            document.getElementById("row" + id).style.display = "none";
+						document.getElementById("row" + id).style.display = "none";
         	        }
         	        id++;
         	    }
-
+				
         	}
-
+			
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
 				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
 				{'filterName' : 'EditorFilter', 'isDropDown' : false},
 			];
-			var filteredRows = new Array();
 			function filter2(){
-				filteredRows = new Array();
 				var id = 1;
         	    while (document.getElementById("row" + id)){
 					var toBeHidden = false;
@@ -190,64 +192,13 @@
 					}
 					
 					if ( !toBeHidden ) {
-        	            //document.getElementById("row" + id).style.display = "none";
-						filteredRows.push(document.getElementById("row" + id));
+        	            document.getElementById("row" + id).style.display = "";
         	        }
-        	        //else {
+        	        else {
         	            document.getElementById("row" + id).style.display = "none";
-        	        //}
+        	        }
         	        id++;
         	    }
-				pagging();
-			}
-
-			function getNPages(size=10) {
-				return Math.floor(filteredRows.length / size);
-			}
-
-			function getSizeOfPage(page=0, size=10) {
-				if (page == getNPages(size)){
-					return filteredRows.length % size;
-				}
-				return size;
-			}
-
-			function hideAllEntries() {
-				var id = 1;
-        	    while (document.getElementById("row" + id)){
-					document.getElementById("row" + id).style.display = "none";
-					id++;
-				}
-			}
-
-			var currentPage = 0;
-			function pagging(page=0, size=4){
-				if (page > getNPages(size) || page < 0) {
-					return;
-				}
-				var displayingN = 0;
-				var trueSize = getSizeOfPage(page, size);
-				hideAllEntries();
-        	    while (displayingN < trueSize) {
-					filteredRows[displayingN + page*size].style.display = "";
-					displayingN++;
-
-				}
-				currentPage = page;
-				document.getElementById("CurrentPage").textContent = String(currentPage + 1);
-				if (getSizeOfPage(page + 1, size) <= 0 || page + 1 > getNPages(size)) {
-					document.getElementById("NextPage").disabled = true;
-				}
-				else {
-					document.getElementById("NextPage").disabled = false;
-				}
-
-				if (page - 1 < 0) {
-					document.getElementById("BackPage").disabled = true;
-				}
-				else {
-					document.getElementById("BackPage").disabled = false;
-				}
 			}
 
 			function toggle(objName){
@@ -259,8 +210,6 @@
 					OBJ.style.display = "none";
 				}
 			}
-
-			filter2();
 		</script>
     	
 {% endblock %}

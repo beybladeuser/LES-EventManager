@@ -3,6 +3,7 @@ from .models import Formtype, Form, Answer, Multipleoptions, Questiontype, Quest
 from PreEventManagement.models import Eventtype
 from EventManagement.models import Resgistration
 import datetime
+from django.utils.safestring import mark_safe
 
 # Create your forms here.
 
@@ -103,7 +104,7 @@ class openEndedQuestionCreation(forms.Form):
 	user = None
 	form = None
 	questionToEdit = None
-	question = forms.CharField(label='Question', max_length=255, required=True)
+	question = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}), label='Question', max_length=255, required=True)
 	options = ((True, 'Yes'), (False, 'No'))
 	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="Is Required", required=True)
 
@@ -175,7 +176,7 @@ class QuestionOptionForm(forms.Form):
 	user = None
 	associatedQuestion = None
 	optionToEdit = None
-	option = forms.CharField(label='Option', max_length=255, required=True)
+	option = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}),label='Option', max_length=255, required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :

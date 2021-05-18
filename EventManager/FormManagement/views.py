@@ -63,6 +63,7 @@ def checkFormLayout(request, formID = None) :
 
     template = loader.get_template('template_show_form_layout.html')
     context = {
+        'questionTypes' : Questiontype.objects.all(),
         'form' : form,
         'questions' : questions,
         'return_addr' : return_addr,
