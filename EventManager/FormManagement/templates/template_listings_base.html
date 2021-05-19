@@ -90,8 +90,21 @@
 	
 	<div class="level">
 		<div class="level-left"></div>
-		<div class="level-right">
+		<div class="level-right" style="white-space: nowrap;">
+			<div class="level-item" style="width: fit-content;">
+				<span style="margin-right: 3%;">Displaying</span>   
+				<div class="select" style="margin-right: 3%;">
+					<select onchange="pagging(0, this.value);">
+					  <option value=5>5</option>
+					  <option value=10>10</option>
+					  <option value=20>20</option>
+					</select>
+				</div>
+				<span style="margin-right: 3%;">out of <span id="FilteredCount"></span></span>
+				
+			</div>
 			<div class="level-item">
+				
 				<nav class="pagination" role="navigation" aria-label="pagination">
 					
 					
@@ -198,6 +211,8 @@
         	        //}
         	        id++;
         	    }
+				document.getElementById("FilteredCount").textContent = filteredRows.length;
+				
 				pagging();
 			}
 
@@ -221,7 +236,12 @@
 			}
 
 			var currentPage = 0;
+			var currentSize=5;
 			function pagging(page=0, size=5){
+				var test = typeof global_size;
+				if (!(typeof global_size === "undefined" )) {
+					size=global_size;
+				}
 				if (page > getNPages(size) || page < 0) {
 					return;
 				}

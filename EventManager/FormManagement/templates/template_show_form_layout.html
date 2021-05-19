@@ -34,7 +34,7 @@
                             {% endif %}
                             {% if question.options %} Ver{% else %} N/a{% endif %}
                         </span>
-                        <div class="box" style="position: fixed; display: none;" id="optionDropdown{{ forloop.counter }}">
+                        <div class="box" style="position: absolute; display: none;" id="optionDropdown{{ forloop.counter }}">
                             {% for option in question.options %}
                                 <div class="icon-text" >
                                     <span>{{option.option}}</span>
