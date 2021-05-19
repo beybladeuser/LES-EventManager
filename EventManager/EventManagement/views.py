@@ -39,28 +39,50 @@ def cancelregistration(request, RegistrationID = None) :
 def consultar_participantes(request,eventid_event) :
     if Event.objects.filter(pk=eventid_event).exists()  :
         event = Event.objects.get(pk=eventid_event)
-        template = loader.get_template('participant.html')
-        context = {
-            'registrations': Resgistration.objects.filter(eventid_event=eventid_event),
-            'event' : event
-        }
-        return HttpResponse(template.render(context, request))
+        if event.canConsultParticipants(request.user) :
+            template = loader.get_template('participant.html')
+            context = {
+                'registrations': Resgistration.objects.filter(eventid_event=eventid_event).order_by('participantuserid'),
+                'event' : event
+            }
+            return HttpResponse(template.render(context, request))
+        else:
+            errorMessage = "can not access this page"
+                
     else:
         errorMessage = "Event does not exist"
-        template = loader.get_template('message.html')
-        context = {
-            'errorMessage' : errorMessage,
-        }
-        return HttpResponse(template.render(context, request))
+
+    template = loader.get_template('message.html')
+    context = {
+        'errorMessage' : errorMessage,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+
+
 
 def viewanswer(request, RegistrationID = None ):
-        viewanswer = Answer.objects.all()
-        template = loader.get_template('test.html')
-        context = {
-            'Answer': Answer.objects.filter(resgistrationid = RegistrationID),
-            'viewanswer' : viewanswer
-        }
-        return HttpResponse(template.render(context, request))
+    answers = Answer.objects.filter(resgistrationid = RegistrationID)
+    if (Resgistration.objects.filter(pk=RegistrationID).exists()) :
+        regisForm = Resgistration.objects.get(pk=RegistrationID).eventid_event.formresgistrationid
+        regisQuestions = regisForm.getQuestions()
+        answers = []
+        for regisQuestion in regisQuestions :
+            if (regisQuestion.getAnswersForForm(regisForm).filter(resgistrationid=RegistrationID).exists()) :
+                answer = regisQuestion.getAnswersForForm(regisForm).get(resgistrationid=RegistrationID)
+                answers.append( {"questionsid_questions":regisQuestion, "answer":answer.answer} )
+            else :
+                answers.append( {"questionsid_questions":regisQuestion, "answer":"N\\a"} )
+
+
+
+
+    template = loader.get_template('list_event_regs_form_answers.html')
+    context = {
+        'answers': answers,
+    }
+    return HttpResponse(template.render(context, request))
     
 
 
