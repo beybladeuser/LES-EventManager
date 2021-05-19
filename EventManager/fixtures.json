@@ -163,6 +163,14 @@
 			"quantity": 10
 		}
 	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 1,
+		"fields" :{
+			"assetname": "Microfone YETI",
+			"quantity": 10
+		}
+	},
 
 	{
 		"model": "AssetManagement.Asset",
@@ -484,10 +492,50 @@
 			"campusid": 3,
 			"buildingname": "Ed. 8"
 		}
+	},
+
+	{
+		"model": "AssetManagement.Equipmenttype",
+		"pk": 1,
+		"fields" :{
+			"typename": "Microfone"
+		}
+	},
+	{
+		"model": "AssetManagement.Equipmenttype",
+		"pk": 2,
+		"fields" :{
+			"typename": "Projetor"
+		}
+	},
+	{
+		"model": "AssetManagement.Equipmenttype",
+		"pk": 3,
+		"fields" :{
+			"typename": "Laptop"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Servicetype",
+		"pk": 1,
+		"fields" :{
+			"typename": "Audiovisual"
+		}
+	},
+	{
+		"model": "AssetManagement.Servicetype",
+		"pk": 2,
+		"fields" :{
+			"typename": "Logístico"
+		}
+	},
+	{
+		"model": "AssetManagement.Servicetype",
+		"pk": 3,
+		"fields" :{
+			"typename": "Protocolar"
+		}
 	}
-
-
-
-
 
   ]

@@ -63,9 +63,9 @@ class Equipment(models.Model):
     equipmenttypeid_equipmenttype = models.ForeignKey('Equipmenttype', models.DO_NOTHING, db_column='EquipmentTypeID_EquipmentType')  # Field name made lowercase.
 
     class Meta:
-        
         db_table = 'equipment'
       
+ 
 
 
 
