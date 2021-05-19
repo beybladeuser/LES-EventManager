@@ -7,6 +7,7 @@ EventManager/Models/__pycache__
 EventManager/PreEventManagement/__pycache__
 EventManager/Schedules/__pycache__
 EventManager/utilizadores/__pycache__
+EventManager/utilizadores/templatetags/__pycache__
 
 
 
@@ -26,3 +27,4 @@ EventManager/Schedules/migrations/*
 !/EventManager/Schedules/migrations/__init__.py
 EventManager/utilizadores/migrations/*
 !/EventManager/utilizadores/migrations/__init__.py
+
