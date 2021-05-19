@@ -1,0 +1,25 @@
+{% extends "template_registration_listngs_base.html" %}
+
+{% block PageTittle %}
+	Ver respostas de --user-- ao evento --evento--
+{% endblock %}
+
+{% block currentPage %}
+    Respostas de --user-- ao evento --evento--
+{% endblock %}
+
+{% block tableHead %}
+    <th>Questão</th>
+    <th style="width: 5%;">Requerida</th>
+    <th style="width: 60%;">Resposta</th>
+{% endblock %}
+
+{% block listings %}
+    {% for awnser in answers %}
+        <tr id="row{{ forloop.counter }}">
+            <td id="NameFilter{{ forloop.counter }}"> {{awnser.questionsid_questions.question}}</td>
+            <td id="RequiredFilter{{ forloop.counter }}">{{awnser.questionsid_questions.required}}</td>
+            <td> {{awnser.answer}}</td>
+        </tr>
+    {% endfor %}		
+{% endblock %}
