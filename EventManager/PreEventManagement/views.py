@@ -73,7 +73,8 @@ def create(request):
 			campusid=form_campus,
 			wasvalidated="0",
 			proponentid=request.user,
-			eventname=form_name
+			eventname=form_name,
+			formproposalid=form
 		)
 		ev.save()
 
@@ -131,7 +132,7 @@ def list(request):
 		#event.QAs = "henlo"
 
 
-	template = loader.get_template('letsgo.html')
+	template = loader.get_template('listEvent.html')
 	context = {
 		'eventes': events,
 	}

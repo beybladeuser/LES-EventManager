@@ -1,3 +1,8 @@
+{% extends 'template_base.html' %}
+
+
+{% block loggedInContent %}
+
 
 <script type="text/javascript">
 	function eventtype_change(){
@@ -66,3 +71,7 @@
 	<br><br>
 	<input type="submit" value="Submit" onclick="return prepare_form();">
 </form>
+  
+{% endblock %}
+{% block loggedOutContent %}
+{% endblock %}
