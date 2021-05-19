@@ -1,0 +1,52 @@
+{% extends "template_base.html" %}
+
+
+
+  {% block loggedInContent %}
+    {% if errorMessage %}
+        <div class="row my-5">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>{{errorMessage}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+    <table class="table">
+        <thead>
+        <tr>
+          <th><abbr title="question">Question</abbr></th>
+            <th><abbr title="awnser">Awnser</abbr></th>
+        </tr>
+        {% for Awnsers in Answer %}
+        <tr>
+            <td> {{Awnsers.questionsid_questions}}</td>
+            <td> {{Awnsers.answer}}</td>
+        </tr>
+        {% endfor %}
+      
+    {% endif %}
+
+
+{% endblock %}
+
+{% block loggedOutContent %}
+    <div class="row my-3">
+        <div class="col-sm-1"></div>
+       <div class="col-sm-10">
+           <div class="card">
+               <div class="card-header">
+                   <h2>You must be signed in to access this page</h2>
+               </div>
+           </div>
+       </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}
