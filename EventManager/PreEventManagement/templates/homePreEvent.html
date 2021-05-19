@@ -1,0 +1,24 @@
+{% extends 'template_base.html' %}
+
+
+{% block loggedInContent %}
+
+<p><a href="create">Criar Evento</a></p>
+<br>
+<p><a href="list">Listar Eventos</a></p> 
+       <!-- <a href="{% url 'utilizadores:escolher-perfil' %}">
+            <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                    class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Utilizador</span>
+            </button>
+        </a>
+        <a href="{% url 'utilizadores:escolher-perfil' %}">
+            <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;">
+            	<span class="icon is-small">
+            		<i class="mdi mdi-plus"></i>
+            	</span> 
+            	<span>Adicionar Utilizador</span>
+            </button>
+        </a>  -->
+{% endblock %}
+{% block loggedOutContent %}
+{% endblock %}

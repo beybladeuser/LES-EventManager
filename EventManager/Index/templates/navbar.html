@@ -17,7 +17,7 @@
             <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Asset</a>
             <a href="" class="navbar-item is-tab router-link">Event</a>
             <a href="{% url 'formsHome' %}" class="navbar-item is-tab router-link">Form</a>
-            <a href="" class="navbar-item is-tab router-link">PreEvent</a>
+            <a href="{% url 'preEventHome' %}" class="navbar-item is-tab router-link">PreEvent</a>
             {% if user|has_group:'Administrador'%}
               <a href="{% url 'utilizadores:consultar-utilizadores' %}" class="navbar-item">
                 Utilizadores
@@ -89,6 +89,7 @@
                 
                 {% if user.is_authenticated %}
                 <a href="/utilizadores/logout">
+
                   <div type="button" class="button">
                     <span class="icon is-small">
                       <i class="mdi mdi-login-variant"></i>
@@ -103,6 +104,7 @@
                   <div class="navbar-item">
                     <div class="buttons">
                       <a href="/utilizadores/escolherperfil">
+
                         <bottom class="button is-primary">
                           <strong>Registar</strong>
                       </a>

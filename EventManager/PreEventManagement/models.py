@@ -42,6 +42,9 @@ class Event(models.Model):
     proponentid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ProponentID')  # Field name made lowercase.
     eventname = models.CharField(db_column='eventName', max_length=255)  # Field name made lowercase.
 
+    def canConsultParticipants(self, user) :
+        return self.proponentid == user or user.groups.filter(pk=1).exists()
+
     class Meta:
         
         db_table = 'event'

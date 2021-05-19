@@ -1,116 +1,170 @@
 {% extends "template_listings_base.html" %}
 
 {% block PageTittle %}
-    Existing questions
+    Question Listings
 {% endblock %}
 
-{% block preListingTittle %}
-    {% if formToAssociate %}
-    <div class="row my-3">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-10">
-            <a class="btn btn-lg" href="{% url 'checkFormLayout' formToAssociate.id %}">
-                <b>Return to Form {{formToAssociate.formname}}</b>
-            </a>
-        </div>
-    </div>
-    {% endif %}
-{% endblock %}
+{% block selectType %}Questão{% endblock %}
 
-{% block listingTittle %}Questions{% endblock %}
-
-{% block filterOptions %}
-    {% for filterOption in filterOptions %}
-        <option>{{filterOption}}</option>
-    {% endfor %}
-{% endblock %}
+{% block listingTittle %}Questões{% endblock %}
 
 {% block filterTypes %}
     {% for questionType in questionTypes %}
         <option>{{questionType.typename}}</option>
-    {% endfor %}
+    {% endfor %}	
+{% endblock %}
+
+{% block currentPage %}Questões{% endblock %}
+
+{% block addAction %}
+    {% url 'createQuestion' 0 0 %}
+{% endblock %}
+
+{% block addButton %}
+    Questão
+{% endblock %}
+
+{% block preListingBlock %}
+    {% if formToAssociate %}
+        <a href="{% url 'checkFormLayout' formToAssociate.id %}">
+            <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                    class="icon is-small"><i class="fa fa-arrow-left"></i></span> <span>Voltar para o formulário {{formToAssociate.formname}}</span>
+            </button>
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block tableHead %}
+    <th style="width: 15%;">Questão</th>
+    <th style="width: 10%;">Tipo</th>
+    <th style="width: 5%;">Opções</th>
+    <th style="width: 5%;">Requerida</th>
+    <th style="width: 5%;">Formulários Associados</th>
+    <th style="width: 5%;">Criador</th>
+    <th style="width: 10%;">Criado em</th>
+    <th style="width: 5%;">Editado por</th>
+    <th style="width: 10%;">Editado em</th>
+    <th style="width: 20%;">Ações</th>
 {% endblock %}
 
 {% block listings %}
-    {% for question in questions %}
-        <div class="row my-3" id="row{{ forloop.counter }}">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 id="name{{ forloop.counter }}">{{question.question}}</h2>
-                    </div>
-                    <div class="card-body">
-                        <b>Question of type: </b><span id="questiontype{{ forloop.counter }}">{{question.questiontypeid_questiontype.typename}}</span><br>
-                        <b>Is Required: </b><span id="requirement{{ forloop.counter }}">{% if question.required %}Yes{% else %}No{% endif %}</span><br>
-                        <b>Created by: </b><span id="creator{{ forloop.counter }}">{{question.createdby.username}}</span><b> on: </b>{{question.dateofcreation}}<br>
-                        <b>Last Edited by: </b><span id="lasteditor{{ forloop.counter }}">{{question.lasteditedby.username}}</span><b> on: </b>{{question.dateoflastedit}}<br><br>
-                        {% if question.options %}
-                            <b>Options:</b>
-                            <p>
-                                {% for option in question.options %}
-                                    {{option.option}}
+        {% for question in questions %}
+            <tr id="row{{ forloop.counter }}">
+                <td id="NameFilter{{ forloop.counter }}">{{question.question}}</td>
+                <td id="TypeFilter{{ forloop.counter }}">{{question.questiontypeid_questiontype.typename}}</td>
+                <td id="OptionsFilter{{ forloop.counter }}">
+                    
+                    <div {% if question.canEdit or question.options %} onmouseover="toggle('optionDropdown{{ forloop.counter }}')" onmouseout="toggle('optionDropdown{{ forloop.counter }}')" {% endif %}>
+                        <span class="icon is-small" >
+                            {% if question.canEdit or question.options %}
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            {% endif %}
+                            {% if question.options %} Ver{% else %} N/a{% endif %}
+                        </span>
+                        <div class="box" style="position: absolute; display: none;" id="optionDropdown{{ forloop.counter }}">
+                            {% for option in question.options %}
+                                <div class="icon-text" >
+                                    <span>{{option.option}}</span>
                                     {% if question.canEdit %}
-                                        |
-                                        <a class="btn btn-sm" href="{% url 'createOption' question.id option.id %}">
-                                            <b>Edit</b>
+                                        <a href="{% url 'createOption' question.id option.id %}" class="icon has-text-info" style="vertical-align: middle;" data-tooltip="Editar Opção">
+                                            <i class="mdi mdi-circle-edit-outline" aria-hidden="true"></i>
                                         </a>
-                                        |
-                                        <a class="btn btn-sm" href="{% url 'deleteOption' question.id option.id %}">
-                                            <b>Remove</b>
+                                        <a href="{% url 'deleteOption' question.id option.id %}" class="icon has-text-info" style="vertical-align: middle;" data-tooltip="Remover Opção">
+                                          <i class="fas fa-times" aria-hidden="true"></i>
                                         </a>
                                     {% endif %}
-                                    <br>
-                                {% endfor %}
-                            </p>
-                        {% endif %}
-                        {% if question.canEdit %}
-                            <a class="btn btn-sm" href="{% url 'createOption' question.id %}">
-                                <b>>>Add option</b>
-                            </a>
-                            <br><br>
-                        {% endif %}
-                        
-                        {% if question.associatedforms %}
-                            
-                            <b>Associated Forms:</b><br>
-                            {% for associatedform in question.associatedforms %}
-                                    {{associatedform.formname}} |
-                                    <a class="btn btn-sm" href="{% url 'checkFormLayout' associatedform.id %}">
-                                        <b>Check Layout</b>
-                                    </a><br>
+                                </div>
                             {% endfor %}
-                        {% endif %}
+                            {% if question.canEdit %}
+                                <a class="button is-white" href="{% url 'createOption' question.id %}">Adicionar Nova</a>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="card-footer">
-                        {% if formToAssociate %}
-                            <a class="btn btn-lg" href="{% url 'associateQuestion' question.id formToAssociate.id %}">
-                                Associate to form {{formToAssociate.formname}}
-                            </a>
-                            |
-                        {% endif %}
-                        {% if question.canEdit %}
-                        <a class="btn btn-lg" href="{% url 'createQuestion' question.id 0 %}">
-                            Rename Question
+                    
+
+                </td>
+                <td id="RequiredFilter{{ forloop.counter }}">{% if question.required %}Sim{% else %}Não{% endif %}</td>
+                <td id="AssociationsFilter{{ forloop.counter }}">
+                    <div {% if question.associatedforms %} onmouseover="toggle('associationsDropdown{{ forloop.counter }}')" onmouseout="toggle('associationsDropdown{{ forloop.counter }}')" {% endif %}>
+                        <span class="icon is-small" >
+                            {% if question.associatedforms %}
+                                <i class="fas fa-angle-down" aria-hidden="true"> </i>
+                                Ver
+                            {% else %} 
+                                N/a
+                            {% endif %}
+                        </span>
+                        <div class="box" style="position: absolute; display: none;" id="associationsDropdown{{ forloop.counter }}">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for associatedform in question.associatedforms %}
+                                        <tr>
+                                            <td><span>{{associatedform.formname}}</span></td>
+                                            <td>
+                                                <div class="icon-text" >
+                                                    <a href="{% url 'checkFormLayout' associatedform.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Formulário">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                
+                                
+                            </table>
+                            
+                            
+                        </div>
+                    </div>
+                </td>
+                <td id="CriatorFilter{{ forloop.counter }}">{{question.createdby.username}}</td>
+                <td id="CriationDateFilter{{ forloop.counter }}">{{question.dateofcreation}}</td>
+                <td id="EditorFilter{{ forloop.counter }}">{{question.lasteditedby.username}}</td>
+                <td id="EditDateFilter{{ forloop.counter }}">{{question.dateoflastedit}}</td>
+                
+                <td id="ActionsFilter{{ forloop.counter }}">
+                    {% if formToAssociate %}
+                        <a href="{% url 'associateQuestion' question.id formToAssociate.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar a {{formToAssociate.formname}}">
+                            <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
                         </a>
-                        |
-                        <a class="btn btn-lg" href="{% url 'deleteQuestion' question.id%}" onclick="return confirm('Are you sure?');">
-                            Delete Question
+                    {% else %}
+                        <a href="{% url 'createQuestion' question.id 0 %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar a formulário" disabled>
+                            <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+
+                    {% if question.canEdit %}
+                        <a href="{% url 'createQuestion' question.id 0 %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Questão">
+                            <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+                        </a>
+                        <a href="{% url 'deleteQuestion' question.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Questão" onclick="return confirm('Are you sure?');">
+                            <i class="fas fa-times fa-lg" aria-hidden="true"></i>
                         </a>
                         {% else %}
-                            <a class="btn btn-lg" >
-                                Can't Edit Question
+                            <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Questão" disabled>
+                                <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+                            </a>
+                            <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Questão" onclick="return confirm('Deseja eliminar esta questão?');" disabled>
+                                <i class="fas fa-times fa-lg" aria-hidden="true"></i>
                             </a>
                         {% endif %}
                         {% if question.canDuplicate %}
-                            |
-                            <a class="btn btn-lg" href="{% url 'duplicateQuestion' question.id%}">
-                                Duplicate Question
+                            <a href="{% url 'duplicateQuestion' question.id%}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Questão">
+                                <i class="far fa-clone" aria-hidden="true"></i>
+                            </a>
+                        {% else %}
+                            <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Questão" disabled>
+                                <i class="far fa-clone" aria-hidden="true"></i>
                             </a>
                         {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
 {% endblock %}
