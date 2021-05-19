@@ -10,39 +10,7 @@
 				<ul class="menu-list">
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<select class="input" id="TypeFilter" onchange="filter2()">
-							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
-							  	{% block filterTypes %}
-							
-								{% endblock %}
-							</select>
-							<span class="icon is-left">
-								<i class="	fa fa-angle-down mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="CriatorFilter" placeholder="Nome do criador" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
+							<input type="text" class="input" id="NameFilter" placeholder="Questão" onkeyup="filter2()">
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
@@ -56,20 +24,15 @@
 			<nav aria-label="breadcrumbs" class="breadcrumb">
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
-					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
+					<li><a href="{% url 'eventHome' %}">Gestor de Inscrições</a></li>
 					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
 					</li>
 				</ul>
 			</nav>
-			<a href="{% block addAction %} {% endblock %}">
-				<button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
-						class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar {% block addButton %} {% endblock %}</span>
-				</button>
-			</a>
 			{% block preListingBlock %}
 
 			{% endblock %}
-			<table class="table">
+			<table class="table is-fullwidth">
 				<thead>
 					<tr>
 						{% block tableHead %}
@@ -158,9 +121,6 @@
 
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
-				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
-				{'filterName' : 'EditorFilter', 'isDropDown' : false},
 			];
 			var filteredRows = new Array();
 			function filter2(){

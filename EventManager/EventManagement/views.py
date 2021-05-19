@@ -63,13 +63,26 @@ def consultar_participantes(request,eventid_event) :
 
 
 def viewanswer(request, RegistrationID = None ):
-        viewanswer = Answer.objects.all()
-        template = loader.get_template('awnser.html')
-        context = {
-            'Answer': Answer.objects.filter(resgistrationid = RegistrationID),
-            'viewanswer' : viewanswer
-        }
-        return HttpResponse(template.render(context, request))
+    answers = Answer.objects.filter(resgistrationid = RegistrationID)
+    if (Resgistration.objects.filter(pk=RegistrationID).exists()) :
+        regisForm = Resgistration.objects.get(pk=RegistrationID).eventid_event.formresgistrationid
+        regisQuestions = regisForm.getQuestions()
+        answers = []
+        for regisQuestion in regisQuestions :
+            if (regisQuestion.getAnswersForForm(regisForm).filter(resgistrationid=RegistrationID).exists()) :
+                answer = regisQuestion.getAnswersForForm(regisForm).get(resgistrationid=RegistrationID)
+                answers.append( {"questionsid_questions":regisQuestion, "answer":answer.answer} )
+            else :
+                answers.append( {"questionsid_questions":regisQuestion, "answer":"N\\a"} )
+
+
+
+
+    template = loader.get_template('list_event_regs_form_answers.html')
+    context = {
+        'answers': answers,
+    }
+    return HttpResponse(template.render(context, request))
     
 
 
