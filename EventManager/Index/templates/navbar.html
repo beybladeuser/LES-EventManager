@@ -17,7 +17,7 @@
             <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Asset</a>
             <a href="" class="navbar-item is-tab router-link">Event</a>
             <a href="{% url 'formsHome' %}" class="navbar-item is-tab router-link">Form</a>
-            <a href="" class="navbar-item is-tab router-link">PreEvent</a>
+            <a href="{% url 'preEventHome' %}" class="navbar-item is-tab router-link">PreEvent</a>
             {% if user|has_group:'Administrador'%}
               <a href="{% url 'utilizadores:consultar-utilizadores' %}" class="navbar-item">
                 Utilizadores
