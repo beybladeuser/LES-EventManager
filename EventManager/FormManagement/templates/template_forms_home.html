@@ -5,44 +5,54 @@
 {% endblock %}
 
 {% block NonErrorContent %}
-    <div class="row my-3">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-10">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Questions</h2>
-                </div>
-                <div class="card-body">
-                    <a class="btn btn-lg" href="{% url 'listQuestions' %}">
-                        See Existing Questions
-                    </a>
-                    |
-                    <a class="btn btn-lg" href="{% url 'createQuestion' 0 0 %}">
-                        Create New
-                    </a>
-                </div>
+    <div class="columns">
+        <div class="column is-12" >
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'homepage' %}">Início</a></li>
+                    <li class="is-active"><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <hr>
+    <div class="columns" >
+        <div class="column is-3" >
+            <div class="box">
+                <header >
+                    <p class="card-header-title">Questões</p>
+                </header>
+                <footer class="card-footer">
+                    <a href="{% url 'listQuestions' %}" class="card-footer-item">Ver questões existentes</a>
+                    <a href="{% url 'createQuestion' 0 0 %}" class="card-footer-item">Criar Nova</a>
+                </footer>
+        
             </div>
         </div>
     </div>
-    {% for formType in formTypes %}
-        <div class="row my-3">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>{{formType.typename}} Forms</h2>
-                    </div>
-                    <div class="card-body">
-                        <a class="btn btn-lg" href="{% url 'listFormsFromType' formType.id %}">
-                            See Existing Forms
-                        </a>
-                        |
-                        <a class="btn btn-lg" href="{% url 'createForm' formType.id %}">
-                            Create New
-                        </a>
-                    </div>
+
+    <hr>
+
+    <div class="columns" >
+        {% for formType in formTypes %}
+            {% if forloop.counter == 5 %}
+                </div>
+                <div class="columns" >
+            {% endif %}
+            <div class="column is-3" >
+                <div class="box">
+                    <header >
+                        <p class="card-header-title">Formulário de {{formType.typename}}</p>
+                    </header>
+                    <br>
+                    <br>
+                    <footer class="card-footer">
+                        <a href="{% url 'listFormsFromType' formType.id %}" class="card-footer-item">Ver formulários existentes</a>
+                        <a href="{% url 'createForm' formType.id %}" class="card-footer-item">Criar Novo</a>
+                    </footer>
+                
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endblock %}

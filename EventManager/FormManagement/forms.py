@@ -3,17 +3,18 @@ from .models import Formtype, Form, Answer, Multipleoptions, Questiontype, Quest
 from PreEventManagement.models import Eventtype
 from EventManagement.models import Resgistration
 import datetime
+from django.utils.safestring import mark_safe
 
 # Create your forms here.
 
 class formCreation(forms.Form):
 	user = None
 	formId = forms.CharField(widget=forms.HiddenInput, max_length=255, required=False)
-	formName = forms.CharField(label='Form Name', max_length=255, required=True)
+	formName = forms.CharField(label='Form Name', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 	OPTIONS_formType = Formtype.makeOptions()
-	formType = forms.CharField(widget=forms.Select(choices=OPTIONS_formType), label='Form Type', required=True)
+	formType = forms.CharField(widget=forms.Select(choices=OPTIONS_formType, attrs={'class' : 'input'}), label='Form Type', required=True)
 	OPTIONS_eventType = Eventtype.makeOptions()
-	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType), label='Event Type', required=True)
+	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType, attrs={'class' : 'input'}), label='Event Type', required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -103,7 +104,7 @@ class openEndedQuestionCreation(forms.Form):
 	user = None
 	form = None
 	questionToEdit = None
-	question = forms.CharField(label='Question', max_length=255, required=True)
+	question = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}), label='Question', max_length=255, required=True)
 	options = ((True, 'Yes'), (False, 'No'))
 	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="Is Required", required=True)
 
@@ -175,7 +176,7 @@ class QuestionOptionForm(forms.Form):
 	user = None
 	associatedQuestion = None
 	optionToEdit = None
-	option = forms.CharField(label='Option', max_length=255, required=True)
+	option = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}),label='Option', max_length=255, required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :

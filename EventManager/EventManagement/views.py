@@ -17,7 +17,7 @@ def cancelregistration(request, RegistrationID = None) :
     if Resgistration.objects.filter(pk=RegistrationID).exists()  :
         registration = Resgistration.objects.get(pk=RegistrationID)
         
-    if  registration and registration.canCancel() :
+    if  registration and registration.canCancel(request.user) :
         registration.cancelregistrations(request.user)
         errorMessage = "Cancel registration successful"
         template = loader.get_template('message.html')

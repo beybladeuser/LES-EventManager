@@ -14,7 +14,9 @@ from FormManagement.models import *
 #			raise Exception("No proposal form exists for event type " + event_type.typename)
 
 def index(request):
-	return HttpResponse('<a href="create">create</a> <a href="list">list</a>')
+	template = loader.get_template('homePreEvent.html')
+	context = {}
+	return HttpResponse(template.render(context, request))
 
 
 
@@ -71,7 +73,8 @@ def create(request):
 			campusid=form_campus,
 			wasvalidated="0",
 			proponentid=request.user,
-			eventname=form_name
+			eventname=form_name,
+			formproposalid=form
 		)
 		ev.save()
 
@@ -129,7 +132,7 @@ def list(request):
 		#event.QAs = "henlo"
 
 
-	template = loader.get_template('letsgo.html')
+	template = loader.get_template('listEvent.html')
 	context = {
 		'eventes': events,
 	}
