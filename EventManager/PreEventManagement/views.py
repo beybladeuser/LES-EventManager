@@ -14,7 +14,9 @@ from FormManagement.models import *
 #			raise Exception("No proposal form exists for event type " + event_type.typename)
 
 def index(request):
-	return HttpResponse('<a href="create">create</a> <a href="list">list</a>')
+	template = loader.get_template('homePreEvent.html')
+	context = {}
+	return HttpResponse(template.render(context, request))
 
 
 
