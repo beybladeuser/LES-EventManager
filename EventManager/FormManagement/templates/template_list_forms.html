@@ -4,13 +4,9 @@
     Form Listings
 {% endblock %}
 
-{% block listingTittle %}{{formType.typename}} Forms{% endblock %}
+{% block selectType %}Evento{% endblock %}
 
-{% block filterOptions %}
-    {% for filterOption in filterOptions %}
-        <option>{{filterOption}}</option>
-    {% endfor %}
-{% endblock %}
+{% block listingTittle %}{{formType.typename}} Forms{% endblock %}
 
 {% block filterTypes %}
     {% for eventType in eventTypes %}
@@ -18,55 +14,86 @@
     {% endfor %}	
 {% endblock %}
 
+{% block currentPage %}Formulários de {{formType}}{% endblock %}
+
+{% block addAction %}
+    {% url 'createForm' formType.id %}
+{% endblock %}
+
+{% block addButton %}
+    Formulário de {{formType.typename}}
+{% endblock %}
+
+{% block tableHead %}
+    <th style="width: 15%;">Nome</th>
+    <th style="width: 10%;">Tipo</th>
+    <th style="width: 5%;">Tipo de Evento</th>
+    <th style="width: 5%;">Arquivado</th>
+    <th style="width: 5%;">Criador</th>
+    <th style="width: 10%;">Criado em</th>
+    <th style="width: 5%;">Editado por</th>
+    <th style="width: 10%;">Editado em</th>
+    <th style="width: 20%;">Ações</th>
+{% endblock %}
+
 {% block listings %}
         {% for form in forms %}
-            <div class="row my-3" id="row{{ forloop.counter }}">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 id="name{{ forloop.counter }}">{{form.formname}} {% if form.archived %}(Archived){% endif %}</h2>
-                        </div>
-                        <div class="card-body">
-                            <b>Form designend for events of type: </b><span id="eventtype{{ forloop.counter }}">{{form.eventtypeid.typename}}</span><br>
-                            <b>Created by: </b><span id="creator{{ forloop.counter }}">{{form.createdby.username}}</span><b> on: </b>{{form.dateofcreation}}<br>
-                            <b>Last Edited by: </b><span id="lasteditor{{ forloop.counter }}">{{form.lasteditedby.username}}</span><b> on: </b>{{form.dateoflastedit}}
-                        </div>
-                        <div class="card-footer">
-                            <a class="btn btn-lg" href="{% url 'checkFormLayout' form.id %}">
-                                See Form Layout
-                            </a>
-                            {% if form.canEdit %}
-                                |
-                                <a class="btn btn-lg" href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
-                                    Edit Form
-                                </a>
-                                |
-                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
-                                    Delete Form
-                                </a>
-
-                            {% elif not form.archived %}    
-                                |
-                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
-                                    Archive Form
-                                </a>
-                            {% else %}
-                                |
-                                <a class="btn btn-lg" href="{% url 'deleteForm' form.id %}" onclick="return confirm('Are you sure?');">
-                                    Unarchive Form
-                                </a>
-                            {% endif %}
-                            {% if form.canDuplicate %}
-                                |
-                                <a class="btn btn-lg" href="{% url 'duplicateForm' form.id %}" onclick="return confirm('This action will archive the current proposal form for events of type {{form.eventtypeid.typename}}. Are you sure you want to continue?');">
-                                    Duplicate Form
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
+            <tr id="row{{ forloop.counter }}">
+                <td id="NameFilter{{ forloop.counter }}">{{form.formname}}</td>
+                <td>{{form.formtypeid_formtype}}</td>
+                <td id="TypeFilter{{ forloop.counter }}">{{form.eventtypeid.typename}}</td>
+                <td id="ArchivedFilter{{ forloop.counter }}">{% if form.archived %}Sim{% else %}Não{% endif %}</td>
+                <td id="CriatorFilter{{ forloop.counter }}">{{form.createdby.username}}</td>
+                <td id="CriationDateFilter{{ forloop.counter }}">{{form.dateofcreation}}</td>
+                <td id="EditorFilter{{ forloop.counter }}">{{form.lasteditedby.username}}</td>
+                <td id="EditDateFilter{{ forloop.counter }}">{{form.dateoflastedit}}</td>
+                <td>
+                    <a href="{% url 'checkFormLayout' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Formulário">
+                        <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+                    </a>
                     
-                </div>
-            </div>
+                    {% if form.canEdit %}
+                        <a href="{% url 'createForm' form.formtypeid_formtype.id form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
+                            <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+                        </a>
+                        <a href="{% url 'deleteForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Formulário" onclick="return confirm('Tem a certeza que deseja apagar este formulário?');">
+                            <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário" disabled>
+                            <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+                        </a>
+                        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Formulário" disabled>
+                            <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                    
+                    {% if not form.archived %}
+                        <a href="{% url 'deleteForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" onclick="return confirm('Após arquivar o formulário não sera possivél associar este a novos eventos nem a sua edição. Deseja continuar?');">
+                            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Remover do arquivo" disabled>
+                            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" disabled>
+                            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <a href="{% url 'deleteForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Remover do arquivo" >
+                            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+
+                    {% if form.canDuplicate %}
+                        <a href="{% url 'duplicateForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Formulário" onclick="return confirm('Esta ação irá arquivar o atual formulário de proposta para eventos do tipo {{form.eventtypeid.typename}}. Tem a certeza que quer continuar?');">
+                            <i class="far fa-clone" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Questão" disabled>
+                            <i class="far fa-clone" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
         {% endfor %}
 {% endblock %}
