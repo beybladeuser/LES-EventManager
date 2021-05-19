@@ -9,7 +9,8 @@
 {% endblock %}
 
 {% block NonErrorContent %}
-    {% load crispy_forms_tags %} 
+    {% load crispy_forms_tags %}
+    <!-- 
     <div class="row my-3">
          <div class="col-sm-3"></div>
         <div class="col-sm-6">
@@ -29,6 +30,36 @@
                     <div class="card-footer">
                         <button class="btn btn-lg btn-block" type="submit">Save</button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    -->
+
+    <div class="columns" style="margin-top: 8%;">
+        <div class="column is-3"></div>
+        <div class="column is-6">
+            <div class="box">
+                <header >
+                    <p class="card-header-title">
+                        {% if questionCreate %}
+                            Create new question
+                        {% else %}
+                            Edit question
+                        {% endif %}
+                    </p>
+                </header>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="card-content">
+                        <div class="content">
+                            {{questionCreation|crispy}}
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <button class="button is-success card-footer-item" type="submit">Save</button>
+                        <a class="button is-white card-footer-item" href="{{ cancelURL }}">Cancel</a>
+                    </footer>
                 </form>
             </div>
         </div>

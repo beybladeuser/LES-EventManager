@@ -1,0 +1,215 @@
+{% extends "template_form_base.html" %}
+
+{% block PageTittle %}
+    Form Layout
+{% endblock %}
+
+{% block NonErrorContent %}
+	<div class="columns">
+		<div class="column is-3">
+
+            <div class="menu">
+				<div class="menu-label">
+					Formulário
+				</div>
+				<ul class="menu-list" style="margin-left: 20px;">
+                    <li><b>Nome: </b>{{form.formname}}</li>
+                    <li><b>Tipo de formulário: </b>{{form.formtypeid_formtype.typename}}</li>
+                    <li><b>Tipo de evento: </b>{{form.eventtypeid.typename}}</li>
+                    <li><b>Criado por: </b>{{form.createdby.username}}<b> em: </b>{{form.dateofcreation}}</li>
+                    <li><b>Editado por: </b>{{form.lasteditedby.username}}<b> em: </b>{{form.dateoflastedit}}</li>
+				</ul>
+			</div>
+
+            <br>
+
+			<div class="menu">
+				<div class="menu-label">
+					Filtros de Questões
+				</div>
+				<ul class="menu-list">
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="TypeFilter" onchange="filter2()">
+							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
+							  	{% block filterTypes %}
+							
+								{% endblock %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="CriatorFilter" placeholder="Nome do criador" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+				</ul>
+			</div>
+		</div>
+
+		<div class="column">
+			<nav aria-label="breadcrumbs" class="breadcrumb">
+				<ul>
+					<li><a href="{% url 'homepage' %}">Início</a></li>
+					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
+                    <li><a href="{% url 'listFormsFromType' form.formtypeid_formtype.id %}">Formulários de {{form.formtypeid_formtype.typename}}</a></li>
+					<li class="is-active"><a href="{% url 'checkFormLayout' form.id %}">Ver Formulário</a>
+					</li>
+				</ul>
+			</nav>
+
+            {% if form.canEdit %}
+			    <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;" onclick="toggle('ExistingQuestion');toggle('NewQuestion');">
+                    <span>Adicionar Questão</span>
+                    <span class="icon is-small"><i class="fas fa-arrow-right"></i></span>
+			    </button>
+                <a href="{% url 'listQuestions' form.id %}">
+                    <button id="ExistingQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
+                        <span class="icon is-small"><i class="fas fa-link"></i></span>
+                        <span>Adicionar Questão Existente</span>
+                    </button>
+                </a>
+                <a href="{% url 'createQuestion' 0 form.id %}">
+                    <button id="NewQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
+                        <span class="icon is-small"><i class="mdi mdi-plus"></i></span>
+                        <span>Criar Nova Questão</span>
+			        </button>
+                </a>
+            {% endif %}
+			
+			<table class="table">
+				<thead>
+					<tr>
+						{% block tableHead %}
+				
+						{% endblock %}
+					</tr>
+				</thead>
+				<tbody>
+					{% block listings %}
+					
+					{% endblock %}
+				</tbody>
+
+				
+			</table>
+		</div>
+	</div>
+		
+{% endblock %}
+
+{% block scripts %}
+		<script>
+
+			
+			function filter(filterName, isDropDown)
+        	{
+				var FilterOBJ = document.getElementById(filterName);
+        	    var filter;
+        	    if (isDropDown) {
+					filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	    }
+        	    else {
+					filter = FilterOBJ.value.toLowerCase();
+        	    }
+				
+				if (isDropDown && filter.indexOf("selecione")>-1) {
+					filter = "";
+        	    }
+				
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					
+					var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
+        	        
+					
+					
+        	        if ( fieldVal.indexOf(filter)>-1 ) {
+						document.getElementById("row" + id).style.display = "";
+        	        }
+        	        else {
+						document.getElementById("row" + id).style.display = "none";
+        	        }
+        	        id++;
+        	    }
+				
+        	}
+			
+			var filters = [
+				{'filterName' : 'NameFilter', 'isDropDown' : false},
+				{'filterName' : 'TypeFilter', 'isDropDown' : true},
+				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
+				{'filterName' : 'EditorFilter', 'isDropDown' : false},
+			];
+			function filter2(){
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					var toBeHidden = false;
+					for (let index = 0; index < filters.length; index++) {
+						var fieldVal = document.getElementById(filters[index].filterName + id).textContent.toLowerCase();
+						var FilterOBJ = document.getElementById(filters[index].filterName);
+        	    		var filter;
+
+						if (filters[index].isDropDown) {
+        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	    		}
+        	    		else {
+        	    		    filter = FilterOBJ.value.toLowerCase();
+        	    		}
+
+						if (filters[index].isDropDown && filter.indexOf("selecione")>-1) {
+							filter = "";
+        	    		}
+
+						if ( fieldVal.indexOf(filter)<=-1 ) {
+							toBeHidden = true;
+						}
+					}
+					
+					if ( !toBeHidden ) {
+        	            document.getElementById("row" + id).style.display = "";
+        	        }
+        	        else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	        }
+        	        id++;
+        	    }
+			}
+
+			function toggle(objName){
+				var OBJ = document.getElementById(objName);
+				if (OBJ.style.display == "none") {
+					OBJ.style.display = "";
+				}
+				else {
+					OBJ.style.display = "none";
+				}
+			}
+		</script>
+    	
+{% endblock %}

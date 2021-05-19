@@ -248,14 +248,10 @@ def alterar_password(request):
     ''' Alterar a password do utilizador '''
     if request.user.is_authenticated:    
         user = get_user(request)
-        if user.groups.filter(name = "Coordenador").exists():
-            u = "Coordenador"
-        elif user.groups.filter(name = "Administrador").exists():
+        if user.groups.filter(name = "Administrador").exists():
             u = "Administrador"
-        elif user.groups.filter(name = "ProfessorUniversitario").exists():
-            u = "ProfessorUniversitario"
         elif user.groups.filter(name = "Colaborador").exists():
-            u = "Colaborador"
+            u = "Proponente"
         elif user.groups.filter(name = "Participante").exists():
             u = "Participante" 
         else:

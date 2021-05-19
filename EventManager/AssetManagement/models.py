@@ -6,13 +6,23 @@
 #   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.conf import settings
 from Models.models import *
+import datetime
 
 class Asset(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     assetname = models.CharField(db_column='AssetName', unique=True, max_length=255)  # Field name made lowercase.
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
+
+
+
+    canAdd = False
+
+    
+    def userHasEditPermitions(self, user) :
+        return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
 
 
     def getServiceTypeName(self):
@@ -26,7 +36,6 @@ class Asset(models.Model):
 
     def __str__(self):
         return self.assetname
-
 
     class Meta:
         db_table = 'asset'
@@ -63,9 +72,9 @@ class Equipment(models.Model):
     equipmenttypeid_equipmenttype = models.ForeignKey('Equipmenttype', models.DO_NOTHING, db_column='EquipmentTypeID_EquipmentType')  # Field name made lowercase.
 
     class Meta:
-        
         db_table = 'equipment'
       
+ 
 
 
 

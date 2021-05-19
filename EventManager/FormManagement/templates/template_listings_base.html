@@ -1,101 +1,161 @@
 {% extends "template_form_base.html" %}
 
 {% block NonErrorContent %}
-		{% block preListingTittle %}
-    	
-		{% endblock %}
-        <div class="row my-3">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <h2>{% block listingTittle %} {% endblock %}</h2>
-            </div>
-        </div>
-		<div class="row my-3">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <b>Filter by:</b>
-				<select  class="form-select" id="FilterBy" onchange="updateFilter();">
-					<option selected>Name</option>
-					{% block filterOptions %}
-					
-					{% endblock %}
-				</select>
+	<div class="columns">
+		<div class="column is-3">
+			<div class="menu">
+				<div class="menu-label">
+					Filtros
+				</div>
+				<ul class="menu-list">
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
 
-				<input type="text" id="FilterBar" placeholder="Insert name here" onkeyup="filter();" />
-				<select  class="form-select" id="FilterSelect" onchange="filter();" style="display: none;">
-					<option selected>Select</option>
-					{% block filterTypes %}
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="TypeFilter" onchange="filter2()">
+							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
+							  	{% block filterTypes %}
+							
+								{% endblock %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="CriatorFilter" placeholder="Nome do criador" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+				</ul>
+			</div>
+		</div>
+
+		<div class="column">
+			<nav aria-label="breadcrumbs" class="breadcrumb">
+				<ul>
+					<li><a href="{% url 'homepage' %}">Início</a></li>
+					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
+					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
+					</li>
+				</ul>
+			</nav>
+			<a href="{% block addAction %} {% endblock %}">
+				<button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+						class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar {% block addButton %} {% endblock %}</span>
+				</button>
+			</a>
+			{% block preListingBlock %}
+
+			{% endblock %}
+			<table class="table">
+				<thead>
+					<tr>
+						{% block tableHead %}
+				
+						{% endblock %}
+					</tr>
+				</thead>
+				<tbody>
+					{% block listings %}
 					
 					{% endblock %}
-				</select>
-            </div>
-        </div>
-        {% block listings %}
-    	
-		{% endblock %}
+				</tbody>
+
+				
+			</table>
+		</div>
+	</div>
+	
+	<div class="level">
+		<div class="level-left"></div>
+		<div class="level-right" style="white-space: nowrap;">
+			<div class="level-item" style="width: fit-content;">
+				<span style="margin-right: 3%;">Displaying</span>   
+				<div class="select" style="margin-right: 3%;">
+					<select onchange="pagging(0, this.value);">
+					  <option value=5>5</option>
+					  <option value=10>10</option>
+					  <option value=20>20</option>
+					</select>
+				</div>
+				<span style="margin-right: 3%;">out of <span id="FilteredCount"></span></span>
+				
+			</div>
+			<div class="level-item">
+				
+				<nav class="pagination" role="navigation" aria-label="pagination">
+					
+					
+					<ul class="pagination-list">
+						<li>
+							
+							<a class="pagination-link is-current" id="CurrentPage">1</a>
+							
+						</li>
+					</ul>
+					<button id="BackPage" role="button" class="pagination-previous" onclick="pagging(currentPage-1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-left mdi-24px"></i>
+						</span>
+					</button>
+					
+					<button id="NextPage" role="button" class="pagination-next" onclick="pagging(currentPage+1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-right mdi-24px"></i>
+						</span>
+					</button>
+					
+				</nav>
+			</div>
+		</div>
+	</div>
+		
 {% endblock %}
 
 {% block scripts %}
 		<script>
-			function updateFilter() {
-				var selectedFilterOption = getSelectedFieldSpaced();
-				
-				var FilterBar = document.getElementById("FilterBar");
-				if ( FilterBar.style.display == "none" | selectedFilterOption.indexOf("type")>-1) {
-					toggleFilterInputs();
-				}
-				
-				FilterBar.placeholder = "Insert " + selectedFilterOption + " here";
-				
-				
-			}
-
-			function toggleFilterInputs() {
-				var FilterBar = document.getElementById("FilterBar");
-				var FilterSelect = document.getElementById("FilterSelect");
-				if (FilterBar.style.display === "none") {
-					FilterSelect.style.display = "none";
-					FilterBar.style.display = "";
-				}
-				else {
-					FilterBar.style.display = "none";
-					FilterSelect.style.display = "";
-				}
-				FilterBar.value = "";
-				FilterSelect.selectedIndex = 0;
-				
-				FilterSelect[0].text = "Select " + getSelectedFieldSpaced();
-				filter();
-			}
-			function getSelectedFieldSpaced() {
-				var FilterAttr = document.getElementById("FilterBy");
-				return FilterAttr.options[FilterAttr.selectedIndex].text.toLowerCase();
-			}
-
-			function getSelectedField() {
-				return getSelectedFieldSpaced().replace(" ", "");
-			}
-
-        	function filter()
+        	function filter(filterName, isDropDown)
         	{
-        	    var FilterBar = document.getElementById("FilterBar");
-        	    var FilterSelect = document.getElementById("FilterSelect");
+        	    var FilterOBJ = document.getElementById(filterName);
         	    var filter;
-        	    if (FilterBar.style.display == "none") {
-        	        filter = FilterSelect.options[FilterSelect.selectedIndex].text.toLowerCase();
+        	    if (isDropDown) {
+        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
         	    }
         	    else {
-        	        filter = FilterBar.value.toLowerCase();
+        	        filter = FilterOBJ.value.toLowerCase();
         	    }
 
-        	    var id = 1;
+				if (isDropDown && filter.indexOf("selecione")>-1) {
+					filter = "";
+        	    }
+				
+				var id = 1;
         	    while (document.getElementById("row" + id)){
-        	        var field = getSelectedField();
 
-        	        var fieldVal = document.getElementById(field + id).textContent.toLowerCase();
-        	        if (FilterBar.style.display == "none" && filter.indexOf("select")>-1) {
-        	            filter = "";
-        	        }
+        	        var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
+        	        
 
 
         	        if ( fieldVal.indexOf(filter)>-1 ) {
@@ -108,6 +168,119 @@
         	    }
 
         	}
+
+			var filters = [
+				{'filterName' : 'NameFilter', 'isDropDown' : false},
+				{'filterName' : 'TypeFilter', 'isDropDown' : true},
+				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
+				{'filterName' : 'EditorFilter', 'isDropDown' : false},
+			];
+			var filteredRows = new Array();
+			function filter2(){
+				filteredRows = new Array();
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					var toBeHidden = false;
+					for (let index = 0; index < filters.length; index++) {
+						var fieldVal = document.getElementById(filters[index].filterName + id).textContent.toLowerCase();
+						var FilterOBJ = document.getElementById(filters[index].filterName);
+        	    		var filter;
+
+						if (filters[index].isDropDown) {
+        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	    		}
+        	    		else {
+        	    		    filter = FilterOBJ.value.toLowerCase();
+        	    		}
+
+						if (filters[index].isDropDown && filter.indexOf("selecione")>-1) {
+							filter = "";
+        	    		}
+
+						if ( fieldVal.indexOf(filter)<=-1 ) {
+							toBeHidden = true;
+						}
+					}
+					
+					if ( !toBeHidden ) {
+        	            //document.getElementById("row" + id).style.display = "none";
+						filteredRows.push(document.getElementById("row" + id));
+        	        }
+        	        //else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	        //}
+        	        id++;
+        	    }
+				document.getElementById("FilteredCount").textContent = filteredRows.length;
+				
+				pagging();
+			}
+
+			function getNPages(size=10) {
+				return Math.floor(filteredRows.length / size);
+			}
+
+			function getSizeOfPage(page=0, size=10) {
+				if (page == getNPages(size)){
+					return filteredRows.length % size;
+				}
+				return size;
+			}
+
+			function hideAllEntries() {
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					document.getElementById("row" + id).style.display = "none";
+					id++;
+				}
+			}
+
+			var currentPage = 0;
+			var currentSize=5;
+			function pagging(page=0, size=5){
+				var test = typeof global_size;
+				if (!(typeof global_size === "undefined" )) {
+					size=global_size;
+				}
+				if (page > getNPages(size) || page < 0) {
+					return;
+				}
+				var displayingN = 0;
+				var trueSize = getSizeOfPage(page, size);
+				hideAllEntries();
+        	    while (displayingN < trueSize) {
+					filteredRows[displayingN + page*size].style.display = "";
+					displayingN++;
+
+				}
+				currentPage = page;
+				document.getElementById("CurrentPage").textContent = String(currentPage + 1);
+				if (getSizeOfPage(page + 1, size) <= 0 || page + 1 > getNPages(size)) {
+					document.getElementById("NextPage").disabled = true;
+				}
+				else {
+					document.getElementById("NextPage").disabled = false;
+				}
+
+				if (page - 1 < 0) {
+					document.getElementById("BackPage").disabled = true;
+				}
+				else {
+					document.getElementById("BackPage").disabled = false;
+				}
+			}
+
+			function toggle(objName){
+				var OBJ = document.getElementById(objName);
+				if (OBJ.style.display == "none") {
+					OBJ.style.display = "";
+				}
+				else {
+					OBJ.style.display = "none";
+				}
+			}
+
+			filter2();
 		</script>
     	
 {% endblock %}

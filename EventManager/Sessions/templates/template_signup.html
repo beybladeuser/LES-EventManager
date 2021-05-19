@@ -1,0 +1,37 @@
+{% extends "template_base.html" %}
+
+{% block loggedInContent %}
+    <div class="row my-3">
+        <div class="col-sm-3"></div>
+       <div class="col-sm-6">
+           <div class="card">
+               <div class="card-header">
+                   <h2>Logout first to sign up</h2>
+               </div>
+           </div>
+       </div>
+    </div>
+{% endblock %}
+
+{% block loggedOutContent %}
+    {% load crispy_forms_tags %} 
+    <div class="row my-3">
+         <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Sign up</h2>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        {{signup_form|crispy}}
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-lg btn-block" type="submit">Sign up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

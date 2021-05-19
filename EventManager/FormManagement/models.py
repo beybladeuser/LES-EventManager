@@ -114,7 +114,7 @@ class Form(models.Model):
         result.eventtypeid = self.eventtypeid
         result.formtypeid_formtype = self.formtypeid_formtype
         if self.formtypeid_formtype == Formtype.getProposalType() :
-            result.formname = self.formname
+            result.formname = self.formname + " (Copy)"
         else :
             result.formname = self.formname + " (Copy)"
         result.dateofcreation = datetime.datetime.now()
