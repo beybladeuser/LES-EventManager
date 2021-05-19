@@ -6,8 +6,10 @@
 #   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.conf import settings
 from Models.models import *
+import datetime
 
 class Asset(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
@@ -26,6 +28,9 @@ class Asset(models.Model):
 
     def __str__(self):
         return self.assetname
+
+    def addAsset(self, )
+
 
 
     class Meta:

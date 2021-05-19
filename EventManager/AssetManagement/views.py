@@ -4,6 +4,10 @@ from .models import Asset
 from .models import Service
 from .models import Asset, Equipment, Rooms, Service
 from django.template import loader
+
+from .forms import *
+
+
 # Create your views here.
 def home(request) :
     template = loader.get_template('home.html')
@@ -46,9 +50,12 @@ def consultar_rooms(request):
 
 
 def insert_assets(request):
+    if request.method == 'POST':
+        iaf = InsertAssetForm(request.POST)
+    
     template = loader.get_template('InsertAssets.html')
     context = {
-       
+       'InsertAssetForm': iaf
     }
     return HttpResponse(template.render(context, request))    
 

@@ -457,12 +457,8 @@ def testForm(request, formID = 1):
             answeredForm = form.save()
             request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(answeredForm.formtypeid_formtype.id)
             return redirect("checkFormLayout", answeredForm.id)
-    
     else:
         form = EventManagerForm(eventManagerFormID=formID, associatedRegistration=regis, associatedEvent=None)
-    
-    
-
 
     template = loader.get_template('template_test_form.html')
     context = {
