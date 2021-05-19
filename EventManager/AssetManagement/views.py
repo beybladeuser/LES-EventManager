@@ -40,6 +40,7 @@ def consultar_equipments(request):
     }
     return HttpResponse(template.render(context, request))
 
+
 def consultar_rooms(request):
     template = loader.get_template('ViewRooms.html')
     context = {
@@ -48,14 +49,12 @@ def consultar_rooms(request):
     return HttpResponse(template.render(context, request))    
 
 
-
 def insert_assets(request):
     if request.method == 'POST':
-        iaf = InsertAssetForm(request.POST)
-    
-    template = loader.get_template('InsertAssets.html')
-    context = {
-       'InsertAssetForm': iaf
-    }
-    return HttpResponse(template.render(context, request))    
+        form = insert_assets(request.POST)
+        if form.isvalid():
+            form.save()
+        else:
+            form.save()
+    return render(request, 'InsertAssets', {'InsertAssetForm': form})    
 

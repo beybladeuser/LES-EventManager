@@ -17,6 +17,14 @@ class Asset(models.Model):
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
 
 
+
+    canAdd = False
+
+    
+    def userHasEditPermitions(self, user) :
+        return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
+
+
     def getServiceTypeName(self):
         result = None
         service = Service.objects.filter(assetid=self.id)
@@ -28,10 +36,6 @@ class Asset(models.Model):
 
     def __str__(self):
         return self.assetname
-
-    def addAsset(self, )
-
-
 
     class Meta:
         db_table = 'asset'
