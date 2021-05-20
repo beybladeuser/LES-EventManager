@@ -464,7 +464,7 @@ def duplicateForm(request, formID=None) :
         formToDuplicate = Form.objects.get(id=formID)
         if formToDuplicate.canDuplicate(request.user) :
             newForm = formToDuplicate.duplicate(request.user)
-            return redirect('createForm', newForm.formtypeid_formtype.id, newForm.id)
+            return redirect('checkFormLayout', newForm.id)
         return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
     return redirect('formsHome')
 
@@ -476,6 +476,34 @@ def duplicateQuestion(request, questionID=None) :
             return redirect('createQuestion', newQuestion.id, 0)
         return redirect('listQuestions')
     return redirect('formsHome')
+
+def publishForm(request, formID=None) :
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToPublish = Form.objects.get(id=formID)
+        if formToPublish.canPublish(request.user) :
+            formToPublish.publish(request.user)
+            return redirect(request.session.get('publishForm_form_redirect', '/forms/checkformlayout/' + str(formToPublish.id) + '/'))
+        return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
+    return redirect('formsHome')
+
+def archiveForm(request, formID=None) :
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToArchive = Form.objects.get(id=formID)
+        if formToArchive.canArchive(request.user) :
+            formToArchive.archive(request.user)
+            return redirect(request.session.get('archiveForm_form_redirect', '/forms/checkformlayout/' + str(formToArchive.id) + '/'))
+        return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
+    return redirect('formsHome')
+
+def unarchiveForm(request, formID=None) :
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToArchive = Form.objects.get(id=formID)
+        if formToArchive.canUnarchive(request.user) :
+            formToArchive.unarchive(request.user)
+            return redirect(request.session.get('archiveForm_form_redirect', '/forms/checkformlayout/' + str(formToArchive.id) + '/'))
+        return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
+    return redirect('formsHome')
+    
 
 def testForm(request, formID = 1):
     regis = Resgistration()

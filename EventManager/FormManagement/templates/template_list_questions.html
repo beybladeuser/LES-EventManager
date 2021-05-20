@@ -16,15 +16,12 @@
 
 {% block currentPage %}Questões{% endblock %}
 
-{% block addAction %}
-    {% url 'createQuestion' 0 0 %}
-{% endblock %}
-
-{% block addButton %}
-    Questão
-{% endblock %}
-
 {% block preListingBlock %}
+    <a href="{% url 'createQuestion' 0 0 %}">
+        <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Formulário de Questão</span>
+        </button>
+    </a>
     {% if formToAssociate %}
         <a href="{% url 'checkFormLayout' formToAssociate.id %}">
             <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span

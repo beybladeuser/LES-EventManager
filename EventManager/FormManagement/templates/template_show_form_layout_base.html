@@ -16,12 +16,99 @@
                     <li><b>Nome: </b>{{form.formname}}</li>
                     <li><b>Tipo de formulário: </b>{{form.formtypeid_formtype.typename}}</li>
                     <li><b>Tipo de evento: </b>{{form.eventtypeid.typename}}</li>
+					<li><b>Publico: </b>{% if form.published %}Sim{% else %}Não{% endif %}</li>
+					<li><b>Arquivado: </b>{% if form.archived %}Sim{% else %}Não{% endif %}</li>
                     <li><b>Criado por: </b>{{form.createdby.username}}<b> em: </b>{{form.dateofcreation}}</li>
                     <li><b>Editado por: </b>{{form.lasteditedby.username}}<b> em: </b>{{form.dateoflastedit}}</li>
+					{% load form_extras %}
+					
+					<!--
+					{% if form|can_edit_form:user %}
+						<li>
+							<a href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
+								<button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;">
+									<span class="icon is-small"><i class="mdi mdi-circle-edit-outline mdi-24px"></i></span>
+									<span>Editar Formulário</span>
+								</button>
+							</a>
+						</li>
+					{% endif %}
+					-->
 				</ul>
 			</div>
+			<br>
+			<table class="table">
+				<tbody>
+					<tr>
+						<td>
+							{% if form|can_edit_form:user %}
+								<a href="{% url 'createForm' form.formtypeid_formtype.id form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
+									<i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+								</a>
+								<a href="{% url 'deleteForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Formulário" onclick="return confirm('Tem a certeza que deseja apagar este formulário?');">
+									<i class="fas fa-times fa-lg" aria-hidden="true"></i>
+								</a>
+							{% else %}
+								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário" disabled>
+									<i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+								</a>
+								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Formulário" disabled>
+									<i class="fas fa-times fa-lg" aria-hidden="true"></i>
+								</a>
+							{% endif %}
+							
+							{% if not form.archived %}
+                        		{% if form|can_archive_form:user %}
+                        		    <a href="{% url 'archiveForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" onclick="return confirm('Após arquivar o formulário não sera possivél associar este a novos eventos nem a sua edição. Deseja continuar?');">
+                        		        <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                        		    </a>
+                        		{% else %}
+                        		    <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" disabled>
+                        		        <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                        		    </a>
+                        		{% endif %}
+								
+								
+                        		{% if form.published %}
+                        		    <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
+                        		        <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
+                        		    </a>
+                        		{% elif form|can_publish_form:user %}
+                        		    <a href="{% url 'publishForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar">
+                        		        <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
+                        		    </a>
+                        		{% endif %}
+                        
+                    			{% else %}
+                    			    {% if form|can_unarchive_form:user %}
+                    			        <a href="{% url 'unarchiveForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desarquivar Formulário" onclick="return confirm('Após arquivar o formulário não sera possivél associar este a novos eventos nem a sua edição. Deseja continuar?');">
+                    			            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                    			        </a>
+                    			    {% else %}
+                    			        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" disabled>
+                    			            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                    			        </a>
+                    			    {% endif %}
+                    			    <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
+                    			        <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
+                    			    </a>
+                    			{% endif %}
+							
+							{% if form.canDuplicate %}
+								<a href="{% url 'duplicateForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Formulário" onclick="return confirm('Esta ação irá arquivar o atual formulário de proposta para eventos do tipo {{form.eventtypeid.typename}}. Tem a certeza que quer continuar?');">
+									<i class="far fa-clone" aria-hidden="true"></i>
+								</a>
+							{% else %}
+								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Questão" disabled>
+									<i class="far fa-clone" aria-hidden="true"></i>
+								</a>
+							{% endif %}
+						</td>
+					</tr>
+				</tbody>
+			</table>
 
-            <br>
+			<br>
 
 			<div class="menu">
 				<div class="menu-label">

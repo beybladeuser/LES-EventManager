@@ -10,16 +10,16 @@ from django.utils.safestring import mark_safe
 class formCreation(forms.Form):
 	user = None
 	formId = forms.CharField(widget=forms.HiddenInput, max_length=255, required=False)
-	formName = forms.CharField(label='Form Name', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
-	OPTIONS_formType = Formtype.makeOptions()
-	formType = forms.CharField(widget=forms.Select(choices=OPTIONS_formType, attrs={'class' : 'input'}), label='Form Type', required=True)
+	formName = forms.CharField(label='Nome do Formulário', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 	OPTIONS_eventType = Eventtype.makeOptions()
-	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType, attrs={'class' : 'input'}), label='Event Type', required=True)
+	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType, attrs={'class' : 'input'}), label='Tipo de evento', required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
 			self.user = kwargs.pop('currentUser', None)
 		super().__init__(*args, **kwargs)
+		OPTIONS_formType = Formtype.makeOptions(self.user)
+		self.fields["formType"] = forms.CharField(widget=forms.Select(choices=OPTIONS_formType, attrs={'class' : 'input'}), label='Tipo de formulário', required=True)
 
 	class Meta:
 		model = Formtype
@@ -28,23 +28,27 @@ class formCreation(forms.Form):
 
 		formId = self.cleaned_data.get("formId")
 		if not self.user :
-			self.add_error("eventType", 'Must be logged in to perform this action')
+			self.add_error("eventType", 'É necessário possuir a sessão iniciada para concluir esta ação')
 			return
 		
 		if formId and Form.objects.filter(id=formId).exists():
 			form = Form.objects.get(id=formId)
-			if form.createdby.id != self.user.id and not self.user.groups.filter(pk=1).exists() :
-				self.add_error("eventType", 'Not allowed to edit this form')
+			if not form.canEdit(self.user) :
+				self.add_error("eventType", 'Não pode editar este formulário')
 				return
 
 		formType = self.cleaned_data.get("formType")
 		formName = self.cleaned_data.get("formName")
 		if not formId :
 			if Form.objects.filter(formname=formName, formtypeid_formtype=formType, archived=False).exists() :
-				self.add_error("formName", 'Can\'t have duplicate form names of forms of same type')
+				self.add_error("formName", 'Impossível criar formulários com nomes duplicados')
 		else :
 			if Form.objects.filter(formname=formName, formtypeid_formtype=formType, archived=False).exclude(id=formId).exists() :
-				self.add_error("formName", 'Can\'t have duplicate form names of forms of same type')
+				self.add_error("formName", 'Impossível criar formulários com nomes duplicados')
+		
+		if not Formtype.objects.get(pk=formType).canCreate(self.user) :
+			self.add_error("formType", 'Não pode criar eventos do tipo especificado')
+
 
 	def clean_eventType(self, *args, **kwargs):
 		formType = self.cleaned_data.get("formType")
