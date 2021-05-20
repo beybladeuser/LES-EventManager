@@ -26,38 +26,46 @@
 	}
 </script>
 
-<form action="" method="POST">{% csrf_token %}
-	<label for="name">Name: </label>
-	<input type="text" name="name"><br>
+<form class="box" action="" method="POST">{% csrf_token %}
+	
+	<div class="field">
+		<label class="label" for="name">Nome do Evento: </label>
+		<div class="control">
+			<input class="input" type="text" name="name" placeholder="Exemplo: Palestra de Informática" required="" style="margin: auto; width: 30%"><br>			
+		</div>
+	</div>
+
+	<div class="field">
+		<label class="label" for="event_type">Campus:</label>
+		  <div class="dropdown-trigger">
+			<select name="campus" class="button "aria-haspopup="true" aria-controls="dropdown-menu3" style="margin: auto; width: 30%">
+				{% for campus in campuses %}
+					<option class="dropdown-item" value="{{campus.id}}" required>{{campus.campusname}}</option>
+				{% endfor %}
+			</select><br>
+		  </div>
+	</div>
 
 
-	<label for="event_type">Campus:</label>
-	<select name="campus">
-		{% for campus in campuses %}
-			<option value="{{campus.id}}">{{campus.campusname}}</option>
-		{% endfor %}
-	</select><br>
-
-
-	<label for="event_type">Event type:</label>
-	<select onchange="eventtype_change.call(this)" name="event_type">
+	<label class="label" for="event_type">Event type:</label>
+	<select class="button" onchange="eventtype_change.call(this)" name="event_type" style="margin: auto; width: 30%" required>
 		{% for event_type in event_types %}
 			<option value="{{event_type.id}}">{{event_type.typename}}</option>
 		{% endfor %}
 	</select>
 	<br>
 
-	<br><hr><br>
+	<hr>
 
 	{% for form in forms %}
 		<div class="subforms" id="subform{{form.eventtypeid.id}}" style="display: {% if form.eventtypeid == default_event_type %}block{% else %}none{% endif %};">
 			<input type="hidden" name="form_id" value="{{form.id}}">
 			{% for question in form.formquestions %}
-				<label>{{question.question}}</label>
+				<label class="label">{{question.question}}</label>
 				{% if question.questiontypeid_questiontype.typename == "Open Ended" %}
-					<input type="text" name="val{{question.id}}">
+					<input class="input" type="text" name="val{{question.id}}" required="" placeholder="Exemplo: João Silva" style="margin: auto; width: 30%">
 				{% elif question.questiontypeid_questiontype.typename == "Multiple Choice" %}
-					<select name="val{{question.id}}">
+					<select class="button" name="val{{question.id}}">
 						{% for option in question.options %}
 							<option value="{{option.id}}">{{option.option}}</option>
 						{% endfor %}
@@ -68,8 +76,8 @@
 		</div>
 	{% endfor %}
 
-	<br><br>
-	<input type="submit" value="Submit" onclick="return prepare_form();">
+	<br>
+	<input class="button is-success is-outlined" type="submit" value="Submeter" onclick="return prepare_form();">
 </form>
   
 {% endblock %}
