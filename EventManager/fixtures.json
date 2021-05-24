@@ -252,10 +252,102 @@
 			"quantity": 20
 		}
 	},
-
-
-
-
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 11,
+		"fields" :{
+			"assetname": "Técnico de Som",
+			"quantity": 3
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 12,
+		"fields" :{
+			"assetname": "Técnico de imagem",
+			"quantity": 7
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 12,
+		"fields" :{
+			"assetname": "Alojamento",
+			"quantity": 100
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 13,
+		"fields" :{
+			"assetname": "Catering",
+			"quantity": 3
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 14,
+		"fields" :{
+			"assetname": "Organização de ofertas",
+			"quantity": 2
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 15,
+		"fields" :{
+			"assetname": "Reserva de Estacionamento",
+			"quantity": 10
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 16,
+		"fields" :{
+			"assetname": "Descargas/Montagem",
+			"quantity": 12
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 17,
+		"fields" :{
+			"assetname": "Transporte",
+			"quantity": 9
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 18,
+		"fields" :{
+			"assetname": "Brindes Promocionais",
+			"quantity": 2
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 19,
+		"fields" :{
+			"assetname": "Secretariado",
+			"quantity": 6
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 20,
+		"fields" :{
+			"assetname": "Inscrições para o evento",
+			"quantity": 100
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 21,
+		"fields" :{
+			"assetname": "Bandeiras",
+			"quantity": 2
+		}
+	},
 
 
 

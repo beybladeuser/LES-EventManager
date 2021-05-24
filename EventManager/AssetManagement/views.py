@@ -11,7 +11,6 @@ from .forms import *
 # Create your views here.
 def home(request) :
     template = loader.get_template('home.html')
-   
     context = {
     }
 
@@ -20,8 +19,28 @@ def home(request) :
 
 def consultar_assets(request):
     template = loader.get_template('ViewAssets.html')
+    
+    Assets = Asset.objects.all()
+   
+    i = 0
+    sizeofAssets = len(Assets)
+    while i < sizeofAssets :
+        if Asset.getServiceType(Assets[i]) is not None:
+            Assets[i].subtype =  Asset.getServiceType(Assets[i])
+            Assets[i].type = "Serviço"
+
+        elif Asset.getEquipmentType(Assets[i]) is not None:
+            print("epahYha")
+            Assets[i].subtype = Asset.getEquipmentType(Assets[i])
+            Assets[i].type = "Equipamento"
+
+        elif Asset.getRoom(Assets[i]) is not None:
+            Assets[i].type = "Sala/Anfiteatro"
+            Assets[i].subtype = Asset.getRoom(Assets[i]).campus + " - " + Asset.getRoom(Assets[i]).buildingname 
+        i += 1
+
     context = {
-        'Assets': Asset.objects.all()
+        'Assets': Assets
     }
     return HttpResponse(template.render(context, request))
 

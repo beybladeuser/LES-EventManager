@@ -25,14 +25,40 @@ class Asset(models.Model):
         return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
 
 
-    def getServiceTypeName(self):
+    def getServiceType(self):
         result = None
         service = Service.objects.filter(assetid=self.id)
         if service :
             result = service[0].servicetypeid_servicetype.typename
         return result
 
-    service_subclass_typeName = property(getServiceTypeName)
+    service_subclass_type = property(getServiceType)
+
+    def getEquipmentType(self):
+        result = None
+        equipment = Equipment.objects.filter(assetid=self.id)
+       
+        if equipment:
+            result = equipment[0].equipmenttypeid_equipmenttype.typename
+        return result
+
+    # equipment_subclass_type = property(getEquipmentType)
+
+
+    def getRoom(self):
+        result = None
+        room = Rooms.objects.filter(assetid=self.id)
+        if room :
+            result.campus = room[0].buildingid_building.campusid
+            result.buildingname = room[0].buildingid_building.buildingname
+        return result
+
+    room_subclass_type = property(getRoom)
+
+
+
+
+
 
     def __str__(self):
         return self.assetname
@@ -98,7 +124,6 @@ class Rooms(models.Model):
     buildingid_building = models.ForeignKey(Building, models.DO_NOTHING, db_column='BuildingID_Building')  # Field name made lowercase.
 
     class Meta:
-        
         db_table = 'rooms'
 
     def __str__(self):
@@ -110,7 +135,6 @@ class Service(models.Model):
     servicetypeid_servicetype = models.ForeignKey('Servicetype', models.DO_NOTHING, db_column='ServiceTypeID_ServiceType')  # Field name made lowercase.
 
     class Meta:
-        
         db_table = 'service'
     
     def __str__(self):
