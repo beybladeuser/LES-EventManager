@@ -100,7 +100,8 @@ class Equipment(models.Model):
     class Meta:
         db_table = 'equipment'
       
- 
+    def __str__(self):
+       return self.assetid
 
 
 
