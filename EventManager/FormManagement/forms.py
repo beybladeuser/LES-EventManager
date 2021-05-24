@@ -57,12 +57,12 @@ class formCreation(forms.Form):
 		temp = Form.objects.filter(eventtypeid=eventType, formtypeid_formtype=formType, archived=False)
 		if not formId:
 			if formType == "1" and temp.exists() :
-				raise forms.ValidationError("Cannot have two proposal forms for the same event type")
+				raise forms.ValidationError("Não é possivel ter dois formulários de proposta não arquivados do mesmo tipo de evento")
 			else:
 				return eventType
 		else:
 			if formType == "1" and temp.exclude(id=formId).exists() :
-				raise forms.ValidationError("Cannot have two proposal forms for the same event type")
+				raise forms.ValidationError("Não é possivel ter dois formulários de proposta não arquivados do mesmo tipo de evento")
 			else:
 				return eventType
 
@@ -109,8 +109,10 @@ class openEndedQuestionCreation(forms.Form):
 	form = None
 	questionToEdit = None
 	question = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}), label='Question', max_length=255, required=True)
-	options = ((True, 'Yes'), (False, 'No'))
-	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="Is Required", required=True)
+	OPTIONS_questionType = Questiontype.makeOptions()
+	questionType = forms.CharField(widget=forms.Select(choices=OPTIONS_questionType, attrs={'class' : 'input', "onChange":'checkType()'}), label='Tipo de evento', required=True)
+	options = ((True, 'Sim'), (False, 'Não'))
+	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="É Requerida", required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -122,20 +124,20 @@ class openEndedQuestionCreation(forms.Form):
 	def clean(self, *args, **kwargs):
 
 		if not self.user :
-			self.add_error("question", 'Must be logged in to perform this action')
+			self.add_error("question", 'É necessário possuir a sessão iniciada para concluir esta ação')
 			return
 		
 		if self.questionToEdit and not self.questionToEdit.canEdit(self.user):
-			self.add_error("question", 'Not allowed to edit this form')
+			self.add_error("question", 'Não pode editar esta questão')
 			return
 
 		question = self.cleaned_data.get("question")
 		if self.questionToEdit :
 			if Questions.objects.filter(question=question).exclude(id=self.questionToEdit.id).exists() :
-				self.add_error("question", 'Can\'t have duplicate questions')
+				self.add_error("question", 'Não é possivel criar questões duplicadas')
 		else :
 			if Questions.objects.filter(question=question).exists() :
-				self.add_error("question", 'Can\'t have duplicate questions')
+				self.add_error("question", 'Não é possivel criar questões duplicadas')
 
 	def save(self) :
 		newQuestion = None
@@ -180,7 +182,7 @@ class QuestionOptionForm(forms.Form):
 	user = None
 	associatedQuestion = None
 	optionToEdit = None
-	option = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}),label='Option', max_length=255, required=True)
+	option = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}),label='Opção', max_length=255, required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -191,11 +193,11 @@ class QuestionOptionForm(forms.Form):
 
 	def clean(self, *args, **kwargs) :
 		if not self.associatedQuestion.canEdit(self.user) :
-			self.add_error("option", 'Can\'t edit this question')
+			self.add_error("option", 'Não pode editar esta questão')
 			return
 		
 		if self.optionToEdit and self.optionToEdit.questionsid_questions != self.associatedQuestion :
-			self.add_error("option", 'Option to edit is not related to the given question')
+			self.add_error("option", 'Opção a editar não está relacionada com a questão dada')
 	
 	def save(self) :
 		newOption = None

@@ -110,7 +110,7 @@ class Form(models.Model):
         return not user.groups.filter(pk=2).exists()
 
     def canDisplay(self, user) :
-        return (user.id == self.createdby.id or user.groups.filter(pk=1).exists()) or (self.published and user.groups.filter(pk=2).exists())
+        return (user.id == self.createdby.id or user.groups.filter(pk=1).exists() or self.published) and not user.groups.filter(pk=2).exists()
 
     def canPublish(self, user) :
         return self.canEdit(user) and user.id == self.createdby.id
@@ -340,6 +340,19 @@ class Questions(models.Model):
     @staticmethod
     def getFilterOptions() :
         return ("Question Type", "Creator", "Last Editor")
+
+    def setAllOptions(self, newOptions, user) :
+        if self.canEdit(user) :
+            for option in self.options :
+                option.delete()
+                self.notifyOptionRemoval(user)
+            
+            for newOption in newOptions :
+                newOptionModelEntry = Multipleoptions()
+                newOptionModelEntry.option = newOption
+                newOptionModelEntry.questionsid_questions = self
+                newOptionModelEntry.save()
+                self.notifyNewOption(user)
 
     options = property(getMultipleOptions)
 

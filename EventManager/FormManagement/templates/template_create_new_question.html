@@ -54,14 +54,163 @@
                     <div class="card-content">
                         <div class="content">
                             {{questionCreation|crispy}}
+                            
+                            <span id="questionOptionsHeader" style="display: none;">
+                                <br>
+                                <p><b>Opções</b></p>
+                            </span>
+                            <span id="questionOptionsList">
+                                {% for option in options %}
+                                    <input type="text" name="option{{ forloop.counter|add:'-1' }}" id="id_option{{ forloop.counter|add:'-1' }}" value="{{option}}">       
+                                {% endfor %}
+                                
+                            </span>
+                            
                         </div>
                     </div>
+
+                    
                     <footer class="card-footer">
-                        <button class="button is-success card-footer-item" type="submit">Save</button>
-                        <a class="button is-white card-footer-item" href="{{ cancelURL }}">Cancel</a>
+                        <button class="button is-success card-footer-item" type="submit" id="Save">Guardar</button>
+                        <button class="button is-white card-footer-item" onclick="goBack()">Cancelar</button>
                     </footer>
                 </form>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var nOptions_global = 0;
+
+        function getOptionInput(nOptions){
+            if (nOptions < 2) {
+                required = "required";
+            }
+            else {
+                required = "";
+            }
+            var optionInputFrag = [];
+            optionInputFrag.push("<div id=\"div_id_option" + nOptions + "\" class=\"form-group\">");
+            optionInputFrag.push("  <div class=\"\">");
+            optionInputFrag.push("      <input type=\"text\" name=\"option" + nOptions + "\" class=\"input textinput textInput form-control\" maxlength=\"255\" " + required + " id=\"id_option" + nOptions + "\" placeholder=\"Adicionar Nova Opção\" onkeyup=\"checkOption(this.id)\"> ");
+            optionInputFrag.push("      <p>");
+            optionInputFrag.push("          <strong id=\"id_error" + nOptions + "\"></strong>");
+            optionInputFrag.push("      </p>");
+            optionInputFrag.push("  </div>");
+            optionInputFrag.push("</div>");
+            var optionInput = "";
+            optionInputFrag.forEach(element => {
+                optionInput += element;
+            });
+            return optionInput;
+        }
+
+        function checkType()
+        {
+            
+            var questionTypeSelectOBJ = document.getElementById("id_questionType");
+            var selectedOptionVal = questionTypeSelectOBJ.options[questionTypeSelectOBJ.selectedIndex].value;
+            if (questionTypeSelectOBJ && selectedOptionVal == 2) {
+                document.getElementById("questionOptionsHeader").style.display = "";
+                var questionOptionsListSpan = document.getElementById("questionOptionsList");
+            
+                
+                var optionInput = getOptionInput(0);
+            
+                questionOptionsListSpan.innerHTML = optionInput;
+                nOptions_global = 1;
+            
+            }
+            else {
+                document.getElementById("questionOptionsHeader").style.display = "none";
+                var questionOptionsListSpan = document.getElementById("questionOptionsList");
+                questionOptionsListSpan.innerHTML = "";
+            }
+        }
+
+        function updateOptions(currentInputs) {
+            if (currentInputs && currentInputs.length > 0){
+                document.getElementById("questionOptionsHeader").style.display = "";
+                var questionOptionsListSpan = document.getElementById("questionOptionsList"); 
+                questionOptionsListSpan.innerHTML = getOptionInput(0);
+                nOptions_global=1;
+                for (let index = 1; index < currentInputs.length + 1; index++) {
+                    questionOptionsListSpan.innerHTML += "<br>" + getOptionInput(index);
+                    nOptions_global++;
+                }
+
+                for (let index = 0; index < currentInputs.length; index++) {
+                    var option = document.getElementById("id_option" + index);
+                    option.value = currentInputs[index];
+                }
+            }
+            else {
+                checkType()
+            }
+        }
+        
+        function checkOption(id)
+        {
+            var callingOptionOBJ = document.getElementById(id);
+            var callingOptionWasDeleted = false;
+            if (callingOptionOBJ.value == ""){
+                callingOptionWasDeleted = true;
+            }
+
+            var currentInputs = [];
+
+            for (let index = 0; index < nOptions_global; index++) {
+                var option = document.getElementById("id_option" + index);
+                if (option.value != "") {
+                    currentInputs.push(option.value);
+                }
+            }
+            
+            updateOptions(currentInputs);
+
+            if (!callingOptionWasDeleted)
+            {
+                callingOptionOBJ = document.getElementById(id);
+                callingOptionOBJ.focus();
+                //callingOptionOBJ.select();
+            }
+            
+            checkDups(currentInputs);
+        }
+
+        function checkDups(currentInputs) {
+            var hasDups = false;
+            for (let i = 0; i < currentInputs.length; i++) {
+                var optionToCheckOBJ = document.getElementById("id_option" + i);
+                for (let j = i + 1; j < currentInputs.length; j++) {
+                    var optionToCompareOBJ = document.getElementById("id_option" + j);
+                    if (optionToCheckOBJ.value == optionToCompareOBJ.value) {
+                        var optionErrorOBJ = document.getElementById("id_error" + i);
+                        optionErrorOBJ.innerHTML = "Não pode existir opções duplicadas"
+                        document.getElementById("Save").disabled=true;
+                        hasDups = true;
+                    }
+                    
+                }
+            }
+            if (!hasDups) {
+                document.getElementById("Save").disabled=false;
+            }
+        }
+
+        function initPage() {
+            var currentInputs = [];
+            while (document.getElementById("id_option" + nOptions_global)) {
+                currentInputs.push(document.getElementById("id_option" + nOptions_global).value);
+                nOptions_global++;
+            }
+            nOptions_global++;
+            updateOptions(currentInputs);
+        }
+
+        //checkType();
+        initPage();
+    </script>
 {% endblock %}
