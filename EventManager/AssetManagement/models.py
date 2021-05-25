@@ -13,7 +13,7 @@ import datetime
 
 class Asset(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    assetname = models.CharField(db_column='AssetName', unique=True, max_length=255)  # Field name made lowercase.
+    assetname = models.CharField(db_column='AssetName', max_length=255)  # Field name made lowercase.
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
 
 
@@ -62,6 +62,7 @@ class Asset(models.Model):
 
     def __str__(self):
         return self.assetname
+        
 
     class Meta:
         db_table = 'asset'
@@ -73,7 +74,7 @@ class Building(models.Model):
     buildingname = models.CharField(db_column='BuildingName', max_length=255)  # Field name made lowercase.
 
     def __str__(self):
-       return self.buildingname
+       return self.buildingname + " - " + self.campusid.campusname
 
     class Meta:
         
@@ -85,7 +86,6 @@ class Campus(models.Model):
     campusname = models.CharField(db_column='CampusName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        
         db_table = 'campus'
 
     def __str__(self):
@@ -128,7 +128,7 @@ class Rooms(models.Model):
         db_table = 'rooms'
 
     def __str__(self):
-       return self.assetid
+       return self.assetid + " - " + self.buildingid_building
 
 
 class Service(models.Model):
@@ -149,7 +149,6 @@ class Servicetype(models.Model):
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        
         db_table = 'servicetype'
 
     def __str__(self):

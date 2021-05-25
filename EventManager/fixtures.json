@@ -473,6 +473,13 @@
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
+			"assetid":16,
+			"servicetypeid_servicetype": 2
+		}
+	},
+	{
+		"model": "AssetManagement.Service",
+		"fields" :{
 			"assetid":17,
 			"servicetypeid_servicetype": 2
 		}
@@ -512,7 +519,7 @@
 			"servicetypeid_servicetype": 3
 		}
 	},
-
+	
 
 
 
