@@ -222,8 +222,6 @@ class Formtype(models.Model):
             return False
 
 
-    
-
     class Meta:
         managed = True
         db_table = 'formtype'
