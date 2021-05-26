@@ -9,6 +9,7 @@ from django.db.models import Q
 from PreEventManagement.models import *
 
 import datetime
+import re
 
 
 
@@ -108,15 +109,32 @@ class Form(models.Model):
     def canDuplicate(self, user) :
         return not user.groups.filter(pk=2).exists()
 
+    def canDisplay(self, user) :
+        return (user.id == self.createdby.id or user.groups.filter(pk=1).exists() or self.published) and not user.groups.filter(pk=2).exists()
+
+    def canPublish(self, user) :
+        return self.canEdit(user) and user.id == self.createdby.id and len(self.formquestions) > 0
+
+    def canArchive(self, user) :
+        return self.canEdit(user) and user.id == self.createdby.id and not self.archived and len(self.formquestions) > 0
+
+    def canUnarchive(self, user) :
+        return self.userHasEditPermitions(user) and user.id == self.createdby.id and self.archived
     
     def duplicate(self, user) :
         result = Form()
         result.eventtypeid = self.eventtypeid
         result.formtypeid_formtype = self.formtypeid_formtype
-        if self.formtypeid_formtype == Formtype.getProposalType() :
-            result.formname = self.formname + " (Copy)"
+
+        copyTxtList = re.findall(r" \(Copy_[0-9]+\)", self.formname)
+        if (len(copyTxtList) > 0) :
+            copyTxt = copyTxtList[0]
         else :
-            result.formname = self.formname + " (Copy)"
+            copyTxt = ""
+        name = self.formname.replace(copyTxt, '')
+        result.formname = name + " (Copy_" + str(Form.objects.filter(formname__regex=r"^"+ name, formtypeid_formtype=self.formtypeid_formtype).count()) + ")"
+
+
         result.dateofcreation = datetime.datetime.now()
         result.dateoflastedit = datetime.datetime.now()
         result.createdby = user
@@ -136,6 +154,28 @@ class Form(models.Model):
             result.associateQuestion(question, user)
 
         return result
+
+    def publish(self, user) :
+        if self.canPublish(user) :
+            self.published = True
+            self.save()
+
+    def archive(self, user) :
+        if self.canArchive(user) :
+            self.archived = True
+            self.save()
+
+    def unarchive(self, user) :
+        if self.canUnarchive(user) :
+            if self.formtypeid_formtype.id == 1 :
+                proposalForms = Form.objects.filter(formtypeid_formtype=self.formtypeid_formtype)
+                for proposalForm in proposalForms :
+                    proposalForm.archived = True
+                    proposalForm.save()
+            self.archived = False
+            self.save()
+
+
 
     @staticmethod
     def getFilterOptions() :
@@ -157,10 +197,10 @@ class Formtype(models.Model):
         return self.typename
 
     @staticmethod
-    def makeOptions() :
+    def makeOptions(user) :
         if "formtype" in connection.introspection.table_names() :
             formTypes = Formtype.objects.all()
-            options=([(formType.id, formType.typename) for formType in formTypes])
+            options=([(formType.id, formType.typename) for formType in formTypes if formType.canCreate(user)])
             return options
 
         else:
@@ -173,8 +213,14 @@ class Formtype(models.Model):
         else :
             return False
 
+    def canCreate(self, user) :
+        if (self.id == 1 and user.groups.filter(pk=1).exists()) :
+            return True
+        elif (self.id != 1 and not user.groups.filter(pk=2).exists()) :
+            return True
+        else :
+            return False
 
-    
 
     class Meta:
         managed = True
@@ -263,7 +309,14 @@ class Questions(models.Model):
     def duplicate(self, user) :
         result = Questions()
         result.questiontypeid_questiontype = self.questiontypeid_questiontype
-        result.question = self.question + ' (copy)'
+        copyTxtList = re.findall(r" \(Copy_[0-9]+\)", self.question)
+        if (len(copyTxtList) > 0) :
+            copyTxt = copyTxtList[0]
+        else :
+            copyTxt = ""
+        name = self.question.replace(copyTxt, '')
+        result.question = name + " (Copy_" + str(Questions.objects.filter(question__regex=r"^"+ name).count()) + ")"
+
         result.required = self.required
         result.archived = False
 
@@ -285,6 +338,19 @@ class Questions(models.Model):
     @staticmethod
     def getFilterOptions() :
         return ("Question Type", "Creator", "Last Editor")
+
+    def setAllOptions(self, newOptions, user) :
+        if self.canEdit(user) :
+            for option in self.options :
+                option.delete()
+                self.notifyOptionRemoval(user)
+            
+            for newOption in newOptions :
+                newOptionModelEntry = Multipleoptions()
+                newOptionModelEntry.option = newOption
+                newOptionModelEntry.questionsid_questions = self
+                newOptionModelEntry.save()
+                self.notifyNewOption(user)
 
     options = property(getMultipleOptions)
 
