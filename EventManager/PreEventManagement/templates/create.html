@@ -36,9 +36,11 @@
 	</div>
 
 	<div class="field">
+
 		<label class="label" for="event_type">Campus:</label>
 		  <div class="dropdown-trigger">
-			<select name="campus" class="button "aria-haspopup="true" aria-controls="dropdown-menu3" style="margin: auto; width: 30%">
+			<select name="campus" class="select" aria-haspopup="true" aria-controls="dropdown-menu3" style="margin: auto; width: 30%">
+
 				{% for campus in campuses %}
 					<option class="dropdown-item" value="{{campus.id}}" required>{{campus.campusname}}</option>
 				{% endfor %}
@@ -48,7 +50,7 @@
 
 
 	<label class="label" for="event_type">Event type:</label>
-	<select class="button" onchange="eventtype_change.call(this)" name="event_type" style="margin: auto; width: 30%" required>
+	<select class="select" onchange="eventtype_change.call(this)" name="event_type" style="margin: auto; width: 30%" required>
 		{% for event_type in event_types %}
 			<option value="{{event_type.id}}">{{event_type.typename}}</option>
 		{% endfor %}
