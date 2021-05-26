@@ -28,16 +28,16 @@
 {% endblock %}
 
 {% block tableHead %}
-    <th style="width: 15%;">Nome</th>
-    <th style="width: 5%;">Tipo</th>
-    <th style="width: 8%;">Tipo de Evento</th>
-    <th style="width: 5%;">Publico</th>
-    <th style="width: 5%;">Arquivado</th>
-    <th style="width: 5%;">Criador</th>
-    <th style="width: 10%;">Criado em</th>
-    <th style="width: 5%;">Editado por</th>
-    <th style="width: 10%;">Editado em</th>
-    <th style="width: 20%;">Ações</th>
+    <th >Nome</th>
+    <th >Tipo</th>
+    <th >Tipo de Evento</th>
+    <th >Publico</th>
+    <th >Arquivado</th>
+    <th >Criador</th>
+    <th >Criado em</th>
+    <th >Editado por</th>
+    <th >Editado em</th>
+    <th width="250">Ações</th>
 {% endblock %}
 
 {% block listings %}
@@ -45,16 +45,16 @@
     {% for form in forms %}
         {% if form|can_display_form:user %}
             <tr id="row{{ forloop.counter }}">
-                <td id="NameFilter{{ forloop.counter }}">{{form.formname}}</td>
-                <td>{{form.formtypeid_formtype}}</td>
-                <td id="TypeFilter{{ forloop.counter }}">{{form.eventtypeid.typename}}</td>
-                <td id="PublishedFilter{{ forloop.counter }}">{% if form.published %}Sim{% else %}Não{% endif %}</td>
-                <td id="ArchivedFilter{{ forloop.counter }}">{% if form.archived %}Sim{% else %}Não{% endif %}</td>
-                <td id="CriatorFilter{{ forloop.counter }}">{{form.createdby.username}}</td>
-                <td id="CriationDateFilter{{ forloop.counter }}">{{form.dateofcreation}}</td>
-                <td id="EditorFilter{{ forloop.counter }}">{{form.lasteditedby.username}}</td>
-                <td id="EditDateFilter{{ forloop.counter }}">{{form.dateoflastedit}}</td>
-                <td>
+                <td id="NameFilter{{ forloop.counter }}" data-label="Nome">{{form.formname}}</td>
+                <td data-label="Tipo">{{form.formtypeid_formtype}}</td>
+                <td id="TypeFilter{{ forloop.counter }}" data-label="Tipo de evento">{{form.eventtypeid.typename}}</td>
+                <td id="PublishedFilter{{ forloop.counter }}" data-label="Publico">{% if form.published %}Sim{% else %}Não{% endif %}</td>
+                <td id="ArchivedFilter{{ forloop.counter }}" data-label="Arquivado">{% if form.archived %}Sim{% else %}Não{% endif %}</td>
+                <td id="CriatorFilter{{ forloop.counter }}" data-label="Criador">{{form.createdby.username}}</td>
+                <td id="CriationDateFilter{{ forloop.counter }}" data-label="Criado em">{{form.dateofcreation}}</td>
+                <td id="EditorFilter{{ forloop.counter }}" data-label="Editado por">{{form.lasteditedby.username}}</td>
+                <td id="EditDateFilter{{ forloop.counter }}" data-label="Editado em">{{form.dateoflastedit}}</td>
+                <td data-label="Ações">
                     <a href="{% url 'checkFormLayout' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Formulário">
                         <i class="fa fa-search fa-lg" aria-hidden="true"></i>
                     </a>
@@ -95,6 +95,10 @@
                             <a href="{% url 'publishForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar">
                                 <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
                             </a>
+                        {% else %}
+                            <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
+                                <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
+                            </a>
                         {% endif %}
                         
                     {% else %}
@@ -125,4 +129,8 @@
             </tr>
         {% endif %}
     {% endfor %}
+{% endblock %}
+
+{% block showType %}
+    formulários
 {% endblock %}

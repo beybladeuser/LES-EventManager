@@ -66,7 +66,8 @@
 			
 
 			{% endblock %}
-			<table class="table">
+			
+			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
 				<thead>
 					<tr>
 						{% block tableHead %}
@@ -98,7 +99,7 @@
 					</select>
 				</div>
 				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
-				<span style="margin-right: 3%; ">por página</span>
+				<span style="margin-right: 3%; ">{% block showType %} {% endblock %} por página</span>
 
 			</div>
 			<div class="level-item">

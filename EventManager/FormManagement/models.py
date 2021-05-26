@@ -113,10 +113,10 @@ class Form(models.Model):
         return (user.id == self.createdby.id or user.groups.filter(pk=1).exists() or self.published) and not user.groups.filter(pk=2).exists()
 
     def canPublish(self, user) :
-        return self.canEdit(user) and user.id == self.createdby.id
+        return self.canEdit(user) and user.id == self.createdby.id and len(self.formquestions) > 0
 
     def canArchive(self, user) :
-        return self.canEdit(user) and user.id == self.createdby.id and not self.archived
+        return self.canEdit(user) and user.id == self.createdby.id and not self.archived and len(self.formquestions) > 0
 
     def canUnarchive(self, user) :
         return self.userHasEditPermitions(user) and user.id == self.createdby.id and self.archived

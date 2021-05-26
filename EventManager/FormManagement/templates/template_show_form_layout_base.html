@@ -77,6 +77,10 @@
                         		    <a href="{% url 'publishForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar">
                         		        <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
                         		    </a>
+								{% else %}
+									<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
+										<i class="fas fa-eye fa-lg" aria-hidden="true"></i>
+									</a>
                         		{% endif %}
                         
                     			{% else %}
@@ -189,22 +193,66 @@
                 </a>
             {% endif %}
 			
-			<table class="table">
+			
+			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
 				<thead>
 					<tr>
 						{% block tableHead %}
-				
+					
 						{% endblock %}
 					</tr>
 				</thead>
 				<tbody>
 					{% block listings %}
-					
+
 					{% endblock %}
 				</tbody>
-
-				
 			</table>
+		</div>
+	</div>
+
+	<div class="level">
+		<div class="level-left"></div>
+		<div class="level-right" style="white-space: nowrap;">
+			<div class="level-item" style="width: fit-content;">
+				<span style="margin-right: 3%;">Mostrando</span>   
+				<div class="select" style="margin-right: 3%;">
+					<select onchange="pagging(0, this.value);">
+					  <option value=5>5</option>
+					  <option value=10>10</option>
+					  <option value=20>20</option>
+					</select>
+				</div>
+				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
+				<span style="margin-right: 3%; ">{% block showType %} {% endblock %} por página</span>
+
+			</div>
+			<div class="level-item">
+				
+				<nav class="pagination" role="navigation" aria-label="pagination">
+					
+					
+					<ul class="pagination-list">
+						<li>
+							
+							<a class="pagination-link is-current" id="CurrentPage">1</a>
+							
+						</li>
+					</ul>
+					<button id="BackPage" role="button" class="pagination-previous" onclick="pagging(currentPage-1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-left mdi-24px"></i>
+						</span>
+					</button>
+					
+					<button id="NextPage" role="button" class="pagination-next" onclick="pagging(currentPage+1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-right mdi-24px"></i>
+						</span>
+					</button>
+					
+				</nav>
+			</div>
 		</div>
 	</div>
 		
@@ -214,46 +262,15 @@
 		<script>
 
 			
-			function filter(filterName, isDropDown)
-        	{
-				var FilterOBJ = document.getElementById(filterName);
-        	    var filter;
-        	    if (isDropDown) {
-					filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
-        	    }
-        	    else {
-					filter = FilterOBJ.value.toLowerCase();
-        	    }
-				
-				if (isDropDown && filter.indexOf("selecione")>-1) {
-					filter = "";
-        	    }
-				
-				var id = 1;
-        	    while (document.getElementById("row" + id)){
-					
-					var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
-        	        
-					
-					
-        	        if ( fieldVal.indexOf(filter)>-1 ) {
-						document.getElementById("row" + id).style.display = "";
-        	        }
-        	        else {
-						document.getElementById("row" + id).style.display = "none";
-        	        }
-        	        id++;
-        	    }
-				
-        	}
-			
-			var filters = [
+var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
 				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
 				{'filterName' : 'EditorFilter', 'isDropDown' : false},
 			];
+			var filteredRows = new Array();
 			function filter2(){
+				filteredRows = new Array();
 				var id = 1;
         	    while (document.getElementById("row" + id)){
 					var toBeHidden = false;
@@ -279,13 +296,71 @@
 					}
 					
 					if ( !toBeHidden ) {
-        	            document.getElementById("row" + id).style.display = "";
+        	            //document.getElementById("row" + id).style.display = "none";
+						filteredRows.push(document.getElementById("row" + id));
         	        }
-        	        else {
+        	        //else {
         	            document.getElementById("row" + id).style.display = "none";
-        	        }
+        	        //}
         	        id++;
         	    }
+				document.getElementById("FilteredCount").textContent = filteredRows.length;
+				
+				pagging();
+			}
+
+			function getNPages(size=10) {
+				return Math.floor(filteredRows.length / size);
+			}
+
+			function getSizeOfPage(page=0, size=10) {
+				if (page == getNPages(size)){
+					return filteredRows.length % size;
+				}
+				return size;
+			}
+
+			function hideAllEntries() {
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					document.getElementById("row" + id).style.display = "none";
+					id++;
+				}
+			}
+
+			var currentPage = 0;
+			var currentSize=5;
+			function pagging(page=0, size=5){
+				var test = typeof global_size;
+				if (!(typeof global_size === "undefined" )) {
+					size=global_size;
+				}
+				if (page > getNPages(size) || page < 0) {
+					return;
+				}
+				var displayingN = 0;
+				var trueSize = getSizeOfPage(page, size);
+				hideAllEntries();
+        	    while (displayingN < trueSize) {
+					filteredRows[displayingN + page*size].style.display = "";
+					displayingN++;
+
+				}
+				currentPage = page;
+				document.getElementById("CurrentPage").textContent = String(currentPage + 1);
+				if (getSizeOfPage(page + 1, size) <= 0 || page + 1 > getNPages(size)) {
+					document.getElementById("NextPage").disabled = true;
+				}
+				else {
+					document.getElementById("NextPage").disabled = false;
+				}
+
+				if (page - 1 < 0) {
+					document.getElementById("BackPage").disabled = true;
+				}
+				else {
+					document.getElementById("BackPage").disabled = false;
+				}
 			}
 
 			function toggle(objName){
@@ -297,6 +372,9 @@
 					OBJ.style.display = "none";
 				}
 			}
+
+			filter2();
+
 		</script>
     	
 {% endblock %}

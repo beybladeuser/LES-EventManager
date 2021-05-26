@@ -108,9 +108,9 @@ class openEndedQuestionCreation(forms.Form):
 	user = None
 	form = None
 	questionToEdit = None
-	question = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}), label='Question', max_length=255, required=True)
+	question = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}), label='Questão', max_length=255, required=True)
 	OPTIONS_questionType = Questiontype.makeOptions()
-	questionType = forms.CharField(widget=forms.Select(choices=OPTIONS_questionType, attrs={'class' : 'input', "onChange":'checkType()'}), label='Tipo de evento', required=True)
+	questionType = forms.CharField(widget=forms.Select(choices=OPTIONS_questionType, attrs={'class' : 'input', "onChange":'checkType()'}), label='Tipo de questão', required=True)
 	options = ((True, 'Sim'), (False, 'Não'))
 	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="É Requerida", required=True)
 
