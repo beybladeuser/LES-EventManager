@@ -5,8 +5,8 @@
 <form method="post">
   {% load crispy_forms_tags %} 
   {% csrf_token %}
-  {{ InsertAssetForm|crispy }}
-  <button type="submit" class="btn btn-primary">Add Asset</button>
+  {{ ServiceForm|crispy }}
+  <button type="submit" class="btn btn-primary">Adicionar Serviço</button>
 </form>
 {% endblock %}
 

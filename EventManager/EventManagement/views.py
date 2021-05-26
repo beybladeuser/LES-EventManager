@@ -1,3 +1,4 @@
+from django.db.models.query_utils import RegisterLookupMixin
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.contrib.auth.models import User
@@ -58,31 +59,6 @@ def consultar_participantes(request,eventid_event) :
     }
     return HttpResponse(template.render(context, request))
 
-
-
-
-
-def viewanswer(request, RegistrationID = None ):
-    answers = Answer.objects.filter(resgistrationid = RegistrationID)
-    if (Resgistration.objects.filter(pk=RegistrationID).exists()) :
-        regisForm = Resgistration.objects.get(pk=RegistrationID).eventid_event.formresgistrationid
-        regisQuestions = regisForm.getQuestions()
-        answers = []
-        for regisQuestion in regisQuestions :
-            if (regisQuestion.getAnswersForForm(regisForm).filter(resgistrationid=RegistrationID).exists()) :
-                answer = regisQuestion.getAnswersForForm(regisForm).get(resgistrationid=RegistrationID)
-                answers.append( {"questionsid_questions":regisQuestion, "answer":answer.answer} )
-            else :
-                answers.append( {"questionsid_questions":regisQuestion, "answer":"N\\a"} )
-
-
-
-
-    template = loader.get_template('list_event_regs_form_answers.html')
-    context = {
-        'answers': answers,
-    }
-    return HttpResponse(template.render(context, request))
     
 
 
@@ -127,3 +103,40 @@ def addregistration(request, EventID= None):
     return HttpResponse(template.render(context, request))
 
 
+def viewanswer(request, RegistrationID = None ):
+    answers = Answer.objects.filter(resgistrationid = RegistrationID)
+    if (Resgistration.objects.filter(pk=RegistrationID).exists()) :
+        regisForm = Resgistration.objects.get(pk=RegistrationID).eventid_event.formresgistrationid
+        regisQuestions = regisForm.getQuestions()
+        answers = []
+        for regisQuestion in regisQuestions :
+            if (regisQuestion.getAnswersForForm(regisForm).filter(resgistrationid=RegistrationID).exists()) :
+                answer = regisQuestion.getAnswersForForm(regisForm).get(resgistrationid=RegistrationID)
+                answers.append( {"questionsid_questions":regisQuestion, "answer":answer.answer} )
+            else :
+                answers.append( {"questionsid_questions":regisQuestion, "answer":"N\\a"} )
+
+
+
+
+    template = loader.get_template('list_event_regs_form_answers.html')
+    context = {
+        'answers': answers,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def checkout(request, RegistrationID=None):
+    if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
+        regist = Resgistration.objects.get(pk=RegistrationID)
+        if regist.canCancelCheckout(request.user):
+            regist.changeCheckoutStatus(False)
+    return redirect('consultar_participantes', regist.eventid_event.id)
+
+def checkin(request,RegistrationID=None) :
+    if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
+        regist = Resgistration.objects.get(pk=RegistrationID)
+        if regist.canCancelCheckout(request.user):
+            regist.changeCheckoutStatus(True)
+    return redirect('consultar_participantes', regist.eventid_event.id)
+       
