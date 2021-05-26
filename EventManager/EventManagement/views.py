@@ -140,3 +140,31 @@ def checkin(request,RegistrationID=None) :
             regist.changeCheckoutStatus(True)
     return redirect('consultar_participantes', regist.eventid_event.id)
        
+def validateparticipant(request,RegistrationID=None):
+    if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
+        regist = Resgistration.objects.get(pk=RegistrationID)
+        if regist.canCancelCheckout(request.user):
+            regist.changevalidateStatus(True)
+    return redirect('consultar_participantes', regist.eventid_event.id)
+
+def consultar_participantesnaovalidados(request,eventid_event) :
+    if Event.objects.filter(pk=eventid_event).exists()  :
+        event = Event.objects.get(pk=eventid_event)
+        if event.canConsultParticipants(request.user) :
+            template = loader.get_template('nonvalidateparticipantes.html')
+            context = {
+                'registrations': Resgistration.objects.filter(eventid_event=eventid_event).order_by('participantuserid'),
+                'event' : event
+            }
+            return HttpResponse(template.render(context, request))
+        else:
+            errorMessage = "can not access this page"
+                
+    else:
+        errorMessage = "Event does not exist"
+
+    template = loader.get_template('message.html')
+    context = {
+        'errorMessage' : errorMessage,
+    }
+    return HttpResponse(template.render(context, request))

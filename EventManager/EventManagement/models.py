@@ -12,7 +12,8 @@ class Resgistration(models.Model):
     dateofregistration = models.DateTimeField(db_column='dateOfRegistration')  # Field name made lowercase.
     waspresent = models.BooleanField(db_column='WasPresent', default=False)  # Field name made lowercase.
     participantuserid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ParticipantUserID')  # Field name made lowercase.
-     
+    wasvalidate=models.IntegerField(db_column='WasValidate',default=2)
+ 
 
 
     def canCancel(self, user) :
@@ -34,6 +35,10 @@ class Resgistration(models.Model):
         self.save()
         return self.waspresent
 
+    def changevalidateStatus(self, newStatus) :
+        self.wasvalidate = newStatus
+        self.save()
+        return self.wasvalidate
     #to be implemented
     def canCancelCheckout(self, user) :
         return True
