@@ -21,6 +21,21 @@ class Asset(models.Model):
     canAdd = False
 
     
+
+    def delete_asset(self):
+        service = Service.objects.get(assetid=self.id)
+        equipment = Equipment.objects.get(assetid=self.id)
+        room = Rooms.objects.get(assetid=self.id)
+        if service is not None:
+            service.delete()
+        elif equipment is not None:
+            equipment.delete()
+        elif room is not None:
+            room.delete()
+        
+        self.delete()
+        
+
     def userHasEditPermitions(self, user) :
         return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
 
@@ -43,21 +58,12 @@ class Asset(models.Model):
         return result
 
     # equipment_subclass_type = property(getEquipmentType)
-
-
     def getRoom(self):
         result = None
         room = Rooms.objects.filter(assetid=self.id)
-        if room :
-            result.campus = room[0].buildingid_building.campusid
-            result.buildingname = room[0].buildingid_building.buildingname
+        if room  :
+            result = room[0]
         return result
-
-    room_subclass_type = property(getRoom)
-
-
-
-
 
 
     def __str__(self):
@@ -73,11 +79,37 @@ class Building(models.Model):
     campusid = models.ForeignKey('Campus', models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.
     buildingname = models.CharField(db_column='BuildingName', max_length=255)  # Field name made lowercase.
 
+
+    def building_getCampus(self):
+        return self.campusid
+
+
+    def building_getCampusName(self):
+        result = None
+      
+        campus = Building.objects.filter(id=campusid)
+        if campus :
+            result = campus[0].campusname
+        return result
+
+
+
+    def CampusName_BuildingName(self):
+        campus = None
+        campusidd= self.campusid
+        campus = Building.objects.filter(id=campusidd)
+        if campus :
+            campus = campus[0].campusname
+        
+        campus = building_getCampusName(self)
+        return campus + " - " + self.buildingname
+
+
+
     def __str__(self):
-       return self.buildingname + " - " + self.campusid.campusname
+       return self.buildingname 
 
     class Meta:
-        
         db_table = 'building'
 
 
@@ -124,11 +156,15 @@ class Rooms(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
     buildingid_building = models.ForeignKey(Building, models.DO_NOTHING, db_column='BuildingID_Building')  # Field name made lowercase.
 
+    def room_GetBuilding(self):
+        return self.buildingid_building
+
+    
     class Meta:
         db_table = 'rooms'
 
-    def __str__(self):
-       return self.assetid + " - " + self.buildingid_building
+    # def __str__(self):
+    #    return self.assetid + " - " + self.buildingid_building
 
 
 class Service(models.Model):

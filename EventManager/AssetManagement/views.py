@@ -6,6 +6,7 @@ from .models import Asset, Equipment, Rooms, Service
 from django.template import loader
 
 from .forms import *
+from AssetManagement.models import Building
 
 
 # Create your views here.
@@ -30,13 +31,16 @@ def consultar_assets(request):
             Assets[i].type = "Serviço"
 
         elif Asset.getEquipmentType(Assets[i]) is not None:
-            print("epahYha")
             Assets[i].subtype = Asset.getEquipmentType(Assets[i])
             Assets[i].type = "Equipamento"
 
         elif Asset.getRoom(Assets[i]) is not None:
+            room = Asset.getRoom(Assets[i])
+            buildingg = Rooms.room_GetBuilding(room)
+            
+
             Assets[i].type = "Sala/Anfiteatro"
-            Assets[i].subtype = Asset.getRoom(Assets[i]).campus + " - " + Asset.getRoom(Assets[i]).buildingname 
+            Assets[i].subtype = Building.CampusName_BuildingName(buildingg)
         i += 1
 
     context = {
@@ -77,3 +81,11 @@ def insert_assets(request):
             form.save()
     return render(request, 'InsertAssets', {'InsertAssetForm': form})    
 
+
+def delete_assets(request):
+    template = loader.get_template('DeleteAssets.html')
+    
+    context = {
+        'Assets': Rooms.objects.all()
+    }
+    return HttpResponse(template.render(context, request))    
