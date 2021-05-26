@@ -18,7 +18,10 @@ def formsHome(request) :
     formTypes = Formtype.objects.all()
     errorMessage = None
     if not formTypes :
-        errorMessage = "Error: No form types found on data base"
+        errorMessage = "Erro: Não foram encontrados tipos de fomulário na base de dados"
+
+    if request.user.groups.filter(id=2).exists() :
+        errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
     
     template = loader.get_template('template_forms_home.html')
     context = {
@@ -36,19 +39,21 @@ def checkFormLayout(request, formID = None) :
     if formID :
         form_query = Form.objects.filter(id=formID)
         if not form_query :
-            errorMessage = "Error: Form doesn't exist"
+            errorMessage = "Erro: Formulário não existe"
         else :
             form = form_query[0]
             return_addr = return_addr + str(form.formtypeid_formtype.id)
     
     else :
-        errorMessage = "Error: No Form ID given"
+        errorMessage = "Erro: Nenhum formulário dado"
 
     if form :
         form.canEdit = form.canEdit(request.user)
         form.canDuplicate = form.canDuplicate(request.user)
         request.session["deleteOption_form_redirect"] = formID
         request.session["createOption_form_redirect"] = formID
+        if not form.canDisplay(request.user):
+            errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
 
     return_addr = request.session.get('form_return_redirect', return_addr)
@@ -56,6 +61,8 @@ def checkFormLayout(request, formID = None) :
     #    del request.session['form_return_redirect']
     #    request.session.modified = True
     
+    
+
     questions = form.formquestions
     for question in questions :
         question.canEdit = question.canEdit(request.user)
@@ -89,6 +96,9 @@ def checkForm(request, formID = None, return_addr = '/forms/listformsfromtype/')
     else:
         errorMessage = 'Invalid Form ID: No ID given'
 
+    if request.user.groups.filter(id=2).exists() :
+        errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
+
     return_addr = request.session.get('form_return_redirect', return_addr)
     if return_addr != '/forms/listformsfromtype/' :
         del request.session['form_return_redirect']
@@ -114,15 +124,15 @@ def listFormsFromType(request, formTypeID = None) :
         if formType :
             forms = Form.objects.filter(formtypeid_formtype=formTypeID)
             if not forms :
-                errorMessage = "Error: No forms of type " + formType[0].typename
+                errorMessage = "Erro: Nenhum formulário do tipo " + formType[0].typename
             else :
                 request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(formTypeID)
                 request.session['delete_form_return_redirect'] = "/forms/listformsfromtype/" + str(formTypeID)
 
         else :
-            errorMessage = "Error: Invalid form type"
+            errorMessage = "Erro: Tipo de formulário invalido"
     else :
-        errorMessage = "Error: No form type given"
+        errorMessage = "Erro: Nenhum tipo de evento dado"
 
     for form in forms :
         form.canEdit = form.canEdit(request.user)
@@ -130,6 +140,8 @@ def listFormsFromType(request, formTypeID = None) :
 
     filterOptions = Form.getFilterOptions()
     eventTypes = Eventtype.objects.all()
+    if request.user.groups.filter(id=2).exists() :
+        errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
     template = loader.get_template('template_list_forms.html')
     context = {
@@ -173,16 +185,16 @@ def createForm(request, formTypeID=None, formID=None) :
     if formID and Form.objects.filter(id=formID).exists():
         formToEdit = Form.objects.get(pk=formID)
         if not formToEdit.canEdit(request.user) :
-            errorMessage = "Error: Cannot edit this form"
+            errorMessage = "Erro: Utilizador não pode editar este formulário"
     elif request.user.groups.filter(pk=2).exists():
-        errorMessage = "Error: Participant cannot create forms, account must be Proponent or Administrator"
+        errorMessage = "Erro: Participante não pode criar formulários, a conta deve ser do tipo Proponente ou Administrator"
 
     if not errorMessage :
         if formTypeID and Formtype.objects.filter(id=formTypeID).exists() :
             if not formID or not Form.objects.filter(id=formID).exists() :
                 formCreate = True
         else :
-            errorMessage = "Error: No form type specified or invalid form type"
+            errorMessage = "Erro: Não foi especificado o tipo de formulário ou este é invalido"
     
     if not errorMessage :
         if request.method == 'POST':
@@ -207,7 +219,8 @@ def createForm(request, formTypeID=None, formID=None) :
                 })
     
     
-
+    if request.user.groups.filter(id=2).exists() :
+        errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
     template = loader.get_template('template_create_new_form.html')
     context = {
@@ -241,19 +254,20 @@ def createQuestion(request, questionID=None,formID=None):
     questionCreate = None
     errorMessage = None
     questionCreation_form = None
+    optionsInputed = []
     #formCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=None, questionToEdit=None)
 
     if questionID and Questions.objects.filter(id=questionID).exists():
         questionToEdit = Questions.objects.get(pk=questionID)
         if not questionToEdit.canEdit(request.user) :
-            errorMessage = "Error: Cannot edit this question"
+            errorMessage = "Erro: Utilizador não pode editar esta questão"
     elif request.user.groups.filter(pk=2).exists():
-        errorMessage = "Error: Participant cannot create questions, account must be Proponent or Administrator"
+        errorMessage = "Erro: Participante não pode criar questões, a conta deve ser do tipo Proponente ou Administrator"
 
     if formID and Form.objects.filter(id=formID).exists():
         formToEdit = Form.objects.get(pk=formID)
         if not formToEdit.canEdit(request.user):
-            errorMessage = "Error: Cannot edit this form"
+            errorMessage = "Erro: Utilizador não pode editar este formulário"
 
     if not questionID or not Questions.objects.filter(id=questionID).exists() :
         questionCreate = True
@@ -274,8 +288,16 @@ def createQuestion(request, questionID=None,formID=None):
 
         if request.method == 'POST':
             questionCreation_form = openEndedQuestionCreation(request.POST, currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit)
+
+            optionCount = 0
+            while (request.POST.get("option"+str(optionCount),None)) :
+                optionsInputed.append(request.POST.get("option"+str(optionCount),None))
+                optionCount = optionCount + 1
+
             if questionCreation_form.is_valid():
                 newForm = questionCreation_form.save()
+                                    
+                newForm.setAllOptions(optionsInputed, request.user)
 
                 if associatedForm :
                     return redirect("checkFormLayout", associatedForm.id)
@@ -285,14 +307,20 @@ def createQuestion(request, questionID=None,formID=None):
         else:
             if questionToEdit :
                 questionCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit,initial={
-                    'question': questionToEdit.question, 'required': questionToEdit.required,
+                    'question': questionToEdit.question, 'required': questionToEdit.required, 'questionType': questionToEdit.questiontypeid_questiontype.id
                 })
+                for option in questionToEdit.options :
+                    optionsInputed.append(option.option)
             else :
                 questionCreation_form = openEndedQuestionCreation(currentUser=request.user, associatedForm=associatedForm, questionToEdit=questionToEdit)
+
+    if request.user.groups.filter(id=2).exists() :
+        errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
     template = loader.get_template('template_create_new_question.html')
     context = {
         'questionCreate' : questionCreate,
+        'options' : optionsInputed,
         'errorMessage' : errorMessage,
         'questionCreation' : questionCreation_form
     }
@@ -312,11 +340,11 @@ def listQuestions(request, formID=None) :
     
 
     if request.user.groups.filter(id=2).exists() :
-        errorMessage = "Error: participant cant view all questions"
+        errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
     else :
         questions = Questions.objects.all()
         if not questions :
-            errorMessage = "Error: No existing question saved"
+            errorMessage = "Erro: Nenhum questão existente"
         elif formToAssociate :
             questions = [x for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
         for question in questions :
@@ -331,6 +359,7 @@ def listQuestions(request, formID=None) :
     request.session["form_return_redirect"] = "/forms/listquestions/"
     filterOptions = Questions.getFilterOptions()
     questionTypes = Questiontype.objects.all()
+
     template = loader.get_template('template_list_questions.html')
     context = {
         'filterOptions' : filterOptions,
@@ -381,7 +410,7 @@ def createOption(request, questionID=None, optionID=None) :
     if questionID and Questions.objects.filter(id=questionID).exists():
         questionToEdit = Questions.objects.get(pk=questionID)
         if not questionToEdit.canEdit(request.user) :
-            errorMessage = "Error: Cannot edit this question"
+            errorMessage = "Erro: Utilizador não pode editar esta questão"
 
     if not optionID or not Multipleoptions.objects.filter(id=optionID).exists() :
         optionCreate = True
@@ -410,6 +439,9 @@ def createOption(request, questionID=None, optionID=None) :
                 })
             else :
                 optionCreation_form = QuestionOptionForm(currentUser=request.user, associatedQuestion=associatedQuestion, optionToEdit=optionToEdit)
+
+    if request.user.groups.filter(id=2).exists() :
+        errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
     template = loader.get_template('template_create_new_option.html')
     context = {
@@ -464,7 +496,7 @@ def duplicateForm(request, formID=None) :
         formToDuplicate = Form.objects.get(id=formID)
         if formToDuplicate.canDuplicate(request.user) :
             newForm = formToDuplicate.duplicate(request.user)
-            return redirect('createForm', newForm.formtypeid_formtype.id, newForm.id)
+            return redirect('checkFormLayout', newForm.id)
         return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
     return redirect('formsHome')
 
@@ -476,6 +508,34 @@ def duplicateQuestion(request, questionID=None) :
             return redirect('createQuestion', newQuestion.id, 0)
         return redirect('listQuestions')
     return redirect('formsHome')
+
+def publishForm(request, formID=None) :
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToPublish = Form.objects.get(id=formID)
+        if formToPublish.canPublish(request.user) :
+            formToPublish.publish(request.user)
+            return redirect(request.session.get('publishForm_form_redirect', '/forms/checkformlayout/' + str(formToPublish.id) + '/'))
+        return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
+    return redirect('formsHome')
+
+def archiveForm(request, formID=None) :
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToArchive = Form.objects.get(id=formID)
+        if formToArchive.canArchive(request.user) :
+            formToArchive.archive(request.user)
+            return redirect(request.session.get('archiveForm_form_redirect', '/forms/checkformlayout/' + str(formToArchive.id) + '/'))
+        return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
+    return redirect('formsHome')
+
+def unarchiveForm(request, formID=None) :
+    if formID and Form.objects.filter(id=formID).exists() :
+        formToArchive = Form.objects.get(id=formID)
+        if formToArchive.canUnarchive(request.user) :
+            formToArchive.unarchive(request.user)
+            return redirect(request.session.get('archiveForm_form_redirect', '/forms/checkformlayout/' + str(formToArchive.id) + '/'))
+        return redirect('listFormsFromType', formToDuplicate.formtypeid_formtype)
+    return redirect('formsHome')
+    
 
 def testForm(request, formID = 1):
     regis = Resgistration()

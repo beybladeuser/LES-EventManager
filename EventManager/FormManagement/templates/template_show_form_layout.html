@@ -9,23 +9,23 @@
 {% endblock %}
 
 {% block tableHead %}
-    <th style="width: 15%;">Questão</th>
-    <th style="width: 10%;">Tipo</th>
-    <th style="width: 5%;">Opções</th>
-    <th style="width: 5%;">Requerida</th>
-    <th style="width: 5%;">Criador</th>
-    <th style="width: 10%;">Criado em</th>
-    <th style="width: 5%;">Editado por</th>
-    <th style="width: 10%;">Editado em</th>
-    <th style="width: 20%;">Ações</th>
+    <th >Questão</th>
+    <th >Tipo</th>
+    <th >Opções</th>
+    <th >Requerida</th>
+    <th >Criador</th>
+    <th >Criado em</th>
+    <th >Editado por</th>
+    <th >Editado em</th>
+    <th >Ações</th>
 {% endblock %}
 
 {% block listings %}
         {% for question in questions %}
             <tr id="row{{ forloop.counter }}">
-                <td id="NameFilter{{ forloop.counter }}">{{question.question}}</td>
-                <td id="TypeFilter{{ forloop.counter }}">{{question.questiontypeid_questiontype.typename}}</td>
-                <td id="OptionsFilter{{ forloop.counter }}">
+                <td id="NameFilter{{ forloop.counter }}" data-label="Questão">{{question.question}}</td>
+                <td id="TypeFilter{{ forloop.counter }}" data-label="Tipo">{{question.questiontypeid_questiontype.typename}}</td>
+                <td id="OptionsFilter{{ forloop.counter }}" data-label="Opções">
                     
                     <div {% if question.canEdit or question.options %} onmouseover="toggle('optionDropdown{{ forloop.counter }}')" onmouseout="toggle('optionDropdown{{ forloop.counter }}')" {% endif %}>
                         <span class="icon is-small" >
@@ -56,13 +56,13 @@
                     
 
                 </td>
-                <td id="RequiredFilter{{ forloop.counter }}">{% if question.required %}Sim{% else %}Não{% endif %}</td>
-                <td id="CriatorFilter{{ forloop.counter }}">{{question.createdby.username}}</td>
-                <td id="CriationDateFilter{{ forloop.counter }}">{{question.dateofcreation}}</td>
-                <td id="EditorFilter{{ forloop.counter }}">{{question.lasteditedby.username}}</td>
-                <td id="EditDateFilter{{ forloop.counter }}">{{question.dateoflastedit}}</td>
+                <td id="RequiredFilter{{ forloop.counter }}" data-label="Requerida">{% if question.required %}Sim{% else %}Não{% endif %}</td>
+                <td id="CriatorFilter{{ forloop.counter }}" data-label="Criador">{{question.createdby.username}}</td>
+                <td id="CriationDateFilter{{ forloop.counter }}" data-label="Criado em">{{question.dateofcreation}}</td>
+                <td id="EditorFilter{{ forloop.counter }}" data-label="Editado por">{{question.lasteditedby.username}}</td>
+                <td id="EditDateFilter{{ forloop.counter }}" data-label="Editado em">{{question.dateoflastedit}}</td>
                 
-                <td id="ActionsFilter{{ forloop.counter }}">
+                <td id="ActionsFilter{{ forloop.counter }}" data-label="Ações">
                     {% if question.canEdit %}
                         <a href="{% url 'createQuestion' question.id 0 %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Questão">
                             <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>

@@ -8,6 +8,7 @@ EventManager/PreEventManagement/__pycache__
 EventManager/Schedules/__pycache__
 EventManager/utilizadores/__pycache__
 EventManager/utilizadores/templatetags/__pycache__
+EventManager/FormManagement/templatetags/__pycache__
 
 
 

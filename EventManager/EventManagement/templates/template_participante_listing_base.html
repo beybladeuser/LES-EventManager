@@ -16,58 +16,37 @@
 							</span>
 						</div>
 					</div>
-
 					<div class="field">
 						<div class="control has-icons-left">
-							<select class="input" id="TypeFilter" onchange="filter2()">
-							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
-							  	{% block filterTypes %}
-							
-								{% endblock %}
+							<select class="input" id="presenceFilter" onchange="filter2()">
+							  	<option value="Selecione">Selecione o estado da Presença</option>
+							  	<option value="Sim">Presente</option>
+								<option value="Não">Não presente</option>
 							</select>
 							<span class="icon is-left">
 								<i class="	fa fa-angle-down mdi-24px"></i>
 							</span>
 						</div>
 					</div>
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="CriatorFilter" placeholder="Nome do criador" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
+					
 				</ul>
 			</div>
 		</div>
+		
 
 		<div class="column">
 			<nav aria-label="breadcrumbs" class="breadcrumb">
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
-					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
+					<li><a href="{% url 'eventHome' %}">Gestor de Inscrições</a></li>
 					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
 					</li>
 				</ul>
 			</nav>
-			
 			{% block preListingBlock %}
-			
 
 			{% endblock %}
-			
-			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
+			<table class="table is-fullwidth">
 				<thead>
 					<tr>
 						{% block tableHead %}
@@ -90,7 +69,7 @@
 		<div class="level-left"></div>
 		<div class="level-right" style="white-space: nowrap;">
 			<div class="level-item" style="width: fit-content;">
-				<span style="margin-right: 3%;">Mostrando</span>   
+				<span style="margin-right: 3%;">Displaying</span>   
 				<div class="select" style="margin-right: 3%;">
 					<select onchange="pagging(0, this.value);">
 					  <option value=5>5</option>
@@ -98,9 +77,8 @@
 					  <option value=20>20</option>
 					</select>
 				</div>
-				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
-				<span style="margin-right: 3%; ">{% block showType %} {% endblock %} por página</span>
-
+				<span style="margin-right: 3%;">out of <span id="FilteredCount"></span></span>
+				
 			</div>
 			<div class="level-item">
 				
@@ -130,6 +108,7 @@
 			</div>
 		</div>
 	</div>
+	
 		
 {% endblock %}
 
@@ -140,7 +119,7 @@
         	    var FilterOBJ = document.getElementById(filterName);
         	    var filter;
         	    if (isDropDown) {
-        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].value;
         	    }
         	    else {
         	        filter = FilterOBJ.value.toLowerCase();
@@ -170,9 +149,7 @@
 
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
-				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
-				{'filterName' : 'EditorFilter', 'isDropDown' : false},
+				{'filterName' : 'presenceFilter', 'isDropDown' : true},
 			];
 			var filteredRows = new Array();
 			function filter2(){
@@ -186,7 +163,7 @@
         	    		var filter;
 
 						if (filters[index].isDropDown) {
-        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].value.toLowerCase();
         	    		}
         	    		else {
         	    		    filter = FilterOBJ.value.toLowerCase();
@@ -210,8 +187,6 @@
         	        //}
         	        id++;
         	    }
-				document.getElementById("FilteredCount").textContent = filteredRows.length;
-				
 				pagging();
 			}
 
@@ -235,12 +210,7 @@
 			}
 
 			var currentPage = 0;
-			var currentSize=5;
-			function pagging(page=0, size=5){
-				var test = typeof global_size;
-				if (!(typeof global_size === "undefined" )) {
-					size=global_size;
-				}
+			function pagging(page=0, size=4){
 				if (page > getNPages(size) || page < 0) {
 					return;
 				}
@@ -269,17 +239,12 @@
 				}
 			}
 
-			function toggle(objName){
-				var OBJ = document.getElementById(objName);
-				if (OBJ.style.display == "none") {
-					OBJ.style.display = "";
-				}
-				else {
-					OBJ.style.display = "none";
-				}
-			}
+		
 
 			filter2();
+		
+			  
+				
 		</script>
     	
 {% endblock %}
