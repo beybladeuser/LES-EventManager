@@ -29,7 +29,15 @@ class Resgistration(models.Model):
             Answer.objects.filter(resgistrationid=self.id).delete()
             self.delete()
 
-   
+    def changeCheckoutStatus(self, newStatus) :
+        self.waspresent = newStatus
+        self.save()
+        return self.waspresent
+
+    #to be implemented
+    def canCancelCheckout(self, user) :
+        return True
+
 
     class Meta:
         db_table = 'resgistration'
