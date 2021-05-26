@@ -16,15 +16,12 @@
 
 {% block currentPage %}Questões{% endblock %}
 
-{% block addAction %}
-    {% url 'createQuestion' 0 0 %}
-{% endblock %}
-
-{% block addButton %}
-    Questão
-{% endblock %}
-
 {% block preListingBlock %}
+    <a href="{% url 'createQuestion' 0 0 %}">
+        <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Questão</span>
+        </button>
+    </a>
     {% if formToAssociate %}
         <a href="{% url 'checkFormLayout' formToAssociate.id %}">
             <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
@@ -35,24 +32,24 @@
 {% endblock %}
 
 {% block tableHead %}
-    <th style="width: 15%;">Questão</th>
-    <th style="width: 10%;">Tipo</th>
-    <th style="width: 5%;">Opções</th>
-    <th style="width: 5%;">Requerida</th>
-    <th style="width: 5%;">Formulários Associados</th>
-    <th style="width: 5%;">Criador</th>
-    <th style="width: 10%;">Criado em</th>
-    <th style="width: 5%;">Editado por</th>
-    <th style="width: 10%;">Editado em</th>
-    <th style="width: 20%;">Ações</th>
+    <th >Questão</th>
+    <th >Tipo</th>
+    <th >Opções</th>
+    <th >Requerida</th>
+    <th >Formulários Associados</th>
+    <th >Criador</th>
+    <th >Criado em</th>
+    <th >Editado por</th>
+    <th >Editado em</th>
+    <th width="180">Ações</th>
 {% endblock %}
 
 {% block listings %}
         {% for question in questions %}
             <tr id="row{{ forloop.counter }}">
-                <td id="NameFilter{{ forloop.counter }}">{{question.question}}</td>
-                <td id="TypeFilter{{ forloop.counter }}">{{question.questiontypeid_questiontype.typename}}</td>
-                <td id="OptionsFilter{{ forloop.counter }}">
+                <td id="NameFilter{{ forloop.counter }}" data-label="Questão">{{question.question}}</td>
+                <td id="TypeFilter{{ forloop.counter }}" data-label="Tipo">{{question.questiontypeid_questiontype.typename}}</td>
+                <td id="OptionsFilter{{ forloop.counter }}" data-label="Opções">
                     
                     <div {% if question.canEdit or question.options %} onmouseover="toggle('optionDropdown{{ forloop.counter }}')" onmouseout="toggle('optionDropdown{{ forloop.counter }}')" {% endif %}>
                         <span class="icon is-small" >
@@ -83,8 +80,8 @@
                     
 
                 </td>
-                <td id="RequiredFilter{{ forloop.counter }}">{% if question.required %}Sim{% else %}Não{% endif %}</td>
-                <td id="AssociationsFilter{{ forloop.counter }}">
+                <td id="RequiredFilter{{ forloop.counter }}" data-label="Requerida">{% if question.required %}Sim{% else %}Não{% endif %}</td>
+                <td id="AssociationsFilter{{ forloop.counter }}" data-label="Formulários Associados">
                     <div {% if question.associatedforms %} onmouseover="toggle('associationsDropdown{{ forloop.counter }}')" onmouseout="toggle('associationsDropdown{{ forloop.counter }}')" {% endif %}>
                         <span class="icon is-small" >
                             {% if question.associatedforms %}
@@ -124,12 +121,12 @@
                         </div>
                     </div>
                 </td>
-                <td id="CriatorFilter{{ forloop.counter }}">{{question.createdby.username}}</td>
-                <td id="CriationDateFilter{{ forloop.counter }}">{{question.dateofcreation}}</td>
-                <td id="EditorFilter{{ forloop.counter }}">{{question.lasteditedby.username}}</td>
-                <td id="EditDateFilter{{ forloop.counter }}">{{question.dateoflastedit}}</td>
+                <td id="CriatorFilter{{ forloop.counter }}" data-label="Criador">{{question.createdby.username}}</td>
+                <td id="CriationDateFilter{{ forloop.counter }}" data-label="Criado em">{{question.dateofcreation}}</td>
+                <td id="EditorFilter{{ forloop.counter }}" data-label="Editado por">{{question.lasteditedby.username}}</td>
+                <td id="EditDateFilter{{ forloop.counter }}" data-label="Editado em">{{question.dateoflastedit}}</td>
                 
-                <td id="ActionsFilter{{ forloop.counter }}">
+                <td id="ActionsFilter{{ forloop.counter }}" data-label="Ações">
                     {% if formToAssociate %}
                         <a href="{% url 'associateQuestion' question.id formToAssociate.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar a {{formToAssociate.formname}}">
                             <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
@@ -167,4 +164,8 @@
                 </td>
             </tr>
         {% endfor %}
+{% endblock %}
+
+{% block showType %}
+    questões
 {% endblock %}

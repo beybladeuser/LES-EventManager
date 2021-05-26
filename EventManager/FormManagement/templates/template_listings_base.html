@@ -61,15 +61,13 @@
 					</li>
 				</ul>
 			</nav>
-			<a href="{% block addAction %} {% endblock %}">
-				<button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
-						class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar {% block addButton %} {% endblock %}</span>
-				</button>
-			</a>
+			
 			{% block preListingBlock %}
+			
 
 			{% endblock %}
-			<table class="table">
+			
+			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
 				<thead>
 					<tr>
 						{% block tableHead %}
@@ -92,7 +90,7 @@
 		<div class="level-left"></div>
 		<div class="level-right" style="white-space: nowrap;">
 			<div class="level-item" style="width: fit-content;">
-				<span style="margin-right: 3%;">Displaying</span>   
+				<span style="margin-right: 3%;">Mostrando</span>   
 				<div class="select" style="margin-right: 3%;">
 					<select onchange="pagging(0, this.value);">
 					  <option value=5>5</option>
@@ -100,8 +98,9 @@
 					  <option value=20>20</option>
 					</select>
 				</div>
-				<span style="margin-right: 3%;">out of <span id="FilteredCount"></span></span>
-				
+				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
+				<span style="margin-right: 3%; ">{% block showType %} {% endblock %} por página</span>
+
 			</div>
 			<div class="level-item">
 				

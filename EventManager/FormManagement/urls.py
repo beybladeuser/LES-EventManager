@@ -37,6 +37,10 @@ urlpatterns = [
     
     path('duplicateQuestion/<int:questionID>/', views.duplicateQuestion, name='duplicateQuestion'),
 
+    path('publishform/<int:formID>/', views.publishForm, name='publishForm'),
+
+    path('archiveform/<int:formID>/', views.archiveForm, name='archiveForm'),
+    path('unarchiveform/<int:formID>/', views.unarchiveForm, name='unarchiveForm'),
 
     path('test/', views.testForm, name='test'),
 ]
