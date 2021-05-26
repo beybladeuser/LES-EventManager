@@ -2,6 +2,7 @@
 {% block loggedInContent %}
   <table style="width:100%">
     <tr>
+      <th>ID</th>
       <th>Nome do Recurso</th>
       <th>Quantidade</th>
       <th>Tipo</th>
@@ -9,11 +10,12 @@
     </tr>
     {% for asset in Assets %}
         <tr>
+            <td>  <p>{{asset.id}}</p></td>
             <td>  <p>{{asset.assetname}}</p></td>
             <td>  <p>{{asset.quantity}}</p></td>
             <td>  <p>{{asset.type}}</p></td>
             <td>  <p>{{asset.subtype}}</p></td>
-            <td>  <p><a href="{% url 'PreDeleteAssets' asset.id  %}">Eliminar</a></p></td>
+            <td>  <p><a href="{% url 'PreDeleteAssets' asset.id %}">Eliminar</a></p></td>
         </tr>
     {% endfor %}
   </table>

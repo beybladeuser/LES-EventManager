@@ -14,11 +14,11 @@
       <td>  <p>{{asset.id}}</p></td>
       <td>  <p>{{asset.assetname}}</p></td>
       <td>  <p>{{asset.quantity}}</p></td>
-      <td>  <p>{{asset.type}}</p></td>
-      <td>  <p>{{asset.subtype}}</p></td>
+      <td>  <p>{{asset_type}}</p></td>
+      <td>  <p>{{asset_subtype}}</p></td>
     </tr>      
 </table>
-<!-- <button href="{% url 'DeleteAssets' asset.id  %}" class="button" style="vertical-align:bottom"><span>Eliminar </span></button> -->
+<button type="button" class="button" style="vertical-align:bottom"><span><a href="{% url 'DeleteAssets' asset.id  %}" >Eliminar</a></span></button>
     
   
 

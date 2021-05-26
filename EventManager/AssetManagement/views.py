@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import Asset
-from .models import Service
-from .models import Asset, Equipment, Rooms, Service
 from django.template import loader
+from django.http import HttpResponse
+from .models import Asset, Equipment, Rooms, Service
 
-from .forms import *
 from AssetManagement.models import Building
 
+from django_tables2 import SingleTableMixin
+from django_filters.views import FilterView
+
+from .forms import *
+from utilizadores.views import user_check
 
 # Create your views here.
 def home(request) :
@@ -72,23 +74,29 @@ def consultar_rooms(request):
     return HttpResponse(template.render(context, request))    
 
 
-def insert_assets(request):
-    if request.method == 'POST':
-        form = insert_assets(request.POST)
-        if form.isvalid():
-            form.save()
-        else:
-            form.save()
-    return render(request, 'InsertAssets', {'InsertAssetForm': form})    
-
-
 def pre_delete_assets(request, assetID = None):
     template = loader.get_template('PreDeleteAssets.html')
     
     pre_delete_asset = Asset.objects.filter(id=assetID)
   
+
+    if Asset.getServiceType(pre_delete_asset[0]) is not None:
+        asset_subtype =  Asset.getServiceType(pre_delete_asset[0])
+        asset_type = "Serviço"
+    elif Asset.getEquipmentType(pre_delete_asset[0]) is not None:
+        asset_subtype = Asset.getEquipmentType(pre_delete_asset[0])
+        asset_type = "Equipamento"
+    elif Asset.getRoom(pre_delete_asset[0]) is not None:
+        room = Asset.getRoom(pre_delete_asset[0])
+        buildingg = Rooms.room_GetBuilding(room)
+        asset_type = "Sala/Anfiteatro"
+        asset_subtype = Building.CampusName_BuildingName(buildingg)
+    
     context = {
-        'asset': pre_delete_asset
+        'assetID': assetID,
+        'asset_type': asset_type,
+        'asset_subtype': asset_subtype,
+        'asset': pre_delete_asset[0]
     }
     return HttpResponse(template.render(context, request))    
 
@@ -96,7 +104,42 @@ def pre_delete_assets(request, assetID = None):
 def delete_assets(request, assetID = None):
 
     pre_delete_asset = Asset.objects.filter(id=assetID)
+    pre_delete_asset.id = assetID
     Asset.delete_asset(pre_delete_asset)
 
     return redirect('ViewAssets')
 
+
+
+
+
+
+
+
+
+
+
+
+
+def createService(request):
+    errorMessage = None
+    ServiceForm = None
+    if not errorMessage:
+        if request.method == 'POST':
+            ServiceForm = InsertServiceForm(request.POST, currentUser=request.user)
+            if ServiceForm.is_valid():
+                newService = ServiceForm.save()
+          
+        else:
+            ServiceForm = InsertServiceForm(currentUser=request.user)
+
+    
+    
+    
+    template = loader.get_template('InsertService.html')
+    context = {
+        'errorMessage' : errorMessage,
+        'ServiceForm' : ServiceForm,
+        
+    }
+    return HttpResponse(template.render(context, request))    
