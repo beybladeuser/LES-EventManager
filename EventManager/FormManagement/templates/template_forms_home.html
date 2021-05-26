@@ -34,6 +34,7 @@
     <hr>
 
     <div class="columns" >
+        {% load form_extras %}
         {% for formType in formTypes %}
             {% if forloop.counter == 5 %}
                 </div>
@@ -48,7 +49,9 @@
                     <br>
                     <footer class="card-footer">
                         <a href="{% url 'listFormsFromType' formType.id %}" class="card-footer-item">Ver formulários existentes</a>
-                        <a href="{% url 'createForm' formType.id %}" class="card-footer-item">Criar Novo</a>
+                        {% if formType|can_create_form_fromType:user %}
+                            <a href="{% url 'createForm' formType.id %}" class="card-footer-item">Criar Novo</a>
+                        {% endif %}
                     </footer>
                 
                 </div>
