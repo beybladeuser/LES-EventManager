@@ -13,7 +13,7 @@
             <td>  <p>{{asset.quantity}}</p></td>
             <td>  <p>{{asset.type}}</p></td>
             <td>  <p>{{asset.subtype}}</p></td>
-            <td>  <p><a href="{% url 'DeleteAssets:asset' %}">Eliminar</a></p></td>
+            <td>  <p><a href="{% url 'PreDeleteAssets' asset.id  %}">Eliminar</a></p></td>
         </tr>
     {% endfor %}
   </table>

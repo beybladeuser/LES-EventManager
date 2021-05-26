@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Asset
 from .models import Service
@@ -82,10 +82,21 @@ def insert_assets(request):
     return render(request, 'InsertAssets', {'InsertAssetForm': form})    
 
 
-def delete_assets(request):
-    template = loader.get_template('DeleteAssets.html')
+def pre_delete_assets(request, assetID = None):
+    template = loader.get_template('PreDeleteAssets.html')
     
+    pre_delete_asset = Asset.objects.filter(id=assetID)
+  
     context = {
-        'Assets': Rooms.objects.all()
+        'asset': pre_delete_asset
     }
     return HttpResponse(template.render(context, request))    
+
+
+def delete_assets(request, assetID = None):
+
+    pre_delete_asset = Asset.objects.filter(id=assetID)
+    Asset.delete_asset(pre_delete_asset)
+
+    return redirect('ViewAssets')
+

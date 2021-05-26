@@ -15,12 +15,8 @@ class Asset(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     assetname = models.CharField(db_column='AssetName', max_length=255)  # Field name made lowercase.
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
-
-
-
     canAdd = False
 
-    
 
     def delete_asset(self):
         service = Service.objects.get(assetid=self.id)
@@ -35,6 +31,8 @@ class Asset(models.Model):
         
         self.delete()
         
+
+
 
     def userHasEditPermitions(self, user) :
         return (user.id == self.createdby.id or user.groups.filter(pk=1).exists())
@@ -95,14 +93,7 @@ class Building(models.Model):
 
 
     def CampusName_BuildingName(self):
-        campus = None
-        campusidd= self.campusid
-        campus = Building.objects.filter(id=campusidd)
-        if campus :
-            campus = campus[0].campusname
-        
-        campus = building_getCampusName(self)
-        return campus + " - " + self.buildingname
+        return str(self.campusid)  + " - " + self.buildingname
 
 
 
