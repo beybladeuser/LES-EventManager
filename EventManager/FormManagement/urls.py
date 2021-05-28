@@ -5,11 +5,13 @@ from . import views
 urlpatterns = [
     path('', views.formsHome, name='formsHome'),
     path('listformsfromtype/<int:formTypeID>/', views.listFormsFromType, name='listFormsFromType'),
+    path('listformsfromtype/<int:formTypeID>/<str:filterKey>', views.listFormsFromType, name='listFormsFromType'),
     path('listformsfromtype/', views.listFormsFromType, name='listFormsFromType'),
     path('checkform/', views.checkForm, name='checkForm'),
     path('checkform/<int:formID>/', views.checkForm, name='checkForm'),
     path('checkformlayout/', views.checkFormLayout, name='checkFormLayout'),
     path('checkformlayout/<int:formID>/', views.checkFormLayout, name='checkFormLayout'),
+    path('checkformlayout/<int:formID>/<str:filterKey>', views.checkFormLayout, name='checkFormLayout'),
 
     path('createform/', views.createForm, name='createForm'),
     path('createform/<int:formTypeID>/', views.createForm, name='createForm'),
@@ -20,6 +22,7 @@ urlpatterns = [
 
     path('listquestions/', views.listQuestions, name='listQuestions'),
     path('listquestions/<int:formID>', views.listQuestions, name='listQuestions'),
+    path('listquestions/<int:formID>/<str:filterKey>', views.listQuestions, name='listQuestions'),
 
 
     path('associatequestion/<int:questionID>/<int:formID>/', views.associateQuestion, name='associateQuestion'),

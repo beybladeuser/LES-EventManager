@@ -31,10 +31,11 @@ def formsHome(request) :
     }
     return HttpResponse(template.render(context, request))
 
-def checkFormLayout(request, formID = None) :
+def checkFormLayout(request, formID = None, filterKey=None) :
     errorMessage = None
     form = None
     canEdit = False
+    questions = None
     return_addr = '/forms/listformsfromtype/'
     if formID :
         form_query = Form.objects.filter(id=formID)
@@ -62,11 +63,13 @@ def checkFormLayout(request, formID = None) :
     #    request.session.modified = True
     
     
+    if form :
+        questions = form.formquestions
+        for question in questions :
+            question.canEdit = question.canEdit(request.user)
+            question.canDuplicate = question.canDuplicate(request.user)
 
-    questions = form.formquestions
-    for question in questions :
-        question.canEdit = question.canEdit(request.user)
-        question.canDuplicate = question.canDuplicate(request.user)
+        questions = Questions.sortByKey(questions, filterKey)
 
     template = loader.get_template('template_show_form_layout.html')
     context = {
@@ -75,6 +78,7 @@ def checkFormLayout(request, formID = None) :
         'questions' : questions,
         'return_addr' : return_addr,
         'errorMessage' : errorMessage,
+        'filterKey' : filterKey,
     }
     return HttpResponse(template.render(context, request))
 
@@ -115,16 +119,18 @@ def checkForm(request, formID = None, return_addr = '/forms/listformsfromtype/')
     }
     return HttpResponse(template.render(context, request))
 
-def listFormsFromType(request, formTypeID = None) :
+def listFormsFromType(request, formTypeID = None, filterKey = None) :
     errorMessage = None
     formType = None
+    formTypes = None
     forms = None
     if formTypeID :
-        formType = Formtype.objects.filter(id=formTypeID)
-        if formType :
+        formTypes = Formtype.objects.filter(id=formTypeID)
+        if formTypes :
+            formType = formTypes[0]
             forms = Form.objects.filter(formtypeid_formtype=formTypeID)
             if not forms :
-                errorMessage = "Erro: Nenhum formulário do tipo " + formType[0].typename
+                errorMessage = "Erro: Nenhum formulário do tipo " + formType.typename
             else :
                 request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(formTypeID)
                 request.session['delete_form_return_redirect'] = "/forms/listformsfromtype/" + str(formTypeID)
@@ -134,9 +140,11 @@ def listFormsFromType(request, formTypeID = None) :
     else :
         errorMessage = "Erro: Nenhum tipo de evento dado"
 
-    for form in forms :
-        form.canEdit = form.canEdit(request.user)
-        form.canDuplicate = form.canDuplicate(request.user)
+    if forms :
+        for form in forms :
+            form.canEdit = form.canEdit(request.user)
+            form.canDuplicate = form.canDuplicate(request.user)
+        forms = Form.sortByKey(forms, filterKey)
 
     filterOptions = Form.getFilterOptions()
     eventTypes = Eventtype.objects.all()
@@ -148,8 +156,9 @@ def listFormsFromType(request, formTypeID = None) :
         'filterOptions' : filterOptions,
         'eventTypes' : eventTypes,
         'forms' : forms,
-        'formType' : formType[0],
+        'formType' : formType,
         'errorMessage' : errorMessage,
+        'filterKey' : filterKey,
     }
     return HttpResponse(template.render(context, request))
 
@@ -327,7 +336,7 @@ def createQuestion(request, questionID=None,formID=None):
     return HttpResponse(template.render(context, request))
 
 
-def listQuestions(request, formID=None) :
+def listQuestions(request, formID=None, filterKey = None) :
     questions = None
     errorMessage = None
     formToAssociate = None
@@ -346,7 +355,8 @@ def listQuestions(request, formID=None) :
         if not questions :
             errorMessage = "Erro: Nenhum questão existente"
         elif formToAssociate :
-            questions = [x for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
+            questions_ = [x.id for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
+            questions = Questions.objects.filter(id__in=questions_)
         for question in questions :
             question.canEdit = question.canEdit(request.user)
             question.canDuplicate = question.canDuplicate(request.user)
@@ -360,6 +370,8 @@ def listQuestions(request, formID=None) :
     filterOptions = Questions.getFilterOptions()
     questionTypes = Questiontype.objects.all()
 
+    if questions :
+        questions = Questions.sortByKey(questions, filterKey)
     template = loader.get_template('template_list_questions.html')
     context = {
         'filterOptions' : filterOptions,
@@ -367,6 +379,7 @@ def listQuestions(request, formID=None) :
         'errorMessage' : errorMessage,
         'questions' : questions,
         'formToAssociate' : formToAssociate,
+        'filterKey' : filterKey,
     }
     return HttpResponse(template.render(context, request))
 
