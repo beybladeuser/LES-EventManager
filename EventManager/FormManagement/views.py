@@ -22,7 +22,8 @@ def formsHome(request) :
 
     if request.user.groups.filter(id=2).exists() :
         errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
-    
+    request.session["createQuestion_cancelRedirect"] = reverse('formsHome')
+    request.session["createForm_cancelRedirect"] = reverse('formsHome')
     template = loader.get_template('template_forms_home.html')
     context = {
         'formTypes' : formTypes,
@@ -65,11 +66,21 @@ def checkFormLayout(request, formID = None, filterKey=None) :
     
     if form :
         questions = form.formquestions
+        questions = Questions.sortByKey(questions, filterKey)
         for question in questions :
             question.canEdit = question.canEdit(request.user)
             question.canDuplicate = question.canDuplicate(request.user)
 
-        questions = Questions.sortByKey(questions, filterKey)
+    if formID != None :
+        if filterKey :
+            request.session["createQuestion_cancelRedirect"] = reverse('checkFormLayout', args =[formID, filterKey])
+            request.session["createOption_cancelRedirect"] = reverse('checkFormLayout', args =[formID, filterKey])
+        else :
+            request.session["createQuestion_cancelRedirect"] = reverse('checkFormLayout', args =[formID])
+            request.session["createOption_cancelRedirect"] = reverse('checkFormLayout', args =[formID])
+    else :
+        request.session["createQuestion_cancelRedirect"] = reverse('checkFormLayout')
+        request.session["createOption_cancelRedirect"] = reverse('checkFormLayout')
 
     template = loader.get_template('template_show_form_layout.html')
     context = {
@@ -141,16 +152,24 @@ def listFormsFromType(request, formTypeID = None, filterKey = None) :
         errorMessage = "Erro: Nenhum tipo de evento dado"
 
     if forms :
+        forms = Form.sortByKey(forms, filterKey)
         for form in forms :
             form.canEdit = form.canEdit(request.user)
             form.canDuplicate = form.canDuplicate(request.user)
-        forms = Form.sortByKey(forms, filterKey)
 
     filterOptions = Form.getFilterOptions()
     eventTypes = Eventtype.objects.all()
     if request.user.groups.filter(id=2).exists() :
         errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
+    if formTypeID != None :
+        if filterKey :
+            request.session["createForm_cancelRedirect"] = reverse('listFormsFromType', args =[formTypeID, filterKey])
+        else :
+            request.session["createForm_cancelRedirect"] = reverse('listFormsFromType', args =[formTypeID])
+    else :
+        request.session["createForm_cancelRedirect"] = reverse('listFormsFromType')
+    
     template = loader.get_template('template_list_forms.html')
     context = {
         'filterOptions' : filterOptions,
@@ -231,11 +250,13 @@ def createForm(request, formTypeID=None, formID=None) :
     if request.user.groups.filter(id=2).exists() :
         errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
+    cancelRedirect = request.session.get("createForm_cancelRedirect", None)
     template = loader.get_template('template_create_new_form.html')
     context = {
         'formCreate' : formCreate,
         'errorMessage' : errorMessage,
-        'formCreation' : formCreation_form
+        'formCreation' : formCreation_form,
+        'cancelRedirect' : cancelRedirect
     }
     return HttpResponse(template.render(context, request))
 
@@ -326,12 +347,14 @@ def createQuestion(request, questionID=None,formID=None):
     if request.user.groups.filter(id=2).exists() :
         errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
+    cancelRedirect = request.session.get("createQuestion_cancelRedirect", None)
     template = loader.get_template('template_create_new_question.html')
     context = {
         'questionCreate' : questionCreate,
         'options' : optionsInputed,
         'errorMessage' : errorMessage,
-        'questionCreation' : questionCreation_form
+        'questionCreation' : questionCreation_form,
+        'cancelRedirect' : cancelRedirect
     }
     return HttpResponse(template.render(context, request))
 
@@ -357,9 +380,6 @@ def listQuestions(request, formID=None, filterKey = None) :
         elif formToAssociate :
             questions_ = [x.id for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
             questions = Questions.objects.filter(id__in=questions_)
-        for question in questions :
-            question.canEdit = question.canEdit(request.user)
-            question.canDuplicate = question.canDuplicate(request.user)
         
         if request.session.get("deleteOption_form_redirect") :
             del request.session["deleteOption_form_redirect"]
@@ -372,6 +392,21 @@ def listQuestions(request, formID=None, filterKey = None) :
 
     if questions :
         questions = Questions.sortByKey(questions, filterKey)
+        for question in questions :
+            question.canEdit = question.canEdit(request.user)
+            question.canDuplicate = question.canDuplicate(request.user)
+
+    if formID != None :
+        if filterKey :
+            request.session["createQuestion_cancelRedirect"] = reverse('listQuestions', args =[formID, filterKey])
+            request.session["createOption_cancelRedirect"] = reverse('listQuestions', args =[formID, filterKey])
+        else :
+            request.session["createQuestion_cancelRedirect"] = reverse('listQuestions', args =[formID])
+            request.session["createOption_cancelRedirect"] = reverse('listQuestions', args =[formID])
+    else :
+        request.session["createQuestion_cancelRedirect"] = reverse('listQuestions')
+        request.session["createOption_cancelRedirect"] = reverse('listQuestions')
+    
     template = loader.get_template('template_list_questions.html')
     context = {
         'filterOptions' : filterOptions,
@@ -456,11 +491,13 @@ def createOption(request, questionID=None, optionID=None) :
     if request.user.groups.filter(id=2).exists() :
         errorMessage = "Erro: Utilizador não possui acesso a esta pagina"
 
+    cancelRedirect = request.session.get("createOption_cancelRedirect", None)
     template = loader.get_template('template_create_new_option.html')
     context = {
         'optionCreate' : optionCreate,
         'errorMessage' : errorMessage,
-        'optionCreation' : optionCreation_form
+        'optionCreation' : optionCreation_form,
+        'cancelRedirect' : cancelRedirect
     }
     return HttpResponse(template.render(context, request))
 
