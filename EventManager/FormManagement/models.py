@@ -66,8 +66,8 @@ class Form(models.Model):
 
     def getQuestions(self) :
         Form_Questions = QuestionsForm.objects.filter(formid_form=self.id)
-        Questions_Associated_with_form = [x.questionsid_questions for x in Form_Questions]
-        return Questions_Associated_with_form
+        Questions_Associated_with_form = [x.questionsid_questions.id for x in Form_Questions]
+        return Questions.objects.filter(id__in=Questions_Associated_with_form)
 
     def associateQuestion(self, question, user) :
         if self.canEdit(user) :
@@ -174,6 +174,61 @@ class Form(models.Model):
                     proposalForm.save()
             self.archived = False
             self.save()
+
+    @staticmethod
+    def sortByKey(setToSort, key) :
+        if not setToSort:
+            return None
+        if key :
+            if key.find("00") > -1: 
+                return setToSort.order_by('formname')
+            elif key.find("01") > -1:
+                return setToSort.order_by('-formname')
+    
+            if key.find("10") > -1: 
+                return setToSort.order_by('formtypeid_formtype')
+            elif key.find("11") > -1:
+                return setToSort.order_by('-formtypeid_formtype')
+    
+            if key.find("20") > -1: 
+                return setToSort.order_by('eventtypeid')
+            elif key.find("21") > -1:
+                return setToSort.order_by('-eventtypeid')
+    
+            
+            if key.find("30") > -1: 
+                return setToSort.order_by('published')
+            elif key.find("31") > -1:
+                return setToSort.order_by('-published')
+    
+            if key.find("40") > -1: 
+                return setToSort.order_by('archived')
+            elif key.find("41") > -1:
+                return setToSort.order_by('-archived')
+    
+            if key.find("50") > -1: 
+                return setToSort.order_by('createdby')
+            elif key.find("51") > -1:
+                return setToSort.order_by('-createdby')
+    
+            if key.find("60") > -1: 
+                return setToSort.order_by('dateofcreation')
+            elif key.find("61") > -1:
+                return setToSort.order_by('-dateofcreation')
+    
+            if key.find("70") > -1: 
+                return setToSort.order_by('lasteditedby')
+            elif key.find("71") > -1:
+                return setToSort.order_by('-lasteditedby')
+    
+            if key.find("80") > -1: 
+                return setToSort.order_by('dateoflastedit')
+            elif key.find("81") > -1:
+                return setToSort.order_by('-dateoflastedit')
+
+        return setToSort.order_by('formname')
+            
+
 
 
 
@@ -334,6 +389,49 @@ class Questions(models.Model):
             newOption.save()
 
         return result
+
+    @staticmethod
+    def sortByKey(setToSort, key) :
+        if not setToSort:
+            return None
+        if key :
+            if key.find("00") > -1: 
+                return setToSort.order_by('question')
+            elif key.find("01") > -1:
+                return setToSort.order_by('-question')
+    
+            if key.find("10") > -1: 
+                return setToSort.order_by('questiontypeid_questiontype')
+            elif key.find("11") > -1:
+                return setToSort.order_by('-questiontypeid_questiontype')
+    
+            if key.find("20") > -1: 
+                return setToSort.order_by('required')
+            elif key.find("21") > -1:
+                return setToSort.order_by('-required')
+    
+            
+            if key.find("30") > -1: 
+                return setToSort.order_by('createdby')
+            elif key.find("31") > -1:
+                return setToSort.order_by('-createdby')
+    
+            if key.find("40") > -1: 
+                return setToSort.order_by('dateofcreation')
+            elif key.find("41") > -1:
+                return setToSort.order_by('-dateofcreation')
+    
+            if key.find("50") > -1: 
+                return setToSort.order_by('lasteditedby')
+            elif key.find("51") > -1:
+                return setToSort.order_by('-lasteditedby')
+    
+            if key.find("60") > -1: 
+                return setToSort.order_by('dateoflastedit')
+            elif key.find("61") > -1:
+                return setToSort.order_by('-dateoflastedit')
+
+        return setToSort.order_by('question')
 
     @staticmethod
     def getFilterOptions() :
