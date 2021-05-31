@@ -17,11 +17,6 @@ class Asset(models.Model):
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
     canAdd = False
 
-
-
-
-
-
     def delete_asset(self):        
         if Service.objects.filter(assetid=self.id).exists():
             service = Service.objects.get(assetid=self.id)
@@ -125,7 +120,15 @@ class Equipment(models.Model):
       
     def __str__(self):
        return self.assetid
-
+   
+    @staticmethod
+    def makeOptions():
+        if "equipmenttype" in connection.introspection.table_names():
+            equipmenttypes = Equipmenttype.objects.all()
+            options=([(equipmenttypes.id, equipmenttypes.typename) for equipmenttypes in equipmenttypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
 
 

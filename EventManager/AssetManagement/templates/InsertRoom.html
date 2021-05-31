@@ -1,0 +1,14 @@
+{% extends 'template_base.html' %}
+
+
+{% block loggedInContent %}
+<form method="post">
+  {% load crispy_forms_tags %} 
+  {% csrf_token %}
+  {{ RoomForm|crispy }}
+  <button type="submit" class="btn btn-primary">Adicionar Equipamento</button>
+</form>
+{% endblock %}
+
+{% block loggedOutContent %}
+{% endblock %}
