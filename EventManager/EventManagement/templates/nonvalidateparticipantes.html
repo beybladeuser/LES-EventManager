@@ -1,4 +1,4 @@
-{% extends "template_participante_listing_base.html" %}
+{% extends "participantnonvalidate.html" %}
 
 {% block PageTittle %}
 	Ver participantes no evento {{event.eventname}}
@@ -11,56 +11,52 @@
 {% block tableHead %}
     <th>Nome</th>
     <th>Registado em:</th>
-    <th></th>
+    <th>Estado</th>
     <th>Respostas</th>
 {% endblock %}
 
 {% block listings %}
+    {% for registration in registrations %}
+        <tr id="row{{ forloop.counter }}">
+            <td>
+                <span id="NameFilter{{ forloop.counter }}">{{registration.participantuserid}}</span>
+            </td>
+            <td>
+                    {{registration.dateofregistration}}
 
-{% for registration in registrations %}
-<tr id="row{{ forloop.counter }}" style="display: none;">
-    <td>
-    
-        <div id= "check">
-            <span id="NameFilter{{ forloop.counter }}">{{registration.participantuserid}}</span>
-        </td>
-        <td>
-            {{registration.dateofregistration}}
-        </div> 
-        </td> 
+            </td> 
 
-        <td>
-            <span >
-                <span style="display: none;" id="presenceFilter{{ forloop.counter }}">
-                    {% if registration.waspresent %}
-                        Sim
-                    {% else %}
-                        Não
+            <td>
+                <span >
+                    <span style="display: none;" id="stateFilter{{ forloop.counter }}">
+                        {% if registration.state == 0 %}
+                            pendente
+                        {% elif registration.state == 1 %}
+                            Invalidado
+                        {% endif %}
+                    </span>
+
+
+                    {% if event.proponentid.id == user.id %} 
+                        {% if  registration.state == 0 %}
+                            <button href="{% url 'validateparticipant' registration.id %}"><a class="button is-warning" >Pendente</a></button> 
+                        {% elif  registration.state == 1 %}  
+                            <button><a class="button is-danger" >Invalidado</a></button> 
+
+                        {% endif %}
                     {% endif %}
                 </span>
-                
-                
-                {% if event.proponentid.id == user.id %} 
-                    {% if  registration.waspresent == 0 %}
-                    
-                    <a class="button is-danger" type="submit"   id= "all"  href={% url 'checkin' registration.id %}  > check in</a>
-                
-                    {% else %}
-                    <a class="button is-success" href="{% url 'checkout' registration.id %}">cancelar</a>     
-                    {% endif %}
-                {% endif %}
-            </span>
-         
-        </div>
-        </td>
-        <td>
-        <div >
-            <button><a class="btn btn-lg" href="{% url 'viewanswer' registration.id %}">
-                Ver respostas do user
-            </a></button>
-        </div>
-        </td>
-    </tr>
+            
+            </div>
+            </td>
+            <td>
+            <div >
+                <button><a class="btn btn-lg" href="{% url 'viewanswer' registration.id %}">
+                    Ver respostas do user
+                </a></button>
+            </div>
+            </td>
+        </tr>
     {% endfor %}
    
 

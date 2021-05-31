@@ -1,0 +1,250 @@
+{% extends "template_form_base.html" %}
+
+{% block NonErrorContent %}
+	<div class="columns">
+		<div class="column is-3">
+			<div class="menu">
+				<div class="menu-label">
+					Filtros
+				</div>
+				<ul class="menu-list">
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="stateFilter" onchange="filter2()">
+							  	<option value="Selecione">Selecione o estado da Validação</option>
+							  	<option value="Pendente">Pendente</option>
+								<option value="Invalidado">Invalidado</option>
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					
+				</ul>
+			</div>
+		</div>
+		
+
+		<div class="column">
+			<nav aria-label="breadcrumbs" class="breadcrumb">
+				<ul>
+					<li><a href="{% url 'homepage' %}">Início</a></li>
+					<li><a href="{% url 'eventHome' %}">Gestor de Inscrições</a></li>
+					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
+					</li>
+				</ul>
+			</nav>
+			{% block preListingBlock %}
+
+			{% endblock %}
+			<table class="table is-fullwidth">
+				<thead>
+					<tr>
+						{% block tableHead %}
+				
+						{% endblock %}
+					</tr>
+				</thead>
+				<tbody>
+					{% block listings %}
+					
+					{% endblock %}
+				</tbody>
+
+				
+			</table>
+		</div>
+	</div>
+	
+	<div class="level">
+		<div class="level-left"></div>
+		<div class="level-right" style="white-space: nowrap;">
+			<div class="level-item" style="width: fit-content;">
+				<span style="margin-right: 3%;">Displaying</span>   
+				<div class="select" style="margin-right: 3%;">
+					<select onchange="pagging(0, this.value);">
+					  <option value=5>5</option>
+					  <option value=10>10</option>
+					  <option value=20>20</option>
+					</select>
+				</div>
+				<span style="margin-right: 3%;">out of <span id="FilteredCount"></span></span>
+				
+			</div>
+			<div class="level-item">
+				
+				<nav class="pagination" role="navigation" aria-label="pagination">
+					
+					
+					<ul class="pagination-list">
+						<li>
+							
+							<a class="pagination-link is-current" id="CurrentPage">1</a>
+							
+						</li>
+					</ul>
+					<button id="BackPage" role="button" class="pagination-previous" onclick="pagging(currentPage-1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-left mdi-24px"></i>
+						</span>
+					</button>
+					
+					<button id="NextPage" role="button" class="pagination-next" onclick="pagging(currentPage+1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-right mdi-24px"></i>
+						</span>
+					</button>
+					
+				</nav>
+			</div>
+		</div>
+	</div>
+	
+		
+{% endblock %}
+
+{% block scripts %}
+		<script>
+        	function filter(filterName, isDropDown)
+        	{
+        	    var FilterOBJ = document.getElementById(filterName);
+        	    var filter;
+        	    if (isDropDown) {
+        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].value;
+        	    }
+        	    else {
+        	        filter = FilterOBJ.value.toLowerCase();
+        	    }
+
+				if (isDropDown && filter.indexOf("selecione")>-1) {
+					filter = "";
+        	    }
+				
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+
+        	        var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
+        	        
+
+
+        	        if ( fieldVal.indexOf(filter)>-1 ) {
+        	            document.getElementById("row" + id).style.display = "";
+        	        }
+        	        else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	        }
+        	        id++;
+        	    }
+
+        	}
+
+			var filters = [
+				{'filterName' : 'NameFilter', 'isDropDown' : false},
+				{'filterName' : 'stateFilter', 'isDropDown' : true},
+			];
+			var filteredRows = new Array();
+			function filter2(){
+				filteredRows = new Array();
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					var toBeHidden = false;
+					for (let index = 0; index < filters.length; index++) {
+						var fieldVal = document.getElementById(filters[index].filterName + id).textContent.toLowerCase();
+						var FilterOBJ = document.getElementById(filters[index].filterName);
+        	    		var filter;
+
+						if (filters[index].isDropDown) {
+        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].value.toLowerCase();
+        	    		}
+        	    		else {
+        	    		    filter = FilterOBJ.value.toLowerCase();
+        	    		}
+
+						if (filters[index].isDropDown && filter.indexOf("selecione")>-1) {
+							filter = "";
+        	    		}
+
+						if ( fieldVal.indexOf(filter)<=-1 ) {
+							toBeHidden = true;
+						}
+					}
+					
+					if ( !toBeHidden ) {
+        	            //document.getElementById("row" + id).style.display = "none";
+						filteredRows.push(document.getElementById("row" + id));
+        	        }
+        	        //else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	        //}
+        	        id++;
+        	    }
+				pagging();
+			}
+
+			function getNPages(size=10) {
+				return Math.floor(filteredRows.length / size);
+			}
+
+			function getSizeOfPage(page=0, size=10) {
+				if (page == getNPages(size)){
+					return filteredRows.length % size;
+				}
+				return size;
+			}
+
+			function hideAllEntries() {
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					document.getElementById("row" + id).style.display = "none";
+					id++;
+				}
+			}
+
+			var currentPage = 0;
+			function pagging(page=0, size=4){
+				if (page > getNPages(size) || page < 0) {
+					return;
+				}
+				var displayingN = 0;
+				var trueSize = getSizeOfPage(page, size);
+				hideAllEntries();
+        	    while (displayingN < trueSize) {
+					filteredRows[displayingN + page*size].style.display = "";
+					displayingN++;
+
+				}
+				currentPage = page;
+				document.getElementById("CurrentPage").textContent = String(currentPage + 1);
+				if (getSizeOfPage(page + 1, size) <= 0 || page + 1 > getNPages(size)) {
+					document.getElementById("NextPage").disabled = true;
+				}
+				else {
+					document.getElementById("NextPage").disabled = false;
+				}
+
+				if (page - 1 < 0) {
+					document.getElementById("BackPage").disabled = true;
+				}
+				else {
+					document.getElementById("BackPage").disabled = false;
+				}
+			}
+
+		
+
+			filter2();
+		
+			  
+				
+		</script>
+    	
+{% endblock %}
