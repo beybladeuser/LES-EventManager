@@ -621,7 +621,7 @@
 		"model": "AssetManagement.Building",
 		"pk": 6,
 		"fields" :{
-			"campusid": 1,
+			"campusid": 1,	
 			"buildingname": "Ed. 6"
 		}
 	},
@@ -642,7 +642,30 @@
 			"buildingname": "Ed. 8"
 		}
 	},
-
+	{
+		"model": "AssetManagement.Building",
+		"pk": 8,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 9"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 8,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 10"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 8,
+		"fields" :{
+			"campusid": 1,
+			"buildingname": "Ed. 11"
+		}
+	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 9,
@@ -665,7 +688,7 @@
 		"pk": 11,
 		"fields" :{
 			"campusid": 2,
-			"buildingname": "Ed. 3"
+			"buildingname": "Ed. 3 - Complexo Pedagógico"
 		}
 	},
 	{
@@ -673,7 +696,7 @@
 		"pk": 12,
 		"fields" :{
 			"campusid": 2,
-			"buildingname": "Ed. 4"
+			"buildingname": "Ed. 4 - Grande Auditório"
 		}
 	},
 	{
@@ -681,7 +704,7 @@
 		"pk": 13,
 		"fields" :{
 			"campusid": 2,
-			"buildingname": "Ed. 5"
+			"buildingname": "Ed. 5 - Biblioteca Central/GRIM/Reitoria"
 		}
 	},
 	{
@@ -689,7 +712,7 @@
 		"pk": 14,
 		"fields" :{
 			"campusid": 2,
-			"buildingname": "Ed. 6"
+			"buildingname": "Ed. 6 - Restaurante Universitário"
 		}
 	},
 	{
@@ -697,7 +720,7 @@
 		"pk": 15,
 		"fields" :{
 			"campusid": 2,
-			"buildingname": "Ed. 7"
+			"buildingname": "Ed. 7 - CCMAR/ESS/FCT"
 		}
 	},
 	{
@@ -705,10 +728,73 @@
 		"pk": 16,
 		"fields" :{
 			"campusid": 2,
-			"buildingname": "Ed. 8"
+			"buildingname": "Ed. 8 - Faculdade de Ciências e Tecnologia (FCT)"
 		}
 	},
-
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 9 - Faculdade de Economia (FE)"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 18,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 10 - Edíficio do Horto Experimental"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 11 - Campus de Jogos"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 12 - Serviços Académicos"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 13 - Portaria Nascente (Entrada Principal)"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 14 - Portaria Norte"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 15 - Divisão de Empreendedorismo e Transferência de Tecnlogia (CRIA)"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 17,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 16 - Laboratório de Audição e Terapia da Fala (LATF)"
+		}
+	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 17,

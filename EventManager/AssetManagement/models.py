@@ -72,7 +72,7 @@ class Building(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     campusid = models.ForeignKey('Campus', models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.
     buildingname = models.CharField(db_column='BuildingName', max_length=255)  # Field name made lowercase.
-
+    
 
     def building_getCampus(self):
         return self.campusid
