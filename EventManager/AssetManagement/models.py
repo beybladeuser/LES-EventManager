@@ -99,6 +99,19 @@ class Building(models.Model):
         db_table = 'building'
 
 
+    @staticmethod
+    def makeOptions():
+        if "building" in connection.introspection.table_names():
+            buildings = Building.objects.filter()
+            options=([(building.id, building.buildingname) for building in buildings])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+
+
+
+
 class Campus(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     campusname = models.CharField(db_column='CampusName', unique=True, max_length=255)  # Field name made lowercase.
@@ -108,6 +121,15 @@ class Campus(models.Model):
 
     def __str__(self):
        return self.campusname
+
+    @staticmethod
+    def makeOptions():
+        if "campus" in connection.introspection.table_names():
+            campus = Campus.objects.all()
+            options=([(campu.id, campu.campusname) for campu in campus])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
     
 
@@ -136,14 +158,11 @@ class Equipmenttype(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
-    class Meta:
-        
+    class Meta:        
         db_table = 'equipmenttype'
     
     def __str__(self):
        return self.typename
-
-
 
 
 class Rooms(models.Model):
@@ -153,6 +172,10 @@ class Rooms(models.Model):
     def room_GetBuilding(self):
         return self.buildingid_building
 
+
+    def getRoomWithCampus(self):
+        self.campus = self.buildingid_building.campusid
+        return self
     
     class Meta:
         db_table = 'rooms'

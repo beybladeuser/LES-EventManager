@@ -68,8 +68,12 @@ def consultar_equipments(request):
 
 def consultar_rooms(request):
     template = loader.get_template('ViewRooms.html')
+    rooms = Rooms.objects.all()
+    for room in rooms:
+        room = Rooms.getRoomWithCampus(room)
     context = {
-        'Rooms': Rooms.objects.all()
+        'Rooms': rooms
+
     }
     return HttpResponse(template.render(context, request))    
 
