@@ -16,7 +16,11 @@
 {% endblock %}
 
 {% block listings %}
+
     {% for registration in registrations %}
+  
+        
+    
         <tr id="row{{ forloop.counter }}">
             <td>
                 <span id="NameFilter{{ forloop.counter }}">{{registration.participantuserid}}</span>
@@ -30,18 +34,22 @@
                 <span >
                     <span style="display: none;" id="stateFilter{{ forloop.counter }}">
                         {% if registration.state == 0 %}
-                            pendente
+                            Pendente
                         {% elif registration.state == 1 %}
                             Invalidado
+                        {% elif registration.state == 2 %}
+                            Validado
                         {% endif %}
                     </span>
 
 
                     {% if event.proponentid.id == user.id %} 
                         {% if  registration.state == 0 %}
-                            <button href="{% url 'validateparticipant' registration.id %}"><a class="button is-warning" >Pendente</a></button> 
+                            <a class="button is-warning" >Pendente</a> 
                         {% elif  registration.state == 1 %}  
-                            <button><a class="button is-danger" >Invalidado</a></button> 
+                            <a class="button is-danger" >Invalidado</a> 
+                        {% elif  registration.state == 2 %}  
+                            <a class="button is-success" >Validado</a>
 
                         {% endif %}
                     {% endif %}
@@ -57,6 +65,7 @@
             </div>
             </td>
         </tr>
+        
     {% endfor %}
    
 

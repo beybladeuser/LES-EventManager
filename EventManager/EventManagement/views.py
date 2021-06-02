@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.db import connection
 from FormManagement.models import Form, Formtype, QuestionsForm, Questions, Multipleoptions, Questiontype, Answer
-from FormManagement.forms import EventManagerForm
+from .forms import EventManagerForm
 from Models.models import *
 
 from .models import *
@@ -105,8 +105,11 @@ def addregistration(request, EventID= None):
 
 def viewanswer(request, RegistrationID = None ):
     answers = Answer.objects.filter(resgistrationid = RegistrationID)
+    registration = None
+    errorMessage = None
     if (Resgistration.objects.filter(pk=RegistrationID).exists()) :
-        regisForm = Resgistration.objects.get(pk=RegistrationID).eventid_event.formresgistrationid
+        registration = Resgistration.objects.get(pk=RegistrationID)
+        regisForm = registration.eventid_event.formresgistrationid
         regisQuestions = regisForm.getQuestions()
         answers = []
         for regisQuestion in regisQuestions :
@@ -115,13 +118,17 @@ def viewanswer(request, RegistrationID = None ):
                 answers.append( {"questionsid_questions":regisQuestion, "answer":answer.answer} )
             else :
                 answers.append( {"questionsid_questions":regisQuestion, "answer":"N\\a"} )
+    else :
+        errorMessage = "Erro: Registo nao existe"
 
 
 
 
     template = loader.get_template('list_event_regs_form_answers.html')
     context = {
+        'registration' : registration,
         'answers': answers,
+        'errorMessage':errorMessage,
     }
     return HttpResponse(template.render(context, request))
 
@@ -139,13 +146,33 @@ def checkin(request,RegistrationID=None) :
         if regist.canCancelCheckout(request.user):
             regist.changeCheckoutStatus(True)
     return redirect('consultar_participantes', regist.eventid_event.id)
+
+
+    
        
 def validateparticipant(request,RegistrationID=None):
     if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
         regist = Resgistration.objects.get(pk=RegistrationID)
         if regist.canCancelCheckout(request.user):
             regist.changevalidateStatus(2)
-    return redirect('nonvalidateparticipantes', regist.eventid_event.id)
+    return redirect('consultar_participantesnaovalidados', regist.eventid_event.id)
+
+def invalidateparticipant(request,RegistrationID=None):
+    if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
+        regist = Resgistration.objects.get(pk=RegistrationID)
+        if regist.canCancelCheckout(request.user):
+            regist.changevalidateStatus(1)
+    return redirect('consultar_participantesnaovalidados', regist.eventid_event.id)
+
+    
+
+def pendenteparticipant(request,RegistrationID=None):
+    if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
+        regist = Resgistration.objects.get(pk=RegistrationID)
+        if regist.canCancelCheckout(request.user):
+            regist.changevalidateStatus(0)
+    return redirect('consultar_participantesnaovalidados', regist.eventid_event.id)
+
 
 def consultar_participantesnaovalidados(request,eventid_event) :
     if Event.objects.filter(pk=eventid_event).exists()  :

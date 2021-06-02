@@ -12,5 +12,6 @@ urlpatterns = [
     path('chekout/<int:RegistrationID>', views.checkout, name='checkout'),
     path('chekin/<int:RegistrationID>', views.checkin, name='checkin'),
     path('validateparticipant/<int:RegistrationID>', views.validateparticipant, name='validateparticipant'),
-    
+    path('invalidateparticipant/<int:RegistrationID>', views.invalidateparticipant, name='invalidateparticipant'),
+    path('pendenteparticipant/<int:RegistrationID>', views.pendenteparticipant, name='pendenteparticipant'),
 ]
