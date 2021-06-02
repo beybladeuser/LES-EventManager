@@ -421,7 +421,13 @@
 			"equipmenttypeid_equipmenttype": 3
 		}
 	},
-
+	{
+		"model": "AssetManagement.Equipment",
+		"fields" :{
+			"assetid": 10,
+			"equipmenttypeid_equipmenttype": 4
+		}
+	},
 
 
 
@@ -563,75 +569,98 @@
 			"campusname": "Penha"
 		}
 	},
-
-
-
-
-
-
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 1,
+		"fields" :{
+			"typename": "Anfiteatro"
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 2,
+		"fields" :{
+			"typename": "Sala de Aula"
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 3,
+		"fields" :{
+			"typename": "Sala de Reuniões"
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 4,
+		"fields" :{
+			"typename": "Sala de Computadores "
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 5,
+		"fields" :{
+			"typename": "Laboratório"
+		}
+	},
+	
+	
 	{
 		"model": "AssetManagement.Building",
 		"pk": 1,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 1"
+			"buildingname": "Ed. 1 - ESS / FCT / FCHS"
 		}
 	},
-	
 
 	{
 		"model": "AssetManagement.Building",
 		"pk": 2,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 2"
+			"buildingname": "Ed. 2 - DCBM / ESS / FCT"
 		}
 	},
-	
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 3,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 3"
+			"buildingname": "Ed. 3 - Complexo Pedagógico"
 		}
 	},
-	
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 4,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 4"
+			"buildingname": "Ed. 4 - Grande Auditório"
 		}
 	},
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 5,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 5"
+			"buildingname": "Ed. 5 - Biblioteca Central/GRIM/Reitoria"
 		}
 	},
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 6,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 6"
+			"buildingname": "Ed. 6 - Restaurante Universitário"
 		}
 	},
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 7,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 7"
+			"buildingname": "Ed. 7 - CCMAR/ESS/FCT"
 		}
 	},
 	{
@@ -639,82 +668,79 @@
 		"pk": 8,
 		"fields" :{
 			"campusid": 1,
-			"buildingname": "Ed. 8"
+			"buildingname": "Ed. 8 - Faculdade de Ciências e Tecnologia (FCT)"
 		}
 	},
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 9,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 1"
+			"campusid": 1,
+			"buildingname": "Ed. 9 - Faculdade de Economia (FE)"
 		}
 	},
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 10,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 2"
+			"campusid": 1,
+			"buildingname": "Ed. 10 - Edíficio do Horto Experimental"
 		}
 	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 11,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 3"
+			"campusid": 1,
+			"buildingname": "Ed. 11 - Campus de Jogos"
 		}
 	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 12,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 4"
+			"campusid": 1,
+			"buildingname": "Ed. 12 - Serviços Académicos"
 		}
 	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 13,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 5"
+			"campusid": 1,
+			"buildingname": "Ed. 13 - Portaria Nascente (Entrada Principal)"
 		}
 	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 14,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 6"
+			"campusid": 1,
+			"buildingname": "Ed. 14 - Portaria Norte"
 		}
 	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 15,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 7"
+			"campusid": 1,
+			"buildingname": "Ed. 15 - Divisão de Empreendedorismo e Transferência de Tecnlogia (CRIA)"
 		}
 	},
 	{
 		"model": "AssetManagement.Building",
 		"pk": 16,
 		"fields" :{
-			"campusid": 2,
-			"buildingname": "Ed. 8"
+			"campusid": 1,
+			"buildingname": "Ed. 16 - Laboratório de Audição e Terapia da Fala (LATF)"
 		}
 	},
-
 	{
 		"model": "AssetManagement.Building",
 		"pk": 17,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 1"
+			"buildingname": "Ed. 1 - Entrada Principal"
 		}
 	},
 	{
@@ -722,7 +748,7 @@
 		"pk": 18,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 2"
+			"buildingname": "Ed. 2 - Residência Universitária"
 		}
 	},
 	{
@@ -730,7 +756,7 @@
 		"pk": 19,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 3"
+			"buildingname": "Ed. 3 - Caixa Geral de Depósitos"
 		}
 	},
 	{
@@ -738,7 +764,7 @@
 		"pk": 20,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 4"
+			"buildingname": "Ed. 4 - Escola Superior de Gestão, Hotelaria e Turismo (ESGHT)"
 		}
 	},
 	{
@@ -746,7 +772,7 @@
 		"pk": 21,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 5"
+			"buildingname": "Ed. 5 - Serviços Académicos"
 		}
 	},
 	{
@@ -754,7 +780,7 @@
 		"pk": 22,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 6"
+			"buildingname": "Ed. 6 - Escola Superior de Educação e Comunicação (ESEC)"
 		}
 	},
 	{
@@ -762,7 +788,7 @@
 		"pk": 23,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 7"
+			"buildingname": "Ed. 7 - Escola Superior de Educação / Serviços de Ação Social"
 		}
 	},
 	{
@@ -770,10 +796,137 @@
 		"pk": 24,
 		"fields" :{
 			"campusid": 3,
-			"buildingname": "Ed. 8"
+			"buildingname": "Ed. 8 - Instituto Superior de Engenharia"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 25,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 9 - Complexo Pedagógico e Anfiteatros"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 26,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 10 - Fundação para o Desenvolvimento da UAlg"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 27,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 11 - Biblioteca / Administração / Serviços Centrais"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 28,
+		"fields" :{
+			"campusid": 3,
+			"buildingname": "Ed. 12 - Serviços Técnico"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 29,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 1"
+		}
+	},
+	
+	{
+		"model": "AssetManagement.Building",
+		"pk": 30,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 2"
+		}
+	},
+	
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 31,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 3"
+		}
+	},
+	
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 32,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 4"
 		}
 	},
 
+	{
+		"model": "AssetManagement.Building",
+		"pk": 33,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 5"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 34,
+		"fields" :{
+			"campusid": 2,	
+			"buildingname": "Ed. 6"
+		}
+	},
+
+	{
+		"model": "AssetManagement.Building",
+		"pk": 35,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 7"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 36,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 8"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 37,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 9"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 38,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 10"
+		}
+	},
+	{
+		"model": "AssetManagement.Building",
+		"pk": 39,
+		"fields" :{
+			"campusid": 2,
+			"buildingname": "Ed. 11"
+		}
+	},
 	{
 		"model": "AssetManagement.Equipmenttype",
 		"pk": 1,
@@ -795,7 +948,20 @@
 			"typename": "Laptop"
 		}
 	},
-
+	{
+		"model": "AssetManagement.Equipmenttype",
+		"pk": 4,
+		"fields" :{
+			"typename": "Auscutadores"
+		}
+	},
+	{
+		"model": "AssetManagement.Equipmenttype",
+		"pk": 5,
+		"fields" :{
+			"typename": "Sistema de Som"
+		}
+	},
 	{
 		"model": "AssetManagement.Servicetype",
 		"pk": 1,

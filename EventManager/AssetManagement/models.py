@@ -17,11 +17,6 @@ class Asset(models.Model):
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
     canAdd = False
 
-
-
-
-
-
     def delete_asset(self):        
         if Service.objects.filter(assetid=self.id).exists():
             service = Service.objects.get(assetid=self.id)
@@ -77,7 +72,7 @@ class Building(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     campusid = models.ForeignKey('Campus', models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.
     buildingname = models.CharField(db_column='BuildingName', max_length=255)  # Field name made lowercase.
-
+    
 
     def building_getCampus(self):
         return self.campusid
@@ -104,6 +99,19 @@ class Building(models.Model):
         db_table = 'building'
 
 
+    @staticmethod
+    def makeOptions():
+        if "building" in connection.introspection.table_names():
+            buildings = Building.objects.filter()
+            options=([(building.id, building.buildingname) for building in buildings])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+
+
+
+
 class Campus(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     campusname = models.CharField(db_column='CampusName', unique=True, max_length=255)  # Field name made lowercase.
@@ -113,6 +121,15 @@ class Campus(models.Model):
 
     def __str__(self):
        return self.campusname
+
+    @staticmethod
+    def makeOptions():
+        if "campus" in connection.introspection.table_names():
+            campus = Campus.objects.all()
+            options=([(campu.id, campu.campusname) for campu in campus])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
     
 
@@ -125,7 +142,15 @@ class Equipment(models.Model):
       
     def __str__(self):
        return self.assetid
-
+   
+    @staticmethod
+    def makeOptions():
+        if "equipmenttype" in connection.introspection.table_names():
+            equipmenttypes = Equipmenttype.objects.all()
+            options=([(equipmenttypes.id, equipmenttypes.typename) for equipmenttypes in equipmenttypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
 
 
@@ -133,30 +158,41 @@ class Equipmenttype(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
-    class Meta:
-        
+    class Meta:        
         db_table = 'equipmenttype'
     
     def __str__(self):
        return self.typename
 
 
-
-
 class Rooms(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
     buildingid_building = models.ForeignKey(Building, models.DO_NOTHING, db_column='BuildingID_Building')  # Field name made lowercase.
+    capacity =  models.IntegerField(db_column='Capacity')  # Field name made lowercase.
+    haveReducedMob = models.BooleanField(db_column='HaveReducedMob' , default=False)
+    reducedMobCapacity =  models.IntegerField(db_column='Reduced Mobility Capacity', default=0)  # Field name made lowercase.
 
     def room_GetBuilding(self):
         return self.buildingid_building
 
+    def getRoomWithCampus(self):
+        self.campus = self.buildingid_building.campusid
+        return self
     
     class Meta:
         db_table = 'rooms'
 
-    # def __str__(self):
-    #    return self.assetid + " - " + self.buildingid_building
 
+class RoomType(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
+
+    class Meta:
+        db_table = 'roomtype'
+
+    def __str__(self):
+       return self.typename
+    
 
 class Service(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
