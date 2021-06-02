@@ -1,5 +1,134 @@
 {% extends "template_form_base.html" %}
 
+{% block style %}
+<style>
+    th.orderable {
+        cursor: pointer;
+    }
+
+    th.orderable:hover {
+        border-color: #7a7a7a;
+    }
+
+    th.orderable.is-sorting {
+        border-color: #7a7a7a;
+    }
+
+    .table-wrapper .table {
+        margin-bottom: 0
+    }
+
+    .table-wrapper:not(:last-child) {
+        margin-bottom: 1.5rem
+    }
+
+    @media screen and (max-width:1023px) {
+        .table-wrapper {
+            overflow-x: auto
+        }
+    }
+
+    @media screen and (max-width:768px) {
+        .table.has-mobile-cards thead {
+            display: none
+        }
+
+        .table.has-mobile-cards tfoot th {
+            border: 0;
+            display: inherit
+        }
+
+        .table.has-mobile-cards tr {
+            -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
+            box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
+            max-width: 100%;
+            position: relative;
+            display: block
+        }
+
+        .table.has-mobile-cards tr td {
+            border: 0;
+            display: inherit
+        }
+
+        .table.has-mobile-cards tr td:last-child {
+            border-bottom: 0
+        }
+
+        .table.has-mobile-cards tr:not(:last-child) {
+            margin-bottom: 1rem
+        }
+
+        .table.has-mobile-cards tr:not([class*=is-]) {
+            background: inherit
+        }
+
+        .table.has-mobile-cards tr:not([class*=is-]):hover {
+            background-color: inherit
+        }
+
+        .table.has-mobile-cards tr.detail {
+            margin-top: -1rem
+        }
+
+        .table.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            width: auto;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            text-align: right;
+            border-bottom: 1px solid #f5f5f5
+        }
+
+        .table.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            padding-right: .5em;
+            text-align: left
+        }
+    }
+</style>
+
+<style>
+.main-table > tbody > tr:not(.detail) {
+    cursor: pointer;
+}
+
+.main-table > tbody > tr.detail {
+    box-shadow: inset 0 1px 3px #dbdbdb;
+    background: #fafafa;
+    background-color: rgb(250, 250, 250);
+}
+
+.main-table > tbody > tr.detail .detail-container {
+    padding: 1rem;
+}
+
+.main-table > tbody > tr.detail:hover {
+    background-color: #fafafa !important;
+}
+
+.main-table > tbody > tr.detail:not(.is-active) {
+    display: none;
+}
+
+.main-table > tbody > tr.detail .is-active {
+    display: block;
+}
+
+.icon.is-expanded {
+    transform: rotate(90deg);
+}
+
+.icon {
+    transition: transform 150ms ease-out, opacity 86ms ease-out;
+}
+</style>
+{% endblock %}
+
 {% block NonErrorContent %}
 	<div class="columns">
 		<div class="column is-3">
@@ -47,6 +176,12 @@
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
 						</div>
+					</div>
+
+					<div class="field is-grouped">
+						<p class="control is-expanded">
+							<input class="button is-light is-fullwidth" type="reset" onclick="clearFilters()" value="Limpar Filtros">
+						</p>
 					</div>
 				</ul>
 			</div>
@@ -277,6 +412,19 @@
 				else {
 					OBJ.style.display = "none";
 				}
+			}
+
+			function clearFilters() {
+				filters.forEach(element => {
+					var elementOBJ = document.getElementById(element.filterName);
+					if (element.isDropDown) {
+						elementOBJ.selectedIndex = 0;
+					}
+					else {
+						elementOBJ.value = "";
+					}
+				});
+				filter2();
 			}
 
 			filter2();

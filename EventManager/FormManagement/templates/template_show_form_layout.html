@@ -9,15 +9,98 @@
 {% endblock %}
 
 {% block tableHead %}
-    <th >Questão</th>
-    <th >Tipo</th>
-    <th >Opções</th>
-    <th >Requerida</th>
-    <th >Criador</th>
-    <th >Criado em</th>
-    <th >Editado por</th>
-    <th >Editado em</th>
-    <th >Ações</th>
+<th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+    Questão
+    {% if filterKey and filterKey == '00' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-down"></i>
+        </span>
+    {% elif filterKey and filterKey == '01' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-up"></i>
+        </span>
+    {% endif %}
+</th>
+<th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
+    Tipo
+    {% if filterKey and filterKey == '10' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-down"></i>
+        </span>
+    {% elif filterKey and filterKey == '11' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-up"></i>
+        </span>
+    {% endif %}
+</th>
+<th >Opções</th>
+<th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+    Requerida
+    {% if filterKey and filterKey == '20' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-down"></i>
+        </span>
+    {% elif filterKey and filterKey == '21' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-up"></i>
+        </span>
+    {% endif %}
+</th>
+<th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+    Criador
+    {% if filterKey and filterKey == '30' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-down"></i>
+        </span>
+    {% elif filterKey and filterKey == '31' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-up"></i>
+        </span>
+    {% endif %}
+</th>
+<th class="orderable {% if filterKey and filterKey == '40' or filterKey and filterKey == '41' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '40' %}'41'{% else %}'40'{% endif %})">
+    Criado em
+    {% if filterKey and filterKey == '40' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-down"></i>
+        </span>
+    {% elif filterKey and filterKey == '41' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-up"></i>
+        </span>
+    {% endif %}
+</th>
+<th class="orderable {% if filterKey and filterKey == '50' or filterKey and filterKey == '51' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '50' %}'51'{% else %}'50'{% endif %})">
+    Editado por
+    {% if filterKey and filterKey == '50' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-down"></i>
+        </span>
+    {% elif filterKey and filterKey == '51' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-up"></i>
+        </span>
+    {% endif %}
+</th>
+<th class="orderable {% if filterKey and filterKey == '60' or filterKey and filterKey == '61' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '60' %}'61'{% else %}'60'{% endif %})">
+    Editado em
+    {% if filterKey and filterKey == '60' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-down"></i>
+        </span>
+    {% elif filterKey and filterKey == '61' %}
+        <span class="icon is-small">
+            <i class="mdi mdi-menu-up"></i>
+        </span>
+    {% endif %}
+</th>
+<th width="180">Ações</th>
+<script>
+    function redirectToFilter(filterCode) {
+
+        window.location.href = "{% url 'checkFormLayout' form.id %}" + filterCode;
+    }
+</script>
 {% endblock %}
 
 {% block listings %}
@@ -26,7 +109,7 @@
                 <td id="NameFilter{{ forloop.counter }}" data-label="Questão">{{question.question}}</td>
                 <td id="TypeFilter{{ forloop.counter }}" data-label="Tipo">{{question.questiontypeid_questiontype.typename}}</td>
                 <td id="OptionsFilter{{ forloop.counter }}" data-label="Opções">
-                    
+                    <!--
                     <div {% if question.canEdit or question.options %} onmouseover="toggle('optionDropdown{{ forloop.counter }}')" onmouseout="toggle('optionDropdown{{ forloop.counter }}')" {% endif %}>
                         <span class="icon is-small" >
                             {% if question.canEdit or question.options %}
@@ -53,8 +136,51 @@
                             {% endif %}
                         </div>
                     </div>
-                    
-
+                    -->
+                    <div class="dropdown is-hoverable is-right">
+                        <div class="dropdown-trigger">
+                            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                <span>{% if question.options %}Ver{% else %}N/a{% endif %}</span>
+                                {% if question.canEdit or question.options %}
+                                    <span class="icon is-small">
+                                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                    </span>
+                                {% endif %}
+                            </button>
+                        </div>
+                        {% if question.canEdit or question.options %}
+                            <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                <div class="dropdown-content">
+                                    {% for option in question.options %}
+                                        <div class="dropdown-item">
+                                            <div class="icon-text" >
+                                                <span>{{option.option}}</span>
+                                                {% if question.canEdit %}
+                                                    <a href="{% url 'createOption' question.id option.id %}" class="icon has-text-info" style="vertical-align: middle;" data-tooltip="Editar Opção">
+                                                        <i class="mdi mdi-circle-edit-outline mdi-18px" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a href="{% url 'deleteOption' question.id option.id %}" class="icon has-text-info" style="vertical-align: middle;" data-tooltip="Remover Opção">
+                                                      <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% if not forloop.last %}
+                                            <hr class="dropdown-divider">
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if question.canEdit %}
+                                        {% if question.options %}
+                                            <hr class="dropdown-divider">
+                                        {% endif %}
+                                        <div class="dropdown-item">
+                                            <a class="button is-white" href="{% url 'createOption' question.id %}">Adicionar Nova</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
                 </td>
                 <td id="RequiredFilter{{ forloop.counter }}" data-label="Requerida">{% if question.required %}Sim{% else %}Não{% endif %}</td>
                 <td id="CriatorFilter{{ forloop.counter }}" data-label="Criador">{{question.createdby.username}}</td>
