@@ -569,12 +569,42 @@
 			"campusname": "Penha"
 		}
 	},
-
-
-
-
-
-
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 1,
+		"fields" :{
+			"typename": "Anfiteatro"
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 2,
+		"fields" :{
+			"typename": "Sala de Aula"
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 3,
+		"fields" :{
+			"typename": "Sala de Reuniões"
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 4,
+		"fields" :{
+			"typename": "Sala de Computadores "
+		}
+	},
+	{
+		"model": "AssetManagement.RoomType",
+		"pk": 5,
+		"fields" :{
+			"typename": "Laboratório"
+		}
+	},
+	
 	
 	{
 		"model": "AssetManagement.Building",

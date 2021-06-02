@@ -168,10 +168,12 @@ class Equipmenttype(models.Model):
 class Rooms(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
     buildingid_building = models.ForeignKey(Building, models.DO_NOTHING, db_column='BuildingID_Building')  # Field name made lowercase.
+    capacity =  models.IntegerField(db_column='Capacity')  # Field name made lowercase.
+    haveReducedMob = models.BooleanField(db_column='HaveReducedMob' , default=False)
+    reducedMobCapacity =  models.IntegerField(db_column='Reduced Mobility Capacity', default=0)  # Field name made lowercase.
 
     def room_GetBuilding(self):
         return self.buildingid_building
-
 
     def getRoomWithCampus(self):
         self.campus = self.buildingid_building.campusid
@@ -180,9 +182,17 @@ class Rooms(models.Model):
     class Meta:
         db_table = 'rooms'
 
-    # def __str__(self):
-    #    return self.assetid + " - " + self.buildingid_building
 
+class RoomType(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
+
+    class Meta:
+        db_table = 'roomtype'
+
+    def __str__(self):
+       return self.typename
+    
 
 class Service(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
