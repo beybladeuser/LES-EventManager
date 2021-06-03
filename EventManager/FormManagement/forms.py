@@ -11,8 +11,7 @@ class formCreation(forms.Form):
 	user = None
 	formId = forms.CharField(widget=forms.HiddenInput, max_length=255, required=False)
 	formName = forms.CharField(label='Nome do Formulário', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
-	OPTIONS_eventType = Eventtype.makeOptions()
-	eventType = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType, attrs={'class' : 'input'}), label='Tipo de evento', required=True)
+	
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -20,6 +19,10 @@ class formCreation(forms.Form):
 		super().__init__(*args, **kwargs)
 		OPTIONS_formType = Formtype.makeOptions(self.user)
 		self.fields["formType"] = forms.CharField(widget=forms.Select(choices=OPTIONS_formType, attrs={'class' : 'input'}), label='Tipo de formulário', required=True)
+
+		OPTIONS_eventType = Eventtype.makeOptions()
+		self.fields["eventType"] = forms.CharField(widget=forms.Select(choices=OPTIONS_eventType, attrs={'class' : 'input'}), label='Tipo de evento', required=True)
+		
 
 	class Meta:
 		model = Formtype
@@ -40,10 +43,10 @@ class formCreation(forms.Form):
 		formType = self.cleaned_data.get("formType")
 		formName = self.cleaned_data.get("formName")
 		if not formId :
-			if Form.objects.filter(formname=formName, formtypeid_formtype=formType, archived=False).exists() :
+			if Form.objects.filter(formname=formName, formtypeid_formtype=formType).exists() :
 				self.add_error("formName", 'Impossível criar formulários com nomes duplicados')
 		else :
-			if Form.objects.filter(formname=formName, formtypeid_formtype=formType, archived=False).exclude(id=formId).exists() :
+			if Form.objects.filter(formname=formName, formtypeid_formtype=formType).exclude(id=formId).exists() :
 				self.add_error("formName", 'Impossível criar formulários com nomes duplicados')
 		
 		if not Formtype.objects.get(pk=formType).canCreate(self.user) :

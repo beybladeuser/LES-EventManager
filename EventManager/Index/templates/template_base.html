@@ -35,7 +35,8 @@
 
     {% block load %}
     {% endblock load %}
-    
+    {% block style %}
+    {% endblock %}
     <style>
         body,
         html {
@@ -104,6 +105,15 @@
           
           {% block loggedInOutContent %}
           {% endblock %}
+        </div>
+        <div class="columns" >
+          <div class="column is-3"></div>
+          <div class="column is-10">
+            {% block EndOfPageButtons %}
+				
+            {% endblock %}
+          </div>
+          
         </div>
       </div>
     </div>
