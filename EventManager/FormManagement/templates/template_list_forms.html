@@ -28,16 +28,122 @@
 {% endblock %}
 
 {% block tableHead %}
-    <th >Nome</th>
-    <th >Tipo</th>
-    <th >Tipo de Evento</th>
-    <th >Publico</th>
-    <th >Arquivado</th>
-    <th >Criador</th>
-    <th >Criado em</th>
-    <th >Editado por</th>
-    <th >Editado em</th>
+    <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+        Nome
+        {% if filterKey and filterKey == '00' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '01' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
+        Tipo
+        {% if filterKey and filterKey == '10' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '11' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+        Tipo de Evento
+        {% if filterKey and filterKey == '20' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '21' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+        Publico
+        {% if filterKey and filterKey == '30' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '31' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '40' or filterKey and filterKey == '41' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '40' %}'41'{% else %}'40'{% endif %})">
+        Arquivado
+        {% if filterKey and filterKey == '40' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '41' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '50' or filterKey and filterKey == '51' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '50' %}'51'{% else %}'50'{% endif %})">
+        Criador
+        {% if filterKey and filterKey == '50' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '51' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '60' or filterKey and filterKey == '61' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '60' %}'61'{% else %}'60'{% endif %})">
+        Criado em
+        {% if filterKey and filterKey == '60' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '61' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '70' or filterKey and filterKey == '71' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '70' %}'71'{% else %}'70'{% endif %})">
+        Editado por
+        {% if filterKey and filterKey == '70' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '71' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '80' or filterKey and filterKey == '81' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '80' %}'81'{% else %}'80'{% endif %})">
+        Editado em
+        {% if filterKey and filterKey == '80' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '81' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
     <th width="250">Ações</th>
+
+    <script>
+        function redirectToFilter(filterCode) {
+
+            window.location.href = "{% url 'listFormsFromType' formType.id %}" + filterCode;
+        }
+    </script>
 {% endblock %}
 
 {% block listings %}
