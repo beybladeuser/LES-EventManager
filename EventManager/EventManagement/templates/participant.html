@@ -18,15 +18,18 @@
 {% block listings %}
 
     {% for registration in registrations %}
-        <tr id="row{{ forloop.counter }}" style="display: none;">
-            <td>
+        {% if registration.state == 2 %}
+        
+    
+            <tr id="row{{ forloop.counter }}" style="display: none;">
+                <td>
             
-                <div id= "check">
+                
                     <span id="NameFilter{{ forloop.counter }}">{{registration.participantuserid}}</span>
                 </td>
                 <td>
                     {{registration.dateofregistration}}
-                </div> 
+                 
                 </td> 
 
                 <td>
@@ -43,10 +46,10 @@
                         {% if event.proponentid.id == user.id %} 
                             {% if  registration.waspresent == 0 %}
                             
-                            <a class="button is-danger" type="submit"   id= "all"  href={% url 'checkin' registration.id %}  > check in</a>
+                            <a class="button is-danger"  href="{% url 'checkin' registration.id %}"  >Ausente</a>
                         
                             {% else %}
-                            <a class="button is-success" href="{% url 'checkout' registration.id %}">cancelar</a>     
+                            <a class="button is-success" href="{% url 'checkout' registration.id %}">Presente</a>     
                             {% endif %}
                         {% endif %}
                     </span>
@@ -60,7 +63,8 @@
                     </a></button>
                 </div>
                 </td>
-        </tr>
+            </tr>
+        {% endif %}
     {% endfor %}
    
 

@@ -10,7 +10,47 @@
 				<ul class="menu-list">
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="NameFilter" placeholder="Questão" onkeyup="filter2()">
+							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="QuantityFilter" placeholder="Quantidade" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="TypeFilter" onchange="filter2()">
+							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
+							  	{% block filterTypes %}
+							
+								{% endblock %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="SubTypeFilter" placeholder="Nome do criador" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
@@ -24,15 +64,18 @@
 			<nav aria-label="breadcrumbs" class="breadcrumb">
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
-					<li><a href="{% url 'eventHome' %}">Gestor de Inscrições</a></li>
+					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
 					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
 					</li>
 				</ul>
 			</nav>
+			
 			{% block preListingBlock %}
+			
 
 			{% endblock %}
-			<table class="table is-fullwidth">
+			
+			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
 				<thead>
 					<tr>
 						{% block tableHead %}
@@ -49,17 +92,26 @@
 				
 			</table>
 		</div>
-		
 	</div>
 	
 	<div class="level">
-		
-		<div class="level-left">
-			
-		</div>
-		<div class="level-right">
-			
+		<div class="level-left"></div>
+		<div class="level-right" style="white-space: nowrap;">
+			<div class="level-item" style="width: fit-content;">
+				<span style="margin-right: 3%;">Mostrando</span>   
+				<div class="select" style="margin-right: 3%;">
+					<select onchange="pagging(0, this.value);">
+					  <option value=5>5</option>
+					  <option value=10>10</option>
+					  <option value=20>20</option>
+					</select>
+				</div>
+				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
+				<span style="margin-right: 3%; ">{% block showType %} {% endblock %} por página</span>
+
+			</div>
 			<div class="level-item">
+				
 				<nav class="pagination" role="navigation" aria-label="pagination">
 					
 					
@@ -84,51 +136,19 @@
 					
 				</nav>
 			</div>
-			
 		</div>
-		
 	</div>
-	
 		
 {% endblock %}
 
 {% block scripts %}
 		<script>
-        	function filter(filterName, isDropDown)
-        	{
-        	    var FilterOBJ = document.getElementById(filterName);
-        	    var filter;
-        	    if (isDropDown) {
-        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
-        	    }
-        	    else {
-        	        filter = FilterOBJ.value.toLowerCase();
-        	    }
-
-				if (isDropDown && filter.indexOf("selecione")>-1) {
-					filter = "";
-        	    }
-				
-				var id = 1;
-        	    while (document.getElementById("row" + id)){
-
-        	        var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
-        	        
-
-
-        	        if ( fieldVal.indexOf(filter)>-1 ) {
-        	            document.getElementById("row" + id).style.display = "";
-        	        }
-        	        else {
-        	            document.getElementById("row" + id).style.display = "none";
-        	        }
-        	        id++;
-        	    }
-
-        	}
-
+        
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
+				{'filterName' : 'TypeFilter', 'isDropDown' : true},
+				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
+				{'filterName' : 'EditorFilter', 'isDropDown' : false},
 			];
 			var filteredRows = new Array();
 			function filter2(){
@@ -166,6 +186,8 @@
         	        //}
         	        id++;
         	    }
+				document.getElementById("FilteredCount").textContent = filteredRows.length;
+				
 				pagging();
 			}
 
@@ -189,7 +211,12 @@
 			}
 
 			var currentPage = 0;
-			function pagging(page=0, size=4){
+			var currentSize=5;
+			function pagging(page=0, size=5){
+				var test = typeof global_size;
+				if (!(typeof global_size === "undefined" )) {
+					size=global_size;
+				}
 				if (page > getNPages(size) || page < 0) {
 					return;
 				}

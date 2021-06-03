@@ -1,6 +1,13 @@
 {% extends "template_base.html" %}
 {% block loggedInContent %}
-  <table style="width:100%">
+{% block tableHead %}
+    <th >Nome do Recurso</th>
+    <th >Quantidade</th>
+    <th >Tipo</th>
+    <th >Sub-Tipo</th>
+    <th width="180">Ações</th>
+{% endblock %}
+  <table style="width:100%" >
     <tr>
       <th>ID</th>
       <th>Nome do Recurso</th>

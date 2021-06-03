@@ -10,15 +10,29 @@
 				<ul class="menu-list">
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="NameFilter" placeholder="Questão" onkeyup="filter2()">
+							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
 						</div>
 					</div>
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="stateFilter" onchange="filter2()">
+							  	<option value="Selecione">Selecione o estado da Validação</option>
+							  	<option value="Pendente">Pendente</option>
+								<option value="Invalidado">Invalidado</option>
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					
 				</ul>
 			</div>
 		</div>
+		
 
 		<div class="column">
 			<nav aria-label="breadcrumbs" class="breadcrumb">
@@ -49,17 +63,25 @@
 				
 			</table>
 		</div>
-		
 	</div>
 	
 	<div class="level">
-		
-		<div class="level-left">
-			
-		</div>
-		<div class="level-right">
-			
+		<div class="level-left"></div>
+		<div class="level-right" style="white-space: nowrap;">
+			<div class="level-item" style="width: fit-content;">
+				<span style="margin-right: 3%;">Displaying</span>   
+				<div class="select" style="margin-right: 3%;">
+					<select onchange="pagging(0, this.value);">
+					  <option value=5>5</option>
+					  <option value=10>10</option>
+					  <option value=20>20</option>
+					</select>
+				</div>
+				<span style="margin-right: 3%;">out of <span id="FilteredCount"></span></span>
+				
+			</div>
 			<div class="level-item">
+				
 				<nav class="pagination" role="navigation" aria-label="pagination">
 					
 					
@@ -84,9 +106,7 @@
 					
 				</nav>
 			</div>
-			
 		</div>
-		
 	</div>
 	
 		
@@ -99,7 +119,7 @@
         	    var FilterOBJ = document.getElementById(filterName);
         	    var filter;
         	    if (isDropDown) {
-        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].value;
         	    }
         	    else {
         	        filter = FilterOBJ.value.toLowerCase();
@@ -129,6 +149,7 @@
 
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
+				{'filterName' : 'stateFilter', 'isDropDown' : true},
 			];
 			var filteredRows = new Array();
 			function filter2(){
@@ -142,7 +163,7 @@
         	    		var filter;
 
 						if (filters[index].isDropDown) {
-        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].value.toLowerCase();
         	    		}
         	    		else {
         	    		    filter = FilterOBJ.value.toLowerCase();
@@ -218,17 +239,12 @@
 				}
 			}
 
-			function toggle(objName){
-				var OBJ = document.getElementById(objName);
-				if (OBJ.style.display == "none") {
-					OBJ.style.display = "";
-				}
-				else {
-					OBJ.style.display = "none";
-				}
-			}
+		
 
 			filter2();
+		
+			  
+				
 		</script>
     	
 {% endblock %}

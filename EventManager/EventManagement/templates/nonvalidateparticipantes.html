@@ -1,0 +1,76 @@
+{% extends "participantnonvalidate.html" %}
+
+{% block PageTittle %}
+	Ver participantes no evento {{event.eventname}}
+{% endblock %}
+
+{% block currentPage %}
+    participantes  no evento {{event.eventname}}
+{% endblock %}
+
+{% block tableHead %}
+    <th>Nome</th>
+    <th>Registado em:</th>
+    <th>Estado</th>
+    <th>Respostas</th>
+{% endblock %}
+
+{% block listings %}
+
+    {% for registration in registrations %}
+  
+        
+    
+        <tr id="row{{ forloop.counter }}">
+            <td>
+                <span id="NameFilter{{ forloop.counter }}">{{registration.participantuserid}}</span>
+            </td>
+            <td>
+                    {{registration.dateofregistration}}
+
+            </td> 
+
+            <td>
+                <span >
+                    <span style="display: none;" id="stateFilter{{ forloop.counter }}">
+                        {% if registration.state == 0 %}
+                            Pendente
+                        {% elif registration.state == 1 %}
+                            Invalidado
+                        {% elif registration.state == 2 %}
+                            Validado
+                        {% endif %}
+                    </span>
+
+
+                    {% if event.proponentid.id == user.id %} 
+                        {% if  registration.state == 0 %}
+                            <a class="button is-warning" >Pendente</a> 
+                        {% elif  registration.state == 1 %}  
+                            <a class="button is-danger" >Invalidado</a> 
+                        {% elif  registration.state == 2 %}  
+                            <a class="button is-success" >Validado</a>
+
+                        {% endif %}
+                    {% endif %}
+                </span>
+            
+            </div>
+            </td>
+            <td>
+            <div >
+                <button><a class="btn btn-lg" href="{% url 'viewanswer' registration.id %}">
+                    Ver respostas do user
+                </a></button>
+            </div>
+            </td>
+        </tr>
+        
+    {% endfor %}
+   
+
+    
+{% endblock %}
+
+
+
