@@ -4,11 +4,13 @@
     <tr>
       <th>Sala/Anfiteatro</th>
       <th>Edifício</th>
+      <th>Campus</th>
     </tr>
     {% for room in Rooms %}
         <tr>
             <td>  <p>{{room.assetid}}</p></td>
             <td>  <p>{{room.buildingid_building}}</p></td>
+            <td>  <p>{{room.campus}}</p></td>
         </tr>
     {% endfor %}
   </table>

@@ -68,8 +68,12 @@ def consultar_equipments(request):
 
 def consultar_rooms(request):
     template = loader.get_template('ViewRooms.html')
+    rooms = Rooms.objects.all()
+    for room in rooms:
+        room = Rooms.getRoomWithCampus(room)
     context = {
-        'Rooms': Rooms.objects.all()
+        'Rooms': rooms
+
     }
     return HttpResponse(template.render(context, request))    
 
@@ -140,6 +144,46 @@ def createService(request):
     context = {
         'errorMessage' : errorMessage,
         'ServiceForm' : ServiceForm,
+        
+    }
+    return HttpResponse(template.render(context, request))    
+
+def createEquipment(request):
+    errorMessage = None
+    EquipmentForm = None
+    if not errorMessage:
+        if request.method == 'POST':
+            EquipmentForm = InsertEquipmentForm(request.POST, currentUser=request.user)
+            if EquipmentForm.is_valid():
+                newEquipment = EquipmentForm.save()          
+        else:
+            EquipmentForm = InsertEquipmentForm(currentUser=request.user)
+
+
+    template = loader.get_template('InsertEquipment.html')
+    context = {
+        'errorMessage' : errorMessage,
+        'EquipmentForm' : EquipmentForm,
+        
+    }
+    return HttpResponse(template.render(context, request))    
+
+def createRoom(request):
+    errorMessage = None
+    RoomForm = None
+    if not errorMessage:
+        if request.method == 'POST':
+            RoomForm = InsertRoomForm(request.POST, currentUser=request.user)
+            if RoomForm.is_valid():
+                newRoom = RoomForm.save()          
+        else:
+            RoomForm = InsertRoomForm(currentUser=request.user)
+
+
+    template = loader.get_template('InsertRoom.html')
+    context = {
+        'errorMessage' : errorMessage,
+        'RoomForm' : RoomForm,
         
     }
     return HttpResponse(template.render(context, request))    

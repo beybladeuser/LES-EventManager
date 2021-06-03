@@ -15,12 +15,45 @@
     <th style="width: 60%;">Resposta</th>
 {% endblock %}
 
+
 {% block listings %}
     {% for awnser in answers %}
         <tr id="row{{ forloop.counter }}">
             <td id="NameFilter{{ forloop.counter }}"> {{awnser.questionsid_questions.question}}</td>
             <td id="RequiredFilter{{ forloop.counter }}">{{awnser.questionsid_questions.required}}</td>
             <td> {{awnser.answer}}</td>
+            
         </tr>
-    {% endfor %}		
+        
+    {% endfor %}
+    
+{% endblock %}	
+{% block EndOfPageButtons %}
+    {% if registration.state != 2 %}
+    <a href="{% url 'validateparticipant' registration.id %}">
+        <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+            class="icon is-small"><i class="fas fa-check-square"></i></span> <span>Validar registo</span>
+        </button>
+    </a>
+    <a href="{% url 'invalidateparticipant' registration.id %}">
+        <button type="button" class="button is-danger is-outlined" style="margin-bottom: 1rem;"><span
+            class="icon is-small"><i class="fa fa-times"></i></span> <span>Invalidar registo</span>
+        </button>
+    </a>
+    {% else %}
+    <a href="{% url 'invalidateparticipant' registration.id %}">
+        <button type="button" class="button is-danger is-outlined" style="margin-bottom: 1rem;"><span
+            class="icon is-small"><i class="fa fa-times"></i></span> <span>Invalidar registo</span>
+        </button>
+    </a>
+    <a href="{% url 'pendenteparticipant' registration.id %}">
+        <button type="button" class="button is-warning is-outlined" style="margin-bottom: 1rem;"><span
+            class="icon is-small"><i class="fa fa-times"></i></span> <span>Tornar registo pendente</span>
+        </button>
+    </a>
+   
+    {% endif %}
+    
+        
+
 {% endblock %}
