@@ -67,9 +67,10 @@ def checkFormLayout(request, formID = None, filterKey=None) :
     if form :
         questions = form.formquestions
         questions = Questions.sortByKey(questions, filterKey)
-        for question in questions :
-            question.canEdit = question.canEdit(request.user)
-            question.canDuplicate = question.canDuplicate(request.user)
+        if questions :
+            for question in questions :
+                question.canEdit = question.canEdit(request.user)
+                question.canDuplicate = question.canDuplicate(request.user)
 
     if formID != None :
         if filterKey :
