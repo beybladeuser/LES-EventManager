@@ -155,8 +155,9 @@ class openEndedQuestionCreation(forms.Form):
 			newQuestion.question = question
 			wasChanged = True
 		
-		if not self.questionToEdit :
-			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
+		questionType = self.cleaned_data.get("questionType")
+		if not self.questionToEdit  or questionType != self.questionToEdit.questiontypeid_questiontype.id:
+			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=questionType)
 			wasChanged = True
 
 		required = self.cleaned_data.get("required")

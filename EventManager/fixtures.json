@@ -56,14 +56,21 @@
 	  "model": "FormManagement.Questiontype",
 	  "pk": 1,
 	  "fields": {
-		"typename": "Open Ended"
+		"typename": "Resposta Aberta"
 	  }
 	},
 	{
 	  "model": "FormManagement.Questiontype",
 	  "pk": 2,
 	  "fields": {
-		"typename": "Multiple Choice"
+		"typename": "Escolha Múltipla"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 3,
+	  "fields": {
+		"typename": "Seleção de Formulário"
 	  }
 	}
 
