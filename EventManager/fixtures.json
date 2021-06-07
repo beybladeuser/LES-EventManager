@@ -3,14 +3,14 @@
 	  "model": "FormManagement.Formtype",
 	  "pk": 1,
 	  "fields": {
-		"typename": "Proposal"
+		"typename": "Proposta"
 	  }
 	},
 	{
 	  "model": "FormManagement.Formtype",
 	  "pk": 2,
 	  "fields": {
-		"typename": "Registration"
+		"typename": "Registo"
 	  }
 	},
 	{
@@ -24,7 +24,7 @@
 	  "model": "FormManagement.Formtype",
 	  "pk": 4,
 	  "fields": {
-		"typename": "Logistic"
+		"typename": "Logistica"
 	  }
 	}
 
@@ -70,7 +70,14 @@
 	  "model": "FormManagement.Questiontype",
 	  "pk": 3,
 	  "fields": {
-		"typename": "Seleção de Formulário"
+		"typename": "Seleção de Formulário de Registo"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 4,
+	  "fields": {
+		"typename": "Seleção de Formulário de FeedBack"
 	  }
 	}
 
