@@ -170,8 +170,9 @@ class Form(models.Model):
             if self.formtypeid_formtype.id == 1 :
                 proposalForms = Form.objects.filter(formtypeid_formtype=self.formtypeid_formtype)
                 for proposalForm in proposalForms :
-                    proposalForm.archived = True
-                    proposalForm.save()
+                    if proposalForm.eventtypeid == self.eventtypeid :
+                        proposalForm.archived = True
+                        proposalForm.save()
             self.archived = False
             self.save()
 
