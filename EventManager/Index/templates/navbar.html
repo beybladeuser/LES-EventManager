@@ -14,10 +14,10 @@
     </div>
     <div class="navbar-menu">
         <div class="navbar-start">
-            <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Asset</a>
+            <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Gestor de Recursos</a>
             <a href="" class="navbar-item is-tab router-link">Event</a>
             {% if user.is_authenticated and not user|has_group:'Participante'%}
-            <a href="{% url 'formsHome' %}" class="navbar-item is-tab router-link">Form</a>
+            <a href="{% url 'formsHome' %}" class="navbar-item is-tab router-link">Gestor de formularios</a>
             {% endif %}
             <a href="{% url 'preEventHome' %}" class="navbar-item is-tab router-link">PreEvent</a>
             {% if user|has_group:'Administrador'%}
