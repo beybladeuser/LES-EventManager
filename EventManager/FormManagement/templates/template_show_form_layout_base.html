@@ -215,11 +215,11 @@
                     			{% else %}
                     			    {% if form|can_unarchive_form:user %}
                     			        <a href="{% url 'unarchiveForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desarquivar Formulário" onclick="return confirm('Após arquivar o formulário não sera possivél associar este a novos eventos nem a sua edição. Deseja continuar?');">
-                    			            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                    			            <i class="fas fa-archive fa-lg" style="color: red;" aria-hidden="true"></i>
                     			        </a>
                     			    {% else %}
-                    			        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" disabled>
-                    			            <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
+                    			        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desarquivar Formulário" disabled>
+                    			            <i class="fas fa-archive fa-lg" style="color: red;" aria-hidden="true"></i>
                     			        </a>
                     			    {% endif %}
                     			    <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
