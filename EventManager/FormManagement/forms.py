@@ -112,10 +112,6 @@ class openEndedQuestionCreation(forms.Form):
 	form = None
 	questionToEdit = None
 	question = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}), label='Questão', max_length=255, required=True)
-	OPTIONS_questionType = Questiontype.makeOptions()
-	questionType = forms.CharField(widget=forms.Select(choices=OPTIONS_questionType, attrs={'class' : 'input', "onChange":'checkType()'}), label='Tipo de questão', required=True)
-	options = ((True, 'Sim'), (False, 'Não'))
-	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="É Requerida", required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -123,6 +119,15 @@ class openEndedQuestionCreation(forms.Form):
 			self.form = kwargs.pop('associatedForm', None)
 			self.questionToEdit = kwargs.pop('questionToEdit', None)
 		super().__init__(*args, **kwargs)
+		OPTIONS_questionType = Questiontype.makeOptions()
+		if self.form :
+			for questionType in Questiontype.objects.all() :
+				if not self.form.canAssociateQuestionType(questionType) :
+					OPTIONS_questionType.remove((questionType.id, questionType.typename))
+		self.fields["questionType"] = forms.CharField(widget=forms.Select(choices=OPTIONS_questionType, attrs={'class' : 'input', "onChange":'checkType()'}), label='Tipo de questão', required=True)
+		
+		options = ((True, 'Sim'), (False, 'Não'))
+		self.fields["required"] = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="É Requerida", required=True)
 
 	def clean(self, *args, **kwargs):
 

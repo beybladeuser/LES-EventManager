@@ -71,7 +71,7 @@ class Form(models.Model):
 
     def associateQuestion(self, question, user) :
         if self.canEdit(user) :
-            if not QuestionsForm.objects.filter(questionsid_questions=question, formid_form=self):
+            if self.canAssociateQuestion(question):
                 form_question_association = QuestionsForm()
                 form_question_association.questionsid_questions = question
                 form_question_association.formid_form = self
@@ -120,6 +120,14 @@ class Form(models.Model):
 
     def canUnarchive(self, user) :
         return self.userHasEditPermitions(user) and user.id == self.createdby.id and self.archived
+
+    def canAssociateQuestion(self, question) :
+        e1 = not QuestionsForm.objects.filter(questionsid_questions=question, formid_form=self).exists()
+        e2 = self.canAssociateQuestionType(question.questiontypeid_questiontype)
+        return e1 and e2
+    
+    def canAssociateQuestionType(self, questionType) :
+        return not (self.formtypeid_formtype.id != 1 and (questionType.id == 3 or questionType.id == 4))
     
     def duplicate(self, user) :
         result = Form()

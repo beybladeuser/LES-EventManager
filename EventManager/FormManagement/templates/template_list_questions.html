@@ -9,8 +9,11 @@
 {% block listingTittle %}Questões{% endblock %}
 
 {% block filterTypes %}
+    {% load form_extras %}
     {% for questionType in questionTypes %}
-        <option>{{questionType.typename}}</option>
+        {% if not formToAssociate or formToAssociate|can_associate_with_questionType:questionType %}
+            <option>{{questionType.typename}}</option>
+        {% endif %}
     {% endfor %}	
 {% endblock %}
 
@@ -114,8 +117,11 @@
     <th width="180">Ações</th>
     <script>
         function redirectToFilter(filterCode) {
-
-            window.location.href = "{% url 'listQuestions' 0 %}/" + filterCode;
+            {% if formToAssociate %}
+                window.location.href = "{% url 'listQuestions' formToAssociate.id %}/" + filterCode;
+            {% else %}
+                window.location.href = "{% url 'listQuestions' 0 %}/" + filterCode;
+            {% endif %}
         }
     </script>
 {% endblock %}

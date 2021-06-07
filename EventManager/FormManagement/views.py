@@ -379,7 +379,7 @@ def listQuestions(request, formID=None, filterKey = None) :
         if not questions :
             errorMessage = "Erro: Nenhum questão existente"
         elif formToAssociate :
-            questions_ = [x.id for x in questions if not QuestionsForm.objects.filter(questionsid_questions=x, formid_form=formToAssociate).exists()]
+            questions_ = [x.id for x in questions if formToAssociate.canAssociateQuestion(x)]
             questions = Questions.objects.filter(id__in=questions_)
         
         if request.session.get("deleteOption_form_redirect") :
