@@ -61,7 +61,7 @@
 	</div>
 
 
-	<label class="label" for="{{form.2.name}}">Event type:</label>
+	<label class="label" for="{{form.2.name}}">Tipo de Evento:</label>
 	<select class="select" onchange="eventtype_change.call(this)" name="{{form.2.name}}" style="margin: auto; width: 30%" {% if form.2.value is not None %}value="{{form.2.value}}"{% endif %} required>
 		<!--helo-->
 		{% for choice in form.2.choices %}
@@ -115,7 +115,7 @@
 		{% for event_type in eventtypes %}
 			{% if event_type.id not in form.3.array %}
 				<div class="subforms" id="proposalform_{{event_type.id}}" style="display: {% if form.2.value is not None %}{% if event_type.id == form.2.value %}block{% else %}none{% endif %}{% else %}{% if event_type.id == form.2.choices.0.0 %}block{% else %}none{% endif %}{% endif %};">
-					This event type does not possess a Proposal form!
+					Este tipo de Evento não tem um formulário de Proposta!
 				</div>
 			{% endif %}
 		{% endfor %}
@@ -163,7 +163,7 @@
 		{% for event_type in eventtypes %}
 			{% if event_type.id not in form.4.array %}
 				<div class="subforms" id="logisticsform_{{event_type.id}}" style="display: {% if form.2.value is not None %}{% if event_type.id == form.2.value %}block{% else %}none{% endif %}{% else %}{% if event_type.id == form.2.choices.0.0 %}block{% else %}none{% endif %}{% endif %};">
-					This event type does not possess a Logistics form!
+					Este tipo de Evento não tem um formulário de Logística!
 				</div>
 			{% endif %}
 		{% endfor %}
