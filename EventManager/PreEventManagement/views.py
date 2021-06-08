@@ -101,10 +101,10 @@ class CreationForm:
 	def __init__(self, request=None):
 		self.__initvars()
 
-		proposal_form_type = Formtype.objects.get(typename="Proposal")
+		proposal_form_type = Formtype.objects.get(id=1)
 		proposal_forms = Form.objects.filter(formtypeid_formtype=proposal_form_type, archived=False)
 
-		logistics_form_type = Formtype.objects.get(typename="Logistic")
+		logistics_form_type = Formtype.objects.get(id=4)
 		logistics_forms = Form.objects.filter(formtypeid_formtype=logistics_form_type, archived=False)
 
 
@@ -142,8 +142,8 @@ class CreationForm:
 
 	def __build_form(self, generic_name, form):
 
-		registration_form_type = Formtype.objects.get(typename="Registration")
-		feedback_form_type = Formtype.objects.get(typename="Feedback")
+		registration_form_type = Formtype.objects.get(id=2)
+		feedback_form_type = Formtype.objects.get(id=3)
 
 
 		questions = {}
@@ -204,8 +204,8 @@ def create(request):
 
 
 
-		proposal_form_type = Formtype.objects.get(typename="Proposal")
-		logistic_form_type = Formtype.objects.get(typename="Logistic")
+		proposal_form_type = Formtype.objects.get(id=1)
+		logistic_form_type = Formtype.objects.get(id=4)
 
 		name = formboi.inputs[0]["value"]
 		campus = Campus.objects.get(id=int(formboi.inputs[1]["value"]))
@@ -267,7 +267,7 @@ def create(request):
 
 
 def list(request):
-	proposal_form_type = Formtype.objects.get(typename="Proposal")
+	proposal_form_type = Formtype.objects.get(id=1)
 	events = Event.objects.all()
 	for event in events:
 		try:
