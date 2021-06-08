@@ -1,9 +1,5 @@
 {% extends "template_form_base.html" %}
 
-{% block PageTittle %}
-    Form Layout
-{% endblock %}
-
 {% block style %}
 <style>
     th.orderable {
@@ -136,120 +132,9 @@
 {% block NonErrorContent %}
 	<div class="columns">
 		<div class="column is-3">
-
-            <div class="menu">
-				<div class="menu-label">
-					Formulário
-				</div>
-				<ul class="menu-list" style="margin-left: 20px;">
-                    <li><b>Nome: </b>{{form.formname}}</li>
-                    <li><b>Tipo de formulário: </b>{{form.formtypeid_formtype.typename}}</li>
-                    <li><b>Tipo de evento: </b>{{form.eventtypeid.typename}}</li>
-					<li><b>Publico: </b>{% if form.published %}Sim{% else %}Não{% endif %}</li>
-					<li><b>Arquivado: </b>{% if form.archived %}Sim{% else %}Não{% endif %}</li>
-                    <li><b>Criado por: </b>{{form.createdby.username}}<b> em: </b>{{form.dateofcreation}}</li>
-                    <li><b>Editado por: </b>{{form.lasteditedby.username}}<b> em: </b>{{form.dateoflastedit}}</li>
-					{% load form_extras %}
-					
-					<!--
-					{% if form|can_edit_form:user %}
-						<li>
-							<a href="{% url 'createForm' form.formtypeid_formtype.id form.id %}">
-								<button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;">
-									<span class="icon is-small"><i class="mdi mdi-circle-edit-outline mdi-24px"></i></span>
-									<span>Editar Formulário</span>
-								</button>
-							</a>
-						</li>
-					{% endif %}
-					-->
-				</ul>
-			</div>
-			<br>
-			<table class="table">
-				<tbody>
-					<tr>
-						<td>
-							{% if form|can_edit_form:user %}
-								<a href="{% url 'createForm' form.formtypeid_formtype.id form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
-									<i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
-								</a>
-								<a href="{% url 'deleteForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Formulário" onclick="return confirm('Tem a certeza que deseja apagar este formulário?');">
-									<i class="fas fa-times fa-lg" aria-hidden="true"></i>
-								</a>
-							{% else %}
-								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário" disabled>
-									<i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
-								</a>
-								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Formulário" disabled>
-									<i class="fas fa-times fa-lg" aria-hidden="true"></i>
-								</a>
-							{% endif %}
-							
-							{% if not form.archived %}
-                        		{% if form|can_archive_form:user %}
-                        		    <a href="{% url 'archiveForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" onclick="return confirm('Após arquivar o formulário não sera possivél associar este a novos eventos nem a sua edição. Deseja continuar?');">
-                        		        <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
-                        		    </a>
-                        		{% else %}
-                        		    <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Arquivar Formulário" disabled>
-                        		        <i class="fas fa-archive fa-lg" aria-hidden="true"></i>
-                        		    </a>
-                        		{% endif %}
-								
-								
-                        		{% if form.published %}
-                        		    <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
-                        		        <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
-                        		    </a>
-                        		{% elif form|can_publish_form:user %}
-                        		    <a href="{% url 'publishForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar">
-                        		        <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
-                        		    </a>
-								{% else %}
-									<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
-										<i class="fas fa-eye fa-lg" aria-hidden="true"></i>
-									</a>
-                        		{% endif %}
-                        
-                    			{% else %}
-                    			    {% if form|can_unarchive_form:user %}
-                    			        <a href="{% url 'unarchiveForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desarquivar Formulário" onclick="return confirm('Após arquivar o formulário não sera possivél associar este a novos eventos nem a sua edição. Deseja continuar?');">
-                    			            <i class="fas fa-archive fa-lg" style="color: red;" aria-hidden="true"></i>
-                    			        </a>
-                    			    {% else %}
-                    			        <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desarquivar Formulário" disabled>
-                    			            <i class="fas fa-archive fa-lg" style="color: red;" aria-hidden="true"></i>
-                    			        </a>
-                    			    {% endif %}
-                    			    <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Publicar" disabled>
-                    			        <i class="fas fa-eye fa-lg" aria-hidden="true"></i>
-                    			    </a>
-                    			{% endif %}
-							
-							{% if form.canDuplicate %}
-								<a href="{% url 'duplicateForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Formulário" 
-									{% if form.formtypeid_formtype.id == 1 %}
-										onclick="return confirm('Esta ação irá arquivar o atual formulário de proposta para eventos do tipo {{form.eventtypeid.typename}}. Tem a certeza que quer continuar?');"
-									{% endif %}
-								>
-									<i class="far fa-clone" aria-hidden="true"></i>
-								</a>
-							{% else %}
-								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Formulário" disabled>
-									<i class="far fa-clone" aria-hidden="true"></i>
-								</a>
-							{% endif %}
-						</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<br>
-
 			<div class="menu">
 				<div class="menu-label">
-					Filtros de Questões
+					Filtros
 				</div>
 				<ul class="menu-list">
 					<div class="field">
@@ -265,7 +150,7 @@
 						<div class="control has-icons-left">
 							<select class="input" id="TypeFilter" onchange="filter2()">
 							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
-							  	{% block filterTypes %}
+							  	{% block filterEventTypes %}
 							
 								{% endblock %}
 							</select>
@@ -277,7 +162,12 @@
 
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="CriatorFilter" placeholder="Nome do criador" onkeyup="filter2()">
+							<select class="input" id="CampusFilter" onchange="filter2()">
+							  	<option>Selecione o campus</option>
+							  	{% block filterCampuses %}
+							
+								{% endblock %}
+							</select>
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
@@ -286,7 +176,11 @@
 
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
+							<select class="input" id="ValidatedFilter" onchange="filter2()">
+							  	<option>Selecione se está validado</option>
+							  	<option>Sim</option>
+							  	<option>Não</option>
+							</select>
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
@@ -306,55 +200,36 @@
 			<nav aria-label="breadcrumbs" class="breadcrumb">
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
-					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
-                    <li><a href="{% url 'listFormsFromType' form.formtypeid_formtype.id %}">Formulários de {{form.formtypeid_formtype.typename}}</a></li>
-					<li class="is-active"><a href="{% url 'checkFormLayout' form.id %}">Ver Formulário</a>
+					<li><a href="{% url 'formsHome' %}">Gestor de eventos</a></li>
+					<!--<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>-->
 					</li>
 				</ul>
 			</nav>
-
-            {% if form.canEdit %}
-			    <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;" onclick="toggle('ExistingQuestion');toggle('NewQuestion');">
-                    <span>Adicionar Questão</span>
-                    <span class="icon is-small"><i class="fas fa-arrow-right"></i></span>
-			    </button>
-                <a href="{% url 'listQuestions' form.id %}">
-                    <button id="ExistingQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
-                        <span class="icon is-small"><i class="fas fa-link"></i></span>
-                        <span>Adicionar Questão Existente</span>
-                    </button>
-                </a>
-                <a href="{% url 'createQuestion' 0 form.id %}">
-                    <button id="NewQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
-                        <span class="icon is-small"><i class="mdi mdi-plus"></i></span>
-                        <span>Criar Nova Questão</span>
-			        </button>
-                </a>
-				{% endif %}
-				{% if warningMessage %}
-					<div class="has-text-danger">
-						<b>{{warningMessage}}</b>
-					</div>
-				{% endif %}
 			
+			{% block preListingBlock %}
+			
+
+			{% endblock %}
 			
 			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
 				<thead>
 					<tr>
 						{% block tableHead %}
-					
+				
 						{% endblock %}
 					</tr>
 				</thead>
 				<tbody>
 					{% block listings %}
-
+					
 					{% endblock %}
 				</tbody>
+
+				
 			</table>
 		</div>
 	</div>
-
+	
 	<div class="level">
 		<div class="level-left"></div>
 		<div class="level-right" style="white-space: nowrap;">
@@ -404,13 +279,51 @@
 
 {% block scripts %}
 		<script>
+        	function filter(filterName, isDropDown)
+        	{
+        	    var FilterOBJ = document.getElementById(filterName);
+        	    var filter;
+        	    if (isDropDown) {
+        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	    }
+        	    else {
+        	        filter = FilterOBJ.value.toLowerCase();
+        	    }
 
-			
-var filters = [
+				if (isDropDown && filter.indexOf("selecione")>-1) {
+					filter = "";
+        	    }
+				
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+
+        	        var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
+        	        
+
+
+        	        if ( fieldVal.indexOf(filter)>-1 ) {
+        	            document.getElementById("row" + id).style.display = "";
+        	            if(document.getElementById("row" + id).nextElementSibling && document.getElementById("row" + id).nextElementSibling.id.startsWith("aux")){
+        	            if(document.getElementById("row" + id).nextElementSibling.CUSTOM_isHiding == false)
+        	            	document.getElementById("row" + id).nextElementSibling.style.display = "";
+        	            }
+        	        }
+        	        else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	            if(document.getElementById("row" + id).nextElementSibling && document.getElementById("row" + id).nextElementSibling.id.startsWith("aux")){
+        	            document.getElementById("row" + id).nextElementSibling.style.display = "none";
+        	        	}
+        	        }
+        	        id++;
+        	    }
+
+        	}
+
+			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
-				{'filterName' : 'EditorFilter', 'isDropDown' : false},
+				{'filterName' : 'CampusFilter', 'isDropDown' : true},
+				{'filterName' : 'ValidatedFilter', 'isDropDown' : true},
 			];
 			var filteredRows = new Array();
 			function filter2(){
@@ -445,6 +358,9 @@ var filters = [
         	        }
         	        //else {
         	            document.getElementById("row" + id).style.display = "none";
+        	            if(document.getElementById("row" + id).nextElementSibling && document.getElementById("row" + id).nextElementSibling.id.startsWith("aux")){
+        	            	document.getElementById("row" + id).nextElementSibling.style.display = "none";
+        	            }
         	        //}
         	        id++;
         	    }
@@ -468,6 +384,9 @@ var filters = [
 				var id = 1;
         	    while (document.getElementById("row" + id)){
 					document.getElementById("row" + id).style.display = "none";
+					if(document.getElementById("row" + id).nextElementSibling && document.getElementById("row" + id).nextElementSibling.id.startsWith("aux")){
+						document.getElementById("row" + id).nextElementSibling.style.display = "none";
+					}
 					id++;
 				}
 			}
@@ -487,6 +406,11 @@ var filters = [
 				hideAllEntries();
         	    while (displayingN < trueSize) {
 					filteredRows[displayingN + page*size].style.display = "";
+
+					if(filteredRows[displayingN + page*size].nextElementSibling && filteredRows[displayingN + page*size].nextElementSibling.id.startsWith("aux")){
+	        	        if(filteredRows[displayingN + page*size].nextElementSibling.CUSTOM_isHiding == false)
+	        	        	filteredRows[displayingN + page*size].nextElementSibling.style.display = "";
+	        	    }
 					displayingN++;
 
 				}
@@ -531,7 +455,6 @@ var filters = [
 			}
 
 			filter2();
-
 		</script>
     	
 {% endblock %}

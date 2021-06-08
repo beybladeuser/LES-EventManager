@@ -3,14 +3,14 @@
 	  "model": "FormManagement.Formtype",
 	  "pk": 1,
 	  "fields": {
-		"typename": "Proposal"
+		"typename": "Proposta"
 	  }
 	},
 	{
 	  "model": "FormManagement.Formtype",
 	  "pk": 2,
 	  "fields": {
-		"typename": "Registration"
+		"typename": "Registo"
 	  }
 	},
 	{
@@ -24,7 +24,7 @@
 	  "model": "FormManagement.Formtype",
 	  "pk": 4,
 	  "fields": {
-		"typename": "Logistic"
+		"typename": "Logistica"
 	  }
 	},
 	{
@@ -45,14 +45,42 @@
 	  "model": "FormManagement.Questiontype",
 	  "pk": 1,
 	  "fields": {
-		"typename": "Open Ended"
+		"typename": "Resposta Aberta"
 	  }
 	},
 	{
 	  "model": "FormManagement.Questiontype",
 	  "pk": 2,
 	  "fields": {
-		"typename": "Multiple Choice"
+		"typename": "Escolha Múltipla"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 3,
+	  "fields": {
+		"typename": "Seleção de Formulário de Registo"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 4,
+	  "fields": {
+		"typename": "Seleção de Formulário de FeedBack"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 5,
+	  "fields": {
+		"typename": "Data"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 6,
+	  "fields": {
+		"typename": "Hora"
 	  }
 	}
 

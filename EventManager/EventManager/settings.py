@@ -91,7 +91,7 @@ DATABASES = {
         'USER' : 'root',
         'PASSWORD' : '',
         'HOST' : '127.0.0.1',
-        'PORT' : '3307',
+        'PORT' : '3306',
         'OPTIONS' : {
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"
         }
@@ -149,3 +149,6 @@ CRISPY_TEMPLATE_PACK="bootstrap4"
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+USE_L10N = False
+DATETIME_FORMAT = 'd/m/Y H:i:s'

@@ -37,6 +37,7 @@ class Event(models.Model):
     formproposalid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormProposalID', related_name='Event2proposalForm')
     formresgistrationid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormResgistrationID', related_name='Event2registerForm')  # Field name made lowercase.
     formfeedbackid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormFeedBackID', related_name='Event2feedbackForm')  # Field name made lowercase.
+    formlogisticsid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormLogisticsID', related_name='Event2LogisticsForm')  # Field name made lowercase.
     campusid = models.ForeignKey(Campus, models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.
     wasvalidated = models.TextField(db_column='wasValidated')  # Field name made lowercase. This field type is a guess.
     proponentid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ProponentID')  # Field name made lowercase.

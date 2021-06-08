@@ -26,3 +26,7 @@ def can_publish_form(value, user):
 @register.filter(name='can_create_form_fromType')
 def can_create_form_fromType(value, user):
     return value.canCreate(user)
+
+@register.filter(name='can_associate_with_questionType')
+def can_associate_with_questionType(value, questionType):
+    return value.canAssociateQuestionType(questionType)

@@ -112,10 +112,6 @@ class openEndedQuestionCreation(forms.Form):
 	form = None
 	questionToEdit = None
 	question = forms.CharField(widget=forms.TextInput(attrs={'class' : 'input'}), label='Questão', max_length=255, required=True)
-	OPTIONS_questionType = Questiontype.makeOptions()
-	questionType = forms.CharField(widget=forms.Select(choices=OPTIONS_questionType, attrs={'class' : 'input', "onChange":'checkType()'}), label='Tipo de questão', required=True)
-	options = ((True, 'Sim'), (False, 'Não'))
-	required = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="É Requerida", required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs :
@@ -123,6 +119,15 @@ class openEndedQuestionCreation(forms.Form):
 			self.form = kwargs.pop('associatedForm', None)
 			self.questionToEdit = kwargs.pop('questionToEdit', None)
 		super().__init__(*args, **kwargs)
+		OPTIONS_questionType = Questiontype.makeOptions()
+		if self.form :
+			for questionType in Questiontype.objects.all() :
+				if not self.form.canAssociateQuestionType(questionType) :
+					OPTIONS_questionType.remove((questionType.id, questionType.typename))
+		self.fields["questionType"] = forms.CharField(widget=forms.Select(choices=OPTIONS_questionType, attrs={'class' : 'input', "onChange":'checkType()'}), label='Tipo de questão', required=True)
+		
+		options = ((True, 'Sim'), (False, 'Não'))
+		self.fields["required"] = forms.ChoiceField(widget=forms.RadioSelect,choices=options, label="É Requerida", required=True)
 
 	def clean(self, *args, **kwargs):
 
@@ -155,8 +160,9 @@ class openEndedQuestionCreation(forms.Form):
 			newQuestion.question = question
 			wasChanged = True
 		
-		if not self.questionToEdit :
-			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
+		questionType = self.cleaned_data.get("questionType")
+		if not self.questionToEdit  or questionType != self.questionToEdit.questiontypeid_questiontype.id:
+			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=questionType)
 			wasChanged = True
 
 		required = self.cleaned_data.get("required")
@@ -290,7 +296,7 @@ class EventManagerForm(forms.Form) :
 				if question.questiontypeid_questiontype.id == 1 :
 					answerModel.answer = answer
 				elif question.questiontypeid_questiontype.id == 2 :
-					answerModel.answer = Multipleoptions.objects.get(pk=answer[0]).option
+					answerModel.answer = Multipleoptions.objects.get(pk=answer).option
 				
 				answerModel.save()
 		

@@ -13,6 +13,13 @@ from .models import *
 import datetime
 
 # Create your views here.
+
+def index(request):
+	template = loader.get_template('homePreEvent.html')
+	context = {}
+	return HttpResponse(template.render(context, request))
+
+
 def cancelregistration(request, RegistrationID = None) :
     registration=None
     if Resgistration.objects.filter(pk=RegistrationID).exists()  :
@@ -21,7 +28,7 @@ def cancelregistration(request, RegistrationID = None) :
     if  registration and registration.canCancel(request.user) :
         registration.cancelregistrations(request.user)
         errorMessage = "Cancel registration successful"
-        template = loader.get_template('message.html')
+        template = loader.get_template('messageeliminar.html')
         context = {
         'errorMessage' : errorMessage,
         }
@@ -56,6 +63,21 @@ def consultar_participantes(request,eventid_event) :
     template = loader.get_template('message.html')
     context = {
         'errorMessage' : errorMessage,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def consultar_inscricoes(request) :
+    registerEvents=None
+    errorMessage=None
+    if (not Resgistration.objects.filter(participantuserid=request.user.id).exists()) :
+        errorMessage="Não está inscrito em nenhum evento"
+        
+    registerEvents=Resgistration.objects.filter(participantuserid=request.user.id)
+    template = loader.get_template('myevents.html')
+    context = {
+        'registerEvents': registerEvents,
+        'errorMessage' : errorMessage
     }
     return HttpResponse(template.render(context, request))
 
@@ -120,10 +142,6 @@ def viewanswer(request, RegistrationID = None ):
                 answers.append( {"questionsid_questions":regisQuestion, "answer":"N\\a"} )
     else :
         errorMessage = "Erro: Registo nao existe"
-
-
-
-
     template = loader.get_template('list_event_regs_form_answers.html')
     context = {
         'registration' : registration,
