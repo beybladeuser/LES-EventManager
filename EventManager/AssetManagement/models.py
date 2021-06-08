@@ -167,9 +167,10 @@ class Equipmenttype(models.Model):
 
 class Rooms(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
+    room_type = models.ForeignKey('Roomtype', models.DO_NOTHING, db_column='Room_Type')  # Field name made lowercase.
     buildingid_building = models.ForeignKey(Building, models.DO_NOTHING, db_column='BuildingID_Building')  # Field name made lowercase.
+    
     capacity =  models.IntegerField(db_column='Capacity')  # Field name made lowercase.
-    haveReducedMob = models.BooleanField(db_column='HaveReducedMob' , default=False)
     reducedMobCapacity =  models.IntegerField(db_column='Reduced Mobility Capacity', default=0)  # Field name made lowercase.
 
     def room_GetBuilding(self):
@@ -179,6 +180,15 @@ class Rooms(models.Model):
         self.campus = self.buildingid_building.campusid
         return self
     
+    @staticmethod
+    def makeOptions():
+        if "RoomType" in connection.introspection.table_names():
+            roomtypes = RoomType.objects.all()
+            options=([(RoomType.id, RoomType.typename) for roomtype in roomtypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
     class Meta:
         db_table = 'rooms'
 
@@ -188,7 +198,7 @@ class RoomType(models.Model):
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        db_table = 'roomtype'
+        db_table = 'Roomtype'
 
     def __str__(self):
        return self.typename
@@ -197,6 +207,7 @@ class RoomType(models.Model):
 class Service(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
     servicetypeid_servicetype = models.ForeignKey('Servicetype', models.DO_NOTHING, db_column='ServiceTypeID_ServiceType')  # Field name made lowercase.
+    description = models.CharField(db_column='Description' , max_length=255)  # Field name made lowercase.
 
     class Meta:
         db_table = 'service'
