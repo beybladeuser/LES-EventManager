@@ -2,15 +2,21 @@
 {% block loggedInContent %}
   <table style="width:100%">
     <tr>
-      <th>Sala/Anfiteatro</th>
+      <th>Tipo de Sala</th>
       <th>Edifício</th>
       <th>Campus</th>
+      <th>Capacidade</th>
+      <th>Lugares de cap. reduzida</th>
+      
+
     </tr>
     {% for room in Rooms %}
         <tr>
             <td>  <p>{{room.assetid}}</p></td>
             <td>  <p>{{room.buildingid_building}}</p></td>
             <td>  <p>{{room.campus}}</p></td>
+            <td>  <p>{{room.capacity}}</p></td>
+            <td>  <p>{{room.reducedMobCapacity}}</p></td>
         </tr>
     {% endfor %}
   </table>

@@ -356,6 +356,194 @@
 			"quantity": 2
 		}
 	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 23,
+		"fields" :{
+			"assetname": "Auditório 1.4",
+			"quantity": 1
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 24,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 8 - 1.8",
+			"quantity": 1
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 25,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 8 - 1.8.1",
+			"quantity": 1
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 26,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 3 - A",
+			"quantity": 1
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 27,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 3 - B",
+			"quantity": 1
+		}
+	},
+
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 28,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 3 - C",
+			"quantity": 1
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 29,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 3 - D",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 30,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 8 - 0.3",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 31,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 8 - 0.4",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 32,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 8 - 0.55",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 33,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 8 - 0.6",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 34,
+		"fields" :{
+			"assetname": "Anfiteatro Edifício 8 - 1.3",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 35,
+		"fields" :{
+			"assetname": "Auditório Teresa Gamito",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 36,
+		"fields" :{
+			"assetname": "Auditório 1.2 (Verde)",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 37,
+		"fields" :{
+			"assetname": "Auditório 1.5",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 38,
+		"fields" :{
+			"assetname": "Grande Auditório",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 39,
+		"fields" :{
+			"assetname": "Sala de aula 1.5",
+			"quantity": 1
+		}
+	}, 
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 40,
+		"fields" :{
+			"assetname": "Sala de aula 1.5",
+			"quantity": 1
+		}
+	}, {
+		"model": "AssetManagement.Asset",
+		"pk": 41,
+		"fields" :{
+			"assetname": "Almoço",
+			"quantity": 1
+		}
+	},
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 42,
+		"fields" :{
+			"assetname": "Lanche (Manhã)",
+			"quantity": 1
+		}
+	}
+	,
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 43,
+		"fields" :{
+			"assetname": "Lanche (Tarde)",
+			"quantity": 1
+		}
+	}
+	,
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 44,
+		"fields" :{
+			"assetname": "Jantar",
+			"quantity": 1
+		}
+	}
+	,
+	{
+		"model": "AssetManagement.Asset",
+		"pk": 45,
+		"fields" :{
+			"assetname": "Open Bar",
+			"quantity": 1
+		}
+	},
+
 
 
 	{
@@ -445,87 +633,102 @@
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":11,
-			"servicetypeid_servicetype": 1
+			"servicetypeid_servicetype": 1,
+			"description" : "Serviço de técnico de som"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":12,
-			"servicetypeid_servicetype": 1
+			"servicetypeid_servicetype": 1,
+			"description" : "Serviço de técnico de imagem"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":13,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de alojamento"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":14,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de Catering geral"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":15,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de Organização de ofertas"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":16,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de Reserva de Estacionamento"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":17,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de Descaga/Montagem"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":18,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de Transporte"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":19,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de técnico de imagem"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":20,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de Secretariado"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":21,
-			"servicetypeid_servicetype": 2
+			"servicetypeid_servicetype": 2,
+			"description" : "Serviço de Inscrições para eventos"
 		}
 	},
 	{
 		"model": "AssetManagement.Service",
 		"fields" :{
 			"assetid":22,
-			"servicetypeid_servicetype": 3
+			"servicetypeid_servicetype": 3,
+			"description" : "Serviço de Bandeiras"
 		}
 	},
 	
+
+
+
 
 
 
@@ -983,5 +1186,5 @@
 			"typename": "Apoio Protocolar"
 		}
 	}
-
+	
   ]
