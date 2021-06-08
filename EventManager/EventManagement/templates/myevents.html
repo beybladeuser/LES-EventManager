@@ -11,6 +11,8 @@
 {% block tableHead %}
     <th>Nome do Evento</th>
     <th>Registado em:</th>
+    <th>Presença</th>
+    <th>Estado da Inscrição</th>
     <th>Ações</th>
     
 {% endblock %}
@@ -26,6 +28,23 @@
                 </td>
                 <td >
                     {{regis.dateofregistration}}
+                </td>
+                <td>
+                    {% if  regis.waspresent == 1 %}
+                            <a class="button is-success" >Presente</a> 
+                        {% elif  regis.waspresent == 0 %}  
+                            <a class="button is-danger" >Ausente</a> 
+                    {% endif %}
+                    
+
+                <td>
+                    {% if  regis.state == 0 %}
+                            <a class="button is-warning" >Pendente</a> 
+                        {% elif  regis.state == 1 %}  
+                            <a class="button is-danger" >Invalidado</a> 
+                        {% elif  regis.state == 2 %}  
+                            <a class="button is-success" >Validado</a>
+                    {% endif %}
                 </td>
                 <td>
                     {% load registration_extras %}
