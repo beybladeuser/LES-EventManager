@@ -7,8 +7,10 @@
 {% block loggedInContent %}
 	
 	{% for entri in eventes %}
-		nome: {{entri.eventname}} <br>tipo: {{entri.eventtypeid.typename}}<br>
-		validado: {{entri.wasvalidated}} <br> campus: {{entri.campusid.campusname}} <br>
+		nome: {{entri.eventname}} <br>
+		tipo: {{entri.eventtypeid.typename}}<br>
+		validado: {{entri.wasvalidated}} <br> 
+		campus: {{entri.campusid.campusname}} <br>
 		{% for QApair in entri.QAs %}
 			PERGUNTA: "{{ QApair.question.question }}" ==> "{{ QApair.answer.answer }}"<br>
 		{% endfor %}

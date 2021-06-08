@@ -9,8 +9,11 @@
 {% block listingTittle %}Questões{% endblock %}
 
 {% block filterTypes %}
+    {% load form_extras %}
     {% for questionType in questionTypes %}
-        <option>{{questionType.typename}}</option>
+        {% if not formToAssociate or formToAssociate|can_associate_with_questionType:questionType %}
+            <option>{{questionType.typename}}</option>
+        {% endif %}
     {% endfor %}	
 {% endblock %}
 
@@ -22,13 +25,6 @@
                 class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Questão</span>
         </button>
     </a>
-    {% if formToAssociate %}
-        <a href="{% url 'checkFormLayout' formToAssociate.id %}">
-            <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
-                    class="icon is-small"><i class="fa fa-arrow-left"></i></span> <span>Voltar para o formulário {{formToAssociate.formname}}</span>
-            </button>
-        </a>
-    {% endif %}
 {% endblock %}
 
 {% block tableHead %}
@@ -121,8 +117,11 @@
     <th width="180">Ações</th>
     <script>
         function redirectToFilter(filterCode) {
-
-            window.location.href = "{% url 'listQuestions' 0 %}/" + filterCode;
+            {% if formToAssociate %}
+                window.location.href = "{% url 'listQuestions' formToAssociate.id %}/" + filterCode;
+            {% else %}
+                window.location.href = "{% url 'listQuestions' 0 %}/" + filterCode;
+            {% endif %}
         }
     </script>
 {% endblock %}
@@ -322,6 +321,16 @@
                 </td>
             </tr>
         {% endfor %}
+{% endblock %}
+
+{% block EndOfPageButtons %}
+{% if formToAssociate %}
+    <a href="{% url 'checkFormLayout' formToAssociate.id %}" class="is-pulled-right">
+        <button type="button" class="button is-danger is-outlined" style="margin-bottom: 1rem;"><span
+                class="icon is-small"><i class="fa fa-arrow-left"></i></span> <span>Voltar para o formulário {{formToAssociate.formname}}</span>
+        </button>
+    </a>
+    {% endif %}
 {% endblock %}
 
 {% block showType %}
