@@ -326,7 +326,12 @@
                         <span>Criar Nova Questão</span>
 			        </button>
                 </a>
-            {% endif %}
+				{% endif %}
+				{% if warningMessage %}
+					<div class="has-text-danger">
+						<b>{{warningMessage}}</b>
+					</div>
+				{% endif %}
 			
 			
 			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">

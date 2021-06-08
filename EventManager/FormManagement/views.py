@@ -37,6 +37,7 @@ def checkFormLayout(request, formID = None, filterKey=None) :
     form = None
     canEdit = False
     questions = None
+    warningMessage = None
     return_addr = '/forms/listformsfromtype/'
     if formID :
         form_query = Form.objects.filter(id=formID)
@@ -71,6 +72,8 @@ def checkFormLayout(request, formID = None, filterKey=None) :
             for question in questions :
                 question.canEdit = question.canEdit(request.user)
                 question.canDuplicate = question.canDuplicate(request.user)
+        if form.isValid() == 1 :
+            warningMessage = "Formulário necessita de ambas questões do tipo Seleção de Formulário de Registo e FeedBack"
 
     if formID != None :
         if filterKey :
@@ -91,6 +94,7 @@ def checkFormLayout(request, formID = None, filterKey=None) :
         'return_addr' : return_addr,
         'errorMessage' : errorMessage,
         'filterKey' : filterKey,
+        'warningMessage' : warningMessage,
     }
     return HttpResponse(template.render(context, request))
 

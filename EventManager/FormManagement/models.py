@@ -101,22 +101,36 @@ class Form(models.Model):
                     return True
         
         return False
-        
+    
+    def isValid(self) :
+        if self.formtypeid_formtype.id == 1 :
+            hasRegisSelectQuestion = 0
+            hasFeedBackSelect = 0
+            if self.formquestions :
+                for question in self.formquestions :
+                    if question.questiontypeid_questiontype.id == 3 :
+                        hasRegisSelectQuestion = hasRegisSelectQuestion + 1
+                    if question.questiontypeid_questiontype.id == 4 :
+                        hasFeedBackSelect = hasFeedBackSelect + 1
+            if hasRegisSelectQuestion != 1 or hasFeedBackSelect != 1 :
+                #lacking both regis or feedback
+                return 1
+        return 0
 
     def canEdit(self, user) :
         return self.userHasEditPermitions(user) and not self.archived and not self.getAssociatedEvents()
 
     def canDuplicate(self, user) :
-        return not user.groups.filter(pk=2).exists()
+        return not user.groups.filter(pk=2).exists() and self.isValid() == 0
 
     def canDisplay(self, user) :
         return (user.id == self.createdby.id or user.groups.filter(pk=1).exists() or self.published) and not user.groups.filter(pk=2).exists()
 
     def canPublish(self, user) :
-        return self.canEdit(user) and user.id == self.createdby.id and len(self.formquestions) > 0
+        return self.canEdit(user) and user.id == self.createdby.id and len(self.formquestions) > 0 and self.isValid() == 0
 
     def canArchive(self, user) :
-        return self.canEdit(user) and user.id == self.createdby.id and not self.archived and len(self.formquestions) > 0
+        return self.canEdit(user) and user.id == self.createdby.id and not self.archived and len(self.formquestions) > 0 and self.isValid() == 0
 
     def canUnarchive(self, user) :
         return self.userHasEditPermitions(user) and user.id == self.createdby.id and self.archived
