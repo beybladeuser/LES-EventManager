@@ -228,11 +228,15 @@
                     			{% endif %}
 							
 							{% if form.canDuplicate %}
-								<a href="{% url 'duplicateForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Formulário" onclick="return confirm('Esta ação irá arquivar o atual formulário de proposta para eventos do tipo {{form.eventtypeid.typename}}. Tem a certeza que quer continuar?');">
+								<a href="{% url 'duplicateForm' form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Formulário" 
+									{% if form.formtypeid_formtype.id == 1 %}
+										onclick="return confirm('Esta ação irá arquivar o atual formulário de proposta para eventos do tipo {{form.eventtypeid.typename}}. Tem a certeza que quer continuar?');"
+									{% endif %}
+								>
 									<i class="far fa-clone" aria-hidden="true"></i>
 								</a>
 							{% else %}
-								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Questão" disabled>
+								<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Duplicar Formulário" disabled>
 									<i class="far fa-clone" aria-hidden="true"></i>
 								</a>
 							{% endif %}
