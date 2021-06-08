@@ -1,0 +1,92 @@
+{% extends 'template_base.html' %}
+
+
+{% block loggedInContent %}
+
+
+<script type="text/javascript">
+	function eventtype_change(){
+		console.log(this.value);
+		for(subform of document.getElementsByClassName("subforms")){
+			console.log(subform.id.substring(7) + " vs " + this.value + " ==> " + (subform.id.substring(7) == this.value))
+			subform.style.display = (
+				(subform.id.substring(7) == this.value)
+				?"block"
+				:"none"
+			);
+
+		}
+	}
+
+	function prepare_form(){
+		for(subform of document.getElementsByClassName("subforms")){
+			if(subform.style.display == "none")subform.remove();
+		}
+		return true;
+	}
+</script>
+
+<form class="box" action="" method="POST">{% csrf_token %}
+	
+	<div class="field">
+		<label class="label" for="name">Nome do Evento: </label>
+		<div class="control">
+			<input class="input" type="text" name="name" placeholder="Exemplo: Palestra de Informática" required="" style="margin: auto; width: 30%"><br>			
+		</div>
+	</div>
+
+	<div class="field">
+
+		<label class="label" for="event_type">Campus:</label>
+		  <div class="dropdown-trigger">
+			<select name="campus" class="select" aria-haspopup="true" aria-controls="dropdown-menu3" style="margin: auto; width: 30%">
+
+				{% for campus in campuses %}
+					<option class="dropdown-item" value="{{campus.id}}" required>{{campus.campusname}}</option>
+				{% endfor %}
+			</select><br>
+		  </div>
+	</div>
+
+
+	<label class="label" for="event_type">Event type:</label>
+	<select class="select" onchange="eventtype_change.call(this)" name="event_type" style="margin: auto; width: 30%" required>
+		{% for event_type in event_types %}
+			<option value="{{event_type.id}}">{{event_type.typename}}</option>
+		{% endfor %}
+	</select>
+	<br>
+
+	<hr>
+
+	{% for form in forms %}
+		<div class="subforms" id="subform{{form.eventtypeid.id}}" style="display: {% if form.eventtypeid == default_event_type %}block{% else %}none{% endif %};">
+			<input type="hidden" name="form_id" value="{{form.id}}">
+			{% for question in form.formquestions %}
+				<label class="label">{{question.question}}</label>
+
+				{% if question.questiontypeid_questiontype.id == 1 %}
+
+					<input class="input" type="text" name="val{{question.id}}" required="" style="margin: auto; width: 30%">
+
+				{% elif question.questiontypeid_questiontype.id == 2 %}
+
+					<select class="button" name="val{{question.id}}">
+						{% for option in question.options %}
+							<option value="{{option.id}}">{{option.option}}</option>
+						{% endfor %}
+					</select>
+					
+				{% endif %}
+				<br>
+			{% endfor %}
+		</div>
+	{% endfor %}
+
+	<br>
+	<input class="button is-success is-outlined" type="submit" value="Submeter" onclick="return prepare_form();">
+</form>
+  
+{% endblock %}
+{% block loggedOutContent %}
+{% endblock %}

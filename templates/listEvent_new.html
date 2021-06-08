@@ -1,0 +1,224 @@
+{% extends 'template_listings_event.html' %}
+
+{% load poll_extras %}
+
+{% block PageTittle %}
+    Events Listing
+{% endblock %}
+
+
+	
+	{% block selectType %}Evento{% endblock %}
+	
+	{% block filterEventTypes %}
+	    {% for eventType in eventTypes %}
+	        <option>{{eventType.typename}}</option>
+	    {% endfor %}	
+	{% endblock %}
+
+	{% block filterCampuses %}
+	    {% for campus in campuses %}
+	        <option>{{campus.campusname}}</option>
+	    {% endfor %}	
+	{% endblock %}
+
+
+
+
+
+	{% block preListingBlock %}
+	    {% load form_extras %}
+	    {% if user|has_group:'Administrador' %}
+		    <a href="{% url 'create' %}">
+		        <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+		                class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Evento</span>
+		        </button>
+		    </a>
+		{% endif %}
+	{% endblock %}
+
+
+
+
+
+
+
+	{% block tableHead %}
+	    <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+	        Nome
+	        {% if filterKey and filterKey == '00' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-down"></i>
+	            </span>
+	        {% elif filterKey and filterKey == '01' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-up"></i>
+	            </span>
+	        {% endif %}
+	    </th>
+	    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
+	        Tipo
+	        {% if filterKey and filterKey == '10' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-down"></i>
+	            </span>
+	        {% elif filterKey and filterKey == '11' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-up"></i>
+	            </span>
+	        {% endif %}
+	    </th>
+	    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+	        Campus
+	        {% if filterKey and filterKey == '20' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-down"></i>
+	            </span>
+	        {% elif filterKey and filterKey == '21' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-up"></i>
+	            </span>
+	        {% endif %}
+	    </th>
+	    <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+	        Validado
+	        {% if filterKey and filterKey == '30' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-down"></i>
+	            </span>
+	        {% elif filterKey and filterKey == '31' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-up"></i>
+	            </span>
+	        {% endif %}
+	    </th>
+	    
+	    <th width="250">Ações</th>
+
+	    <script type="text/javascript">
+			function rowclicked(){
+				if(this.nextElementSibling.id.startsWith("aux")){
+					if(this.nextElementSibling.style.display == ""){
+						this.nextElementSibling.CUSTOM_isHiding = true;
+						this.nextElementSibling.style.display = "none";
+					}else{
+						this.nextElementSibling.CUSTOM_isHiding = false;
+						this.nextElementSibling.style.display = "";
+					}
+				}
+			}
+
+		</script>
+	    <script>
+	        function redirectToFilter(filterCode) {
+
+	            window.location.href = "{% url 'list' %}" + filterCode;
+	        }
+	    </script>
+	{% endblock %}
+
+	{% block listings %}
+	    {% load form_extras %}
+	    {% for entri in eventes %} {% if entri.proponentid == user or entri.wasvalidated == '1' or user|has_group:'Administrador' %}
+
+
+            <tr class="rou" id="row{{ forloop.counter }}" onclick="rowclicked.call(this)">
+                <td data-label="Nome" id="NameFilter{{ forloop.counter }}">{{entri.eventname}}</td>
+                <td data-label="Tipo" id="TypeFilter{{ forloop.counter }}">{{entri.eventtypeid.typename}}</td>
+                <td data-label="Campus" id="CampusFilter{{ forloop.counter }}">{{entri.campusid.campusname}}</td>
+                <td data-label="Validated" id="ValidatedFilter{{ forloop.counter }}">{% if entri.wasvalidated == '1' %}sim{% else %}não{% endif %}</td>
+
+                <td data-label="Ações">
+
+
+
+                    
+                	{% if user|has_group:'Administrador' or entri.proponentid == user %}
+	                    <a href="{% url 'edit' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Evento" {% if entri.hasParticipants %}disabled{% endif %}>
+	                        <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+	                    </a>
+
+	                    
+	                    {% if user|has_group:'Administrador' %}
+		                    <a href="{% url 'validate' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Validar Evento" onclick="return confirm('Pretende mesmo validar?');" {% if entri.wasvalidated == '1' %}disabled{% endif %}>
+		                        <i class="far fa-check-square" aria-hidden="true"></i>
+		                    </a>
+	                    {% endif %}
+
+
+
+	                    <a href="{% url 'delete' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Evento" onclick="return confirm('Tem a certeza que deseja apagar este Evento?');" {% if entri.hasParticipants %}disabled{% endif %}>
+	                        <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+	                    </a>
+                	{% else %}
+
+	                	<a href="{% url 'addregistration' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Inscrever no Evento" onclick="return confirm('Tem a certeza que se deseja inscrever neste evento?');" {% if entri.currently_enrolled %}disabled{% endif %}>
+	                        <i class="fas fa-address-book" aria-hidden="true"></i>
+	                    </a>
+
+                	{% endif %}
+                    
+
+
+                </td>
+            </tr>
+
+
+            {% if entri.proponentid == user or user|has_group:'Administrador' %}
+	            <tr id="aux{{entri.id}}" style="display: none; background-color: #f0fdff;">
+	            	
+	            	<td colspan="2">
+	            		<i>Proposal questions:</i><br><br>
+	            		{% for proposal_QA in entri.proposal_QAs %}
+		            		<b>{{proposal_QA.question.question}}</b><br>
+		            		{% if proposal_QA.answer.has_text %} 
+		            			{{proposal_QA.answer.text}}({{proposal_QA.answer.answer}})
+		            		{% else %} 
+		            			{{proposal_QA.answer.answer}} 
+		            		{% endif %}
+		            		<br>
+		            		<br>
+		            	{% endfor %}
+	            	</td>
+
+	            	<td colspan="2">
+	            		<i> Logistics questions:</i><br><br>
+	            		{% for logistic_QA in entri.logistic_QAs %}
+		            		<b>{{logistic_QA.question.question}}</b><br>
+		            		{% if logistic_QA.answer.has_text %} 
+		            			{{logistic_QA.answer.text}}({{logistic_QA.answer.answer}})
+		            		{% else %} 
+		            			{{logistic_QA.answer.answer}} 
+		            		{% endif %}
+		            		<br>
+		            		<br>
+		            	{% endfor %}
+	            	</td>
+
+	            	<td>
+	            		
+
+	                    <a href="{% url 'consultar_participantes' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Consultar Participantes">
+	                        <i class="fas fa-user-check" aria-hidden="true"></i>
+	                    </a>
+
+
+
+	                    <a href="{% url 'consultar_participantesnaovalidados' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Consultar Inscrições">
+	                        <i class="fas fa-user" aria-hidden="true"></i>
+	                    </a>
+
+	            	</td>
+	            	
+	            </tr>
+		    {% endif %}
+	    {% endif %}{% endfor %}
+	{% endblock %}
+
+
+
+{% block showType %}
+    formulários
+{% endblock %}
+
+

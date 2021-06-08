@@ -1,0 +1,33 @@
+{% extends 'template_listings_base.html' %}
+
+{% block PageTittle %}
+    Events Listing
+{% endblock %}
+
+{% block loggedInContent %}
+	
+	{% for entri in eventes %}
+		nome: {{entri.eventname}} <br>
+		tipo: {{entri.eventtypeid.typename}}<br>
+		validado: {{entri.wasvalidated}} <br> 
+		campus: {{entri.campusid.campusname}} <br>
+		{% for QApair in entri.QAs %}
+			PERGUNTA: "{{ QApair.question.question }}" ==> "{{ QApair.answer.answer }}"<br>
+		{% endfor %}
+		<!--<a href="">submeter</a>
+		<br>-->
+		<a href="">alterar</a>
+		<br>
+		<a href="delete/{{entri.id}}">cancelar</a>
+		<br>
+		{% if entri.wasvalidated == "0" %}<a href="validate/{{entri.id}}">validar</a> {% endif %}
+
+		<br>
+		<br>
+	{% endfor %}
+
+{% endblock %}
+
+{% block loggedOutContent %}
+
+{% endblock %}
