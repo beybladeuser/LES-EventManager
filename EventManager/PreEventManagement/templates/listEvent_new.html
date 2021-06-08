@@ -150,7 +150,7 @@
 	                    </a>
                 	{% else %}
 
-	                	<a href="{% url 'enroll' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Inscrever no Evento" onclick="return confirm('Tem a certeza que se deseja inscrever neste evento?');" {% if entri.currently_enrolled %}disabled{% endif %}>
+	                	<a href="{% url 'addregistration' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Inscrever no Evento" onclick="return confirm('Tem a certeza que se deseja inscrever neste evento?');" {% if entri.currently_enrolled %}disabled{% endif %}>
 	                        <i class="fas fa-address-book" aria-hidden="true"></i>
 	                    </a>
 
