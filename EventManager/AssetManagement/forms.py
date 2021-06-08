@@ -90,8 +90,17 @@ class InsertRoomForm(forms.Form):
 	OPTIONS_campus = Campus.makeOptions()
 	campus =  forms.CharField(widget=forms.Select(choices=OPTIONS_campus, attrs={'class' : 'input'}), label='Campus', required=True)
 
+	OPTIONS_Rooms = Rooms.makeOptions()
+	room_type =  forms.CharField(widget=forms.Select(choices=OPTIONS_Rooms, attrs={'class' : 'input'}), label='Tipo de Sala', required=True)
+
+
 	OPTIONS_buildings = Building.makeOptions()
 	buildings =  forms.CharField(widget=forms.Select(choices=OPTIONS_buildings, attrs={'class' : 'input'}), label='Edifício', required=True)
+
+	capacity = forms.IntegerField(label='Capacidade', required=True)
+	capacityRed = forms.IntegerField(label='Lugares de cap. reduzida', required=True)
+
+
 
 	def __init__(self, *args, **kwargs):
 		if kwargs:
@@ -105,7 +114,10 @@ class InsertRoomForm(forms.Form):
 		else:
 			assetName = self.cleaned_data.get('assetName')
 			campus = self.cleaned_data.get('campus')
+			room_type = self.cleaned_data.get('room_type')
 			buildings = self.cleaned_data.get('buildings')
+			capacity = self.cleaned_data.get('capacity')
+			capacityRed = self.cleaned_data.get('capacityRed')
 			
 		
 
@@ -117,8 +129,10 @@ class InsertRoomForm(forms.Form):
 
 		newRoom = Rooms()
 		newRoom.assetid = newAsset
-	
+		newRoom.room_type = room_type
 		newRoom.buildingid_building = Building.objects.get(pk=self.cleaned_data.get('buildings'))
+		newRoom.capacity = capacity
+		newRoom.reducedMobCapacity = capacityRed
 		newRoom.save()
 	
 

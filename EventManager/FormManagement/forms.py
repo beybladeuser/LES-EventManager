@@ -296,7 +296,7 @@ class EventManagerForm(forms.Form) :
 				if question.questiontypeid_questiontype.id == 1 :
 					answerModel.answer = answer
 				elif question.questiontypeid_questiontype.id == 2 :
-					answerModel.answer = Multipleoptions.objects.get(pk=answer[0]).option
+					answerModel.answer = Multipleoptions.objects.get(pk=answer).option
 				
 				answerModel.save()
 		

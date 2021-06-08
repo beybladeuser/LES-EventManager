@@ -1,0 +1,76 @@
+{% extends "template_consultareventos_listing_base.html" %}
+
+{% block PageTittle %}
+	Ver participantes no evento {{event.eventname}}
+{% endblock %}
+
+{% block currentPage %}
+    participantes  no evento {{event.eventname}}
+{% endblock %}
+
+{% block tableHead %}
+    <th>Nome do Evento</th>
+    <th>Registado em:</th>
+    <th>Presença</th>
+    <th>Estado da Inscrição</th>
+    <th>Ações</th>
+    
+{% endblock %}
+
+{% block listings %}
+
+    {% for regis in registerEvents %}
+
+            <tr id="row{{ forloop.counter }}" style="display: none;">
+                <td>
+            
+                    <span id="NameFilter{{ forloop.counter }}">{{regis.eventid_event.eventname}}</span>
+                </td>
+                <td >
+                    {{regis.dateofregistration}}
+                </td>
+                <td>
+                    {% if  regis.waspresent == 1 %}
+                            <a class="button is-success" >Presente</a> 
+                        {% elif  regis.waspresent == 0 %}  
+                            <a class="button is-danger" >Ausente</a> 
+                    {% endif %}
+                    
+
+                <td>
+                    {% if  regis.state == 0 %}
+                            <a class="button is-warning" >Pendente</a> 
+                        {% elif  regis.state == 1 %}  
+                            <a class="button is-danger" >Invalidado</a> 
+                        {% elif  regis.state == 2 %}  
+                            <a class="button is-success" >Validado</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% load registration_extras %}
+                    {% if regis|can_erase_registration:user %}
+                        
+                    
+                        <a href="{% url 'cancelregistration' regis.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Inscrição" onclick="return confirm('Tem a certeza que deseja cancelar inscrição?');">
+                            <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a  class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Inscrição" disabled>
+                            <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+                        </a>
+
+                    {% endif %}
+                </td>
+
+                
+            </tr>
+        
+    {% endfor %}
+   
+
+    
+{% endblock %}
+
+
+
+
