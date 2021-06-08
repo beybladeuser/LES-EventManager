@@ -64,14 +64,19 @@
 			<input type="hidden" name="form_id" value="{{form.id}}">
 			{% for question in form.formquestions %}
 				<label class="label">{{question.question}}</label>
-				{% if question.questiontypeid_questiontype.typename == "Open Ended" %}
-					<input class="input" type="text" name="val{{question.id}}" required="" placeholder="Exemplo: João Silva" style="margin: auto; width: 30%">
-				{% elif question.questiontypeid_questiontype.typename == "Multiple Choice" %}
+
+				{% if question.questiontypeid_questiontype.id == 1 %}
+
+					<input class="input" type="text" name="val{{question.id}}" required="" style="margin: auto; width: 30%">
+
+				{% elif question.questiontypeid_questiontype.id == 2 %}
+
 					<select class="button" name="val{{question.id}}">
 						{% for option in question.options %}
 							<option value="{{option.id}}">{{option.option}}</option>
 						{% endfor %}
 					</select>
+					
 				{% endif %}
 				<br>
 			{% endfor %}

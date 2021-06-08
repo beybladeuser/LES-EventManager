@@ -155,8 +155,9 @@ class openEndedQuestionCreation(forms.Form):
 			newQuestion.question = question
 			wasChanged = True
 		
-		if not self.questionToEdit :
-			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=1)
+		questionType = self.cleaned_data.get("questionType")
+		if not self.questionToEdit  or questionType != self.questionToEdit.questiontypeid_questiontype.id:
+			newQuestion.questiontypeid_questiontype = Questiontype.objects.get(id=questionType)
 			wasChanged = True
 
 		required = self.cleaned_data.get("required")
@@ -290,7 +291,7 @@ class EventManagerForm(forms.Form) :
 				if question.questiontypeid_questiontype.id == 1 :
 					answerModel.answer = answer
 				elif question.questiontypeid_questiontype.id == 2 :
-					answerModel.answer = Multipleoptions.objects.get(pk=answer[0]).option
+					answerModel.answer = Multipleoptions.objects.get(pk=answer).option
 				
 				answerModel.save()
 		
