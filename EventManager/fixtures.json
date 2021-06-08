@@ -79,6 +79,20 @@
 	  "fields": {
 		"typename": "Seleção de Formulário de FeedBack"
 	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 5,
+	  "fields": {
+		"typename": "Data"
+	  }
+	},
+	{
+	  "model": "FormManagement.Questiontype",
+	  "pk": 6,
+	  "fields": {
+		"typename": "Hora"
+	  }
 	}
 
 
