@@ -10,8 +10,7 @@ EventManager/utilizadores/__pycache__
 EventManager/utilizadores/templatetags/__pycache__
 EventManager/FormManagement/templatetags/__pycache__
 EventManager/AssetManagement/templatetags/__pycache__
-
-
+EventManager/EventManagement/templatetags/__pycache__
 
 
 EventManager/AssetManagement/migrations/*
