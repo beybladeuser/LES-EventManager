@@ -132,20 +132,20 @@
 
                     
                 	{% if user|has_group:'Administrador' or entri.proponentid == user %}
-	                    <a href="{% url 'edit' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário" {% if entri.hasParticipants %}disabled{% endif %}>
+	                    <a href="{% url 'edit' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Evento" {% if entri.hasParticipants %}disabled{% endif %}>
 	                        <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
 	                    </a>
 
 	                    
 	                    {% if user|has_group:'Administrador' %}
-		                    <a href="{% url 'validate' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Validar Formulário" onclick="return confirm('Pretende mesmo validar?');" {% if entri.wasvalidated == '1' %}disabled{% endif %}>
+		                    <a href="{% url 'validate' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Validar Evento" onclick="return confirm('Pretende mesmo validar?');" {% if entri.wasvalidated == '1' %}disabled{% endif %}>
 		                        <i class="far fa-check-square" aria-hidden="true"></i>
 		                    </a>
 	                    {% endif %}
 
 
 
-	                    <a href="{% url 'delete' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Formulário" onclick="return confirm('Tem a certeza que deseja apagar este formulário?');" {% if entri.hasParticipants %}disabled{% endif %}>
+	                    <a href="{% url 'delete' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Evento" onclick="return confirm('Tem a certeza que deseja apagar este Evento?');" {% if entri.hasParticipants %}disabled{% endif %}>
 	                        <i class="fas fa-times fa-lg" aria-hidden="true"></i>
 	                    </a>
                 	{% else %}
