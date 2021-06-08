@@ -1,0 +1,31 @@
+{% extends "template_base.html" %}
+
+{% block PageTittle %}
+	{{errorMessage}}
+{% endblock %}
+
+{% block loggedInContent %}
+	<div class="columns" style="margin-top: 8%;">
+		<div class="column is-1"></div>
+		<div class="column is-10">
+			<div class="box">
+				<h2 style="text-align: center;">{{errorMessage}}</h2>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block loggedOutContent %}
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        function redirect(){
+            window.location.href = "{% url 'consultar_inscricoes' %}";
+        }
+
+        setTimeout(redirect, 2000); //2000 is equivalent to 2 second
+    </script>
+{% endblock %}
