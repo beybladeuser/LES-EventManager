@@ -26,13 +26,7 @@
 	  "fields": {
 		"typename": "Logistic"
 	  }
-	}
-
-
-
-
-
-	,
+	},
 	{
 	  "model": "PreEventManagement.Eventtype",
 	  "pk": 1,
@@ -46,12 +40,7 @@
 	  "fields": {
 		"typename": "Summer Course"
 	  }
-	}
-
-
-	
-
-	,
+	},
 	{
 	  "model": "FormManagement.Questiontype",
 	  "pk": 1,
