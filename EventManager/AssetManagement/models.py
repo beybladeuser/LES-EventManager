@@ -182,7 +182,7 @@ class Rooms(models.Model):
     
     @staticmethod
     def makeOptions():
-        if "RoomType" in connection.introspection.table_names():
+        if "Roomtype" in connection.introspection.table_names():
             roomtypes = RoomType.objects.all()
             options=([(RoomType.id, RoomType.typename) for roomtype in roomtypes])
             return options
