@@ -98,6 +98,15 @@
           {% if user.is_authenticated %}
               {% block loggedInContent %}
               {% endblock %}
+              <div class="columns" >
+                <div class="column is-3"></div>
+                <div class="column is-9">
+                  {% block EndOfPageButtons %}
+                  
+                  {% endblock %}
+                </div>
+                
+              </div>
           {% else %}
               {% block loggedOutContent %}
               {% endblock %}
@@ -105,15 +114,6 @@
           
           {% block loggedInOutContent %}
           {% endblock %}
-        </div>
-        <div class="columns" >
-          <div class="column is-3"></div>
-          <div class="column is-10">
-            {% block EndOfPageButtons %}
-				
-            {% endblock %}
-          </div>
-          
         </div>
       </div>
     </div>
