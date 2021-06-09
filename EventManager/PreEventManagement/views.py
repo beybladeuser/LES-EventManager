@@ -380,9 +380,11 @@ def edit(request, id):
 		logistic_form = event.formlogisticsid
 
 		for proposal_question in proposal_form.getQuestions():
-			formboi.inputs[3]["array"][event.eventtypeid.id]["questions"][proposal_question.id]["value"] = Answer.objects.filter(eventid_event=event, associatedformid=proposal_form, questionsid_questions=proposal_question)[0].answer
+			answer_queryset = Answer.objects.filter(eventid_event=event, associatedformid=proposal_form, questionsid_questions=proposal_question)
+			formboi.inputs[3]["array"][event.eventtypeid.id]["questions"][proposal_question.id]["value"] = "" if answer_queryset.count()==0 else answer_queryset[0].answer
 		for logistic_question in logistic_form.getQuestions():
-			formboi.inputs[4]["array"][event.eventtypeid.id]["questions"][logistic_question.id]["value"] = Answer.objects.filter(eventid_event=event, associatedformid=logistic_form, questionsid_questions=logistic_question)[0].answer
+			answer_queryset = Answer.objects.filter(eventid_event=event, associatedformid=logistic_form, questionsid_questions=logistic_question)
+			formboi.inputs[4]["array"][event.eventtypeid.id]["questions"][logistic_question.id]["value"] = "" if answer_queryset.count()==0 else answer_queryset[0].answer
 
 
 		template = loader.get_template('create_new.html')
