@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='assetHome'),
-    path('ViewAssets/', views.consultar_assets, name='ViewAssets'),
+    path('ViewAssets/<int:assetID_filter>/', views.consultar_assets, name='ViewAssets'),
     path('ViewServices/<int:isPreEdit>/', views.consultar_services, name='ViewServices'),
     path('ViewEquipments/<int:isPreEdit>/', views.consultar_equipments, name='ViewEquiments'),
     path('ViewRooms/<int:isPreEdit>/', views.consultar_rooms, name='ViewRooms'),
@@ -27,5 +27,10 @@ urlpatterns = [
     path('EditService/<int:assetID>/', views.createService, name='EditService'),
     path('EditEquipment/<int:assetID>/', views.createEquipment, name='EditEquipment'),
     path('EditRoom/<int:assetID>/', views.createRoom, name='EditRoom'),
+
+    path('PreAssociateAsset/', views.pre_associate_asset, name='PreAssociateAsset'),
+    path('AssociateAsset/<int:eventID>/', views.associate_asset, name='AssociateAsset'),
+    path('ViewAssociateAssetOfEvent/<int:eventID>/', views.consultar_recursos_disp, name='ViewAssociateAssetOfEvent'),
+
 
 ]

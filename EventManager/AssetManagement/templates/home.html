@@ -28,7 +28,7 @@
             <br>
             <br>
             <footer class="card-footer">
-                <a href="{% url 'ViewAssets'  %}" class="card-footer-item">Consultar</a>
+                <a href="{% url 'ViewAssets' 0 %}" class="card-footer-item">Consultar</a>
             </footer>    
         </div>
     </div>
@@ -89,13 +89,14 @@
      <div class="column is-3">
         <div class="box">
             <header >
-                <p class="card-header-title">Recursos Disponíveis</p>
+                <p class="card-header-title">Associar Recursos a Eventos</p>
             </header>
             <br>
             <br>
             <footer class="card-footer">
-                <a href="" class="card-footer-item">Consultar</a>
-                <a href="" class="card-footer-item">Editar</a>
+                <a href="{% url 'PreAssociateAsset' %}" class="card-footer-item">Consultar</a>
+                <a href="{% url 'AssociateAsset' 0 %}" class="card-footer-item">Adicionar</a>
+               
             </footer>    
         </div>
     </div>

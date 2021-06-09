@@ -1,0 +1,20 @@
+{% extends "template_base.html" %}
+{% block loggedInContent %}
+{% block tableHead %}
+{% endblock %}
+
+  <table style="width:100%" >
+    <tr>
+      <th>Nome do Evento</th>
+      <th>Nome do Recurso</th>
+    </tr>
+    {% for event in Events %}
+        <tr>
+            <td>  <p>{{event.eventname}}</p></td>
+            
+            <td>  <p><a href="{% url 'AssociateAsset' event.id %}">Associar Recurso</a></p></td>
+            <td>  <p><a href="{% url 'ViewAssociateAssetOfEvent' event.id %}">Ver Recursos Disponibilizados</a></p></td>
+        </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

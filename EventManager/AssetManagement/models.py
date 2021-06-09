@@ -65,6 +65,16 @@ class Asset(models.Model):
         return self.assetname
         
 
+    @staticmethod
+    def makeOptions():
+        if "asset" in connection.introspection.table_names():
+            assets = Asset.objects.filter()
+            options=([(asset.id, asset.assetname) for asset in assets])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+
     class Meta:
         db_table = 'asset'
 

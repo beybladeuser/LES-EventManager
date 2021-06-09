@@ -5,6 +5,7 @@ from FormManagement.models import Form
 from AssetManagement.models import Service, Servicetype, Equipment, Equipmenttype, Campus
 from AssetManagement.models import Building, Rooms, RoomType
 from django.utils.safestring import mark_safe
+from PreEventManagement.models import AssetEvent, Event
 
 class InsertServiceForm(forms.Form):
 	user = None
@@ -153,3 +154,41 @@ class InsertRoomForm(forms.Form):
 
 	class Meta:
 		model = Asset
+
+
+class AssociateAssetForm(forms.Form):
+	user = None
+	OPTIONS_event = Event.makeOptions()
+	event =  forms.CharField(widget=forms.Select(choices=OPTIONS_event, attrs={'class' : 'input'}), label='Evento', required=True)
+	
+	OPTIONS_assetToAssociate = Asset.makeOptions()
+	assetToAssociate = forms.CharField(widget=forms.Select(choices=OPTIONS_assetToAssociate, attrs={'class' : 'input'}), label='Recurso', required=True)
+
+	
+
+	def __init__(self, *args, **kwargs):
+		if kwargs:
+			self.user = kwargs.pop('currentUser', None)
+		super().__init__(*args, **kwargs)
+
+	def clean(self, *args, **kwargs):
+		if not self.user:
+			self.add_error("equipmentType", 'Must be logged in to perform this action')
+			return
+		else:
+			eventName = self.cleaned_data.get('event')
+			assetToAssociate = self.cleaned_data.get('assetToAssociate')
+		
+			
+
+	def save(self):
+	
+		newAsset_Event = AssetEvent()
+		newAsset_Event.eventid_event = Event.objects.get(pk=self.cleaned_data.get('event'))
+		newAsset_Event.assetid_asset = Asset.objects.get(pk=self.cleaned_data.get('assetToAssociate'))
+		newAsset_Event.save()
+	
+
+	class Meta:
+		model = Asset
+

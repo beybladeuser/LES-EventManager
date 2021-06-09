@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import Asset, Equipment, Rooms, Service
 
 from AssetManagement.models import Building
+from PreEventManagement.models import AssetEvent
 
 from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
@@ -20,10 +21,14 @@ def home(request) :
     return HttpResponse(template.render(context, request))
 
 
-def consultar_assets(request):
+def consultar_assets(request, assetID_filter = 0):
     template = loader.get_template('ViewAssets.html')
     
-    Assets = Asset.objects.all()
+
+    if assetID_filter is None:
+        Assets = Asset.objects.filter(assetID_filter)
+    else:
+        Assets = Asset.objects.all()
    
     i = 0
     sizeofAssets = len(Assets)
@@ -224,5 +229,58 @@ def createRoom(request, assetID = None):
         'RoomForm' : RoomForm,
         'editRoomForm': editRoomForm
         
+    }
+    return HttpResponse(template.render(context, request))    
+
+
+
+def pre_associate_asset(request):
+    template = loader.get_template('ViewAssociateAssets.html')
+    context = {
+        'Events': Event.objects.filter()
+        
+    }
+    return HttpResponse(template.render(context, request))    
+
+
+def associate_asset(request, eventID):
+     
+    Asset_EventForm = None
+    Asset_EventForm_EventID = None
+    if Event.objects.filter(pk=eventID).exists():
+        existingEvent = Event.objects.get(pk=eventID) 
+        
+        Asset_EventForm_EventID = AssociateAssetForm(currentUser=request,initial={
+                    'event': existingEvent.id,
+                    'assetToAssociate': eventID
+        })
+        
+        Asset_EventForm = AssociateAssetForm(request.POST, currentUser=request.user)   
+        if Asset_EventForm.is_valid():
+            newAsset_Event = Asset_EventForm.save() 
+            return redirect('PreAssociateAsset')    
+    else:
+        if request.method == 'POST':
+            Asset_EventForm = AssociateAssetForm(request.POST, currentUser=request.user)
+            if Asset_EventForm.is_valid():
+                newAsset_Event = Asset_EventForm.save()    
+                return redirect('PreAssociateAsset')         
+        else:
+            newAsset_Event = Asset_EventForm(currentUser=request.user)
+
+
+    template = loader.get_template('InsertAssetEvent.html')
+    context = {
+        'Asset_EventForm' : Asset_EventForm,
+        'Asset_EventForm_EventID': Asset_EventForm_EventID
+    }
+    return HttpResponse(template.render(context, request))    
+
+
+
+def consultar_recursos_disp(request, eventID):
+    template = loader.get_template('ViewAssociateAssetsOfEvent.html')
+    context = {
+        'Assets' : AssetEvent.getAssetsByEvent(None, eventID)
     }
     return HttpResponse(template.render(context, request))    
