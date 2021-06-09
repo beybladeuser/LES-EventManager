@@ -1,20 +1,69 @@
 {% extends "template_consultareventos_listing_base.html" %}
 
 {% block PageTittle %}
-	Ver participantes no evento {{event.eventname}}
+	Ver eventos inscritos
 {% endblock %}
 
 {% block currentPage %}
-    participantes  no evento {{event.eventname}}
+    Meus Eventos
 {% endblock %}
 
 {% block tableHead %}
-    <th>Nome do Evento</th>
-    <th>Registado em:</th>
-    <th>Presença</th>
-    <th>Estado da Inscrição</th>
-    <th>Ações</th>
     
+    <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+        Nome do Evento
+        {% if filterKey and filterKey == '00' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '01' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
+        Registado em
+        {% if filterKey and filterKey == '10' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '11' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+        Presença
+        {% if filterKey and filterKey == '20' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '21' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '40' or filterKey and filterKey == '41' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '40' %}'41'{% else %}'40'{% endif %})">
+        Estado da inscrição
+        {% if filterKey and filterKey == '40' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '41' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th>Ações</th>
+    <script>
+        function redirectToFilter(filterCode) {
+            window.location.href = "{% url 'consultar_inscricoes'%}/" + filterCode
+        }
+    </script>
 {% endblock %}
 
 {% block listings %}
@@ -51,7 +100,8 @@
                     {% if regis|can_erase_registration:user %}
                         
                     
-                        <a href="{% url 'cancelregistration' regis.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Inscrição" onclick="return confirm('Tem a certeza que deseja cancelar inscrição?');">
+                        <a href="{% url 'cancelregistration' regis.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Inscrição" 
+                        onclick="return confirm('Tem a certeza que deseja cancelar inscrição?');">
                             <i class="fas fa-times fa-lg" aria-hidden="true"></i>
                         </a>
                     {% else %}
