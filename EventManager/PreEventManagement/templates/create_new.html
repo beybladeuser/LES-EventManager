@@ -42,7 +42,7 @@
 <form class="box" action="" method="POST">{% csrf_token %}
 	
 	<div class="field">
-		<label class="label" for="name">Nome do Evento: </label>
+		<label class="label" for="{{form.0.name}}">Nome do Evento: </label>
 		<div class="control">
 			<input class="input" type="text" name="{{form.0.name}}" placeholder="Exemplo: Palestra de Informática" {% if form.0.value is not None %}value="{{form.0.value}}"{% endif %} style="margin: auto; width: 30%" required><br>			
 		</div>
@@ -66,7 +66,7 @@
 	<select class="select" onchange="eventtype_change.call(this)" name="{{form.2.name}}" style="margin: auto; width: 30%" {% if form.2.value is not None %}value="{{form.2.value}}"{% endif %} required>
 		<!--helo-->
 		{% for choice in form.2.choices %}
-			<option class="dropdown-item" value="{{choice.0}}">{{choice.1}}</option>
+			<option class="dropdown-item" value="{{choice.0}}" {% if form.2.value is not None and form.2.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
 		{% endfor %}
 	</select>
 	<br>
@@ -98,6 +98,7 @@
 					{% if question.type == 'open' %}
 
 						<input class="input" type="text" name="{{question.name}}" style="margin: auto; width: 30%" {% if question.value is not None %}value="{{question.value}}"{% endif %} {% if question.required %}required{% endif %}>
+						{% if question.required %}*{% endif %}
 
 					{% elif question.type == 'dropdown' %}
 
@@ -106,6 +107,7 @@
 								<option value="{{choice.0}}" {% if choice.0|slugify == question.value|slugify %}selected{% endif %}>{{choice.1}}</option>
 							{% endfor %}
 						</select>
+						{% if question.required %}*{% endif %}
 						
 					{% endif %}
 					<br>
@@ -146,6 +148,7 @@
 					{% if question.type == 'open' %}
 
 						<input class="input" type="text" name="{{question.name}}" style="margin: auto; width: 30%" {% if question.value is not None %}value="{{question.value}}"{% endif %} {% if question.required %}required{% endif %}>
+						{% if question.required %}*{% endif %}
 
 					{% elif question.type == 'dropdown' %}
 
@@ -154,6 +157,7 @@
 								<option value="{{choice.0}}" {% if choice.0|slugify == question.value|slugify %}selected{% endif %}>{{choice.1}}</option>
 							{% endfor %}
 						</select>
+						{% if question.required %}*{% endif %}
 						
 					{% endif %}
 					<br>
