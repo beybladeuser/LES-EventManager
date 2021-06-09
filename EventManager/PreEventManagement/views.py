@@ -15,9 +15,10 @@ from EventManagement.models import *
 #			raise Exception("No proposal form exists for event type " + event_type.typename)
 
 def index(request):
-	template = loader.get_template('homePreEvent.html')
-	context = {}
-	return HttpResponse(template.render(context, request))
+	return redirect('list') 
+	#template = loader.get_template('homePreEvent.html')
+	#context = {}
+	#return HttpResponse(template.render(context, request))
 
 
 
@@ -108,24 +109,26 @@ class CreationForm:
 		logistics_forms = Form.objects.filter(formtypeid_formtype=logistics_form_type, archived=False)
 
 
-		for form in proposal_forms:
-			self.inputs[3]['array'][form.eventtypeid.id] = {
-				'name': 'proposalform_'+str(form.eventtypeid.id),
+		for form in proposal_forms: 
+			if form.getQuestions().count() > 0:
+				self.inputs[3]['array'][form.eventtypeid.id] = {
+					'name': 'proposalform_'+str(form.eventtypeid.id),
 
-				'eventtype': form.eventtypeid.id,
-				'formid': form.id,
+					'eventtype': form.eventtypeid.id,
+					'formid': form.id,
 
-				'questions': self.__build_form("proposalform", form)
-			}
-		for form in logistics_forms:
-			self.inputs[4]['array'][form.eventtypeid.id] = {
-				'name': 'logisticsform_'+str(form.eventtypeid.id),
+					'questions': self.__build_form("proposalform", form)
+				}
+		for form in logistics_forms: 
+			if form.getQuestions().count() > 0:
+				self.inputs[4]['array'][form.eventtypeid.id] = {
+					'name': 'logisticsform_'+str(form.eventtypeid.id),
 
-				'eventtype': form.eventtypeid.id,
-				'formid': form.id,
+					'eventtype': form.eventtypeid.id,
+					'formid': form.id,
 
-				'questions': self.__build_form("logisticsform", form)
-			}
+					'questions': self.__build_form("logisticsform", form)
+				}
 
 		if request != None:
 			self.inputs[0]["value"] = request.POST.get(self.inputs[0]["name"])
@@ -191,7 +194,11 @@ def create(request):
 
 		context = {
 			'form': formboi.inputs,
-			'eventtypes': Eventtype.objects.all()
+			'eventtypes': Eventtype.objects.all(),
+			'enabled_by_default': 
+					(formboi.inputs[2]["choices"][0][0] in formboi.inputs[3]["array"] and formboi.inputs[2]["choices"][0][0] in formboi.inputs[4]["array"])  
+				if (formboi.inputs[2]["value"] == None) else  
+					(int(formboi.inputs[2]["value"]) in formboi.inputs[3]["array"] and int(formboi.inputs[2]["value"]) in formboi.inputs[4]["array"])
 		}
 
 		print("WHYYYYYYY: " + str(formboi.inputs[2]["value"]))
@@ -206,6 +213,7 @@ def create(request):
 
 		proposal_form_type = Formtype.objects.get(id=1)
 		logistic_form_type = Formtype.objects.get(id=4)
+
 
 		name = formboi.inputs[0]["value"]
 		campus = Campus.objects.get(id=int(formboi.inputs[1]["value"]))
@@ -266,9 +274,10 @@ def create(request):
 
 
 
-def list(request):
+def list(request, sort_key="00"): 
 	proposal_form_type = Formtype.objects.get(id=1)
-	events = Event.objects.all()
+	sortnames = ['eventname', 'eventtypeid', "campusid", "wasvalidated"]
+	events = Event.objects.order_by(('-' if int(sort_key[1:2])==1 else '')+sortnames[int(sort_key[0:1])])
 	for event in events:
 		try:
 			proposal_form = event.formproposalid
@@ -340,7 +349,7 @@ def list(request):
 
 	template = loader.get_template('listEvent_new.html')
 	context = {
-		'filterKey': '00',
+		'filterKey': sort_key,
 		'eventTypes': Eventtype.objects.all(),
 		'campuses': Campus.objects.all(),
 		'eventes': events,
@@ -379,7 +388,8 @@ def edit(request, id):
 		template = loader.get_template('create_new.html')
 		context = {
 			'form': formboi.inputs,
-			'eventtypes': Eventtype.objects.all()
+			'eventtypes': Eventtype.objects.all(),
+			'enabled_by_default': True
 		}
 
 		return HttpResponse(template.render(context, request))
