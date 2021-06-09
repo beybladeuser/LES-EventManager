@@ -141,7 +141,7 @@ class Form(models.Model):
         return e1 and e2
     
     def canAssociateQuestionType(self, questionType) :
-        return not (self.formtypeid_formtype.id != 1 and (questionType.id == 3 or questionType.id == 4))
+        return not (self.formtypeid_formtype.id != 1 and (questionType.id == 3 or questionType.id == 4 or questionType.id == 5 or questionType.id == 6))
     
     def duplicate(self, user) :
         result = Form()
