@@ -2,12 +2,42 @@
 
 
 {% block loggedInContent %}
-<form method="post">
-  {% load crispy_forms_tags %} 
-  {% csrf_token %}
-  {{ RoomForm|crispy }}
-  <button type="submit" class="btn btn-primary">Adicionar Sala/Anfiteatro</button>
-</form>
+<div class="columns" style="margin-top: 5%;">
+        <div class="column is-3">
+        </div>
+        <div class="column is-6">
+            <div class="box">
+                <header >
+                    <p class="card-header-title">
+                        {% if editRoomForm%}
+                            Editar Espaço
+                        {% else %}    
+                            Adicionar Espaço
+                        {%endif%}
+                    </p>
+                </header>  
+                <form method="post">
+                  {% load crispy_forms_tags %} 
+                  {% csrf_token %}
+                  <div class="card-content">
+                    <div class="content">
+                        {% if editRoomForm%}
+                           {{ editRoomForm|crispy }}
+                        {% else %}    
+                            {{ RoomForm|crispy }}
+                        {%endif%}
+                    
+                    </div>
+                  </div>
+                  <footer class="card-footer">
+                    <button class="button is-success card-footer-item" type="submit">Adicionar Espaço</button>
+                    <a href="{% url 'assetHome'  %}" class="button is-white card-footer-item">Cancelar</a>
+                  </footer>
+                </form>
+            </div>
+        </div>
+</div>
+
 {% endblock %}
 
 {% block loggedOutContent %}

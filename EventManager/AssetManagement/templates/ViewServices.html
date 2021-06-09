@@ -2,13 +2,21 @@
 {% block loggedInContent %}
   <table style="width:100%">
     <tr>
-      <th>Service Name</th>
-      <th>Service Type</th>
+      <th>Nome do Serviço</th>
+      <th>Tipo de Serviço</th>
+      <th>Descrição</th>
+      {%if isEdit is 1 %}
+        <th>Editar</th>
+      {%endif%}
     </tr>
     {% for service in Services %}
         <tr>
             <td>  <p>{{service.assetid}}</p></td>
             <td>  <p>{{service.servicetypeid_servicetype}}</p></td>
+            <td>  <p>{{service.description}}</p></td>
+            {%if isEdit is 1 %}
+                <td><p><a href="{% url 'EditService' service.assetid.id %}">Editar</a></p></td>
+            {%endif%}
         </tr>
     {% endfor %}
   </table>

@@ -51,29 +51,32 @@ def consultar_assets(request):
     return HttpResponse(template.render(context, request))
 
     
-def consultar_services(request):
+def consultar_services(request, isPreEdit = 0):
     template = loader.get_template('ViewServices.html')
     context = {
-        'Services': Service.objects.all()
+        'Services': Service.objects.all(),
+         'isEdit': isPreEdit
     }
     return HttpResponse(template.render(context, request))
 
-def consultar_equipments(request):
+def consultar_equipments(request, isPreEdit = 0):
+
     template = loader.get_template('ViewEquipments.html')
     context = {
-        'Equipments': Equipment.objects.all()
+        'Equipments': Equipment.objects.all(),
+        'isEdit': isPreEdit
     }
     return HttpResponse(template.render(context, request))
 
 
-def consultar_rooms(request):
+def consultar_rooms(request, isPreEdit = 0):
     template = loader.get_template('ViewRooms.html')
     rooms = Rooms.objects.all()
     for room in rooms:
         room = Rooms.getRoomWithCampus(room)
     context = {
-        'Rooms': rooms
-
+        'Rooms': rooms,
+        'isEdit': isPreEdit
     }
     return HttpResponse(template.render(context, request))    
 
@@ -116,46 +119,63 @@ def delete_assets(request, assetID = None):
 
 
 
-
-
-
-
-
-
-
-
-
-def createService(request):
-    errorMessage = None
+def createService(request, assetID = None):
     ServiceForm = None
-    if not errorMessage:
+    editService_form = None
+
+    if Asset.objects.filter(pk=assetID).exists():
+        existingAsset = Asset.objects.get(pk=assetID) 
+        editService_form = InsertServiceForm(currentUser=request,initial={
+                    'assetName': existingAsset.assetname,
+                    'assetQuantity': existingAsset.quantity,
+                    'serviceType': Service.objects.get(assetid=assetID).servicetypeid_servicetype.id,
+                    'description': Service.objects.get(assetid=assetID).description
+        })
+        ServiceForm = InsertServiceForm(request.POST, currentUser=request.user)
+        if ServiceForm.is_valid():
+            newService = ServiceForm.save(assetID)
+            return redirect('ViewServices', 1)       
+    else:
         if request.method == 'POST':
             ServiceForm = InsertServiceForm(request.POST, currentUser=request.user)
             if ServiceForm.is_valid():
                 newService = ServiceForm.save()
+                return redirect('ViewServices', 1)        
           
         else:
             ServiceForm = InsertServiceForm(currentUser=request.user)
 
-    
-    
-    
     template = loader.get_template('InsertService.html')
     context = {
-        'errorMessage' : errorMessage,
         'ServiceForm' : ServiceForm,
+        'editService_form' : editService_form
         
     }
     return HttpResponse(template.render(context, request))    
 
-def createEquipment(request):
+def createEquipment(request, assetID = None):
     errorMessage = None
     EquipmentForm = None
-    if not errorMessage:
+    editEquipmentForm = None
+
+    if Asset.objects.filter(pk=assetID).exists():
+        existingAsset = Asset.objects.get(pk=assetID) 
+        editEquipmentForm = InsertEquipmentForm(currentUser=request,initial={
+                    'assetName': existingAsset.assetname,
+                    'assetQuantity': existingAsset.quantity,
+                    'equipmentType': Equipment.objects.get(assetid=assetID).equipmenttypeid_equipmenttype.id,
+        })
+        
+        EquipmentForm = InsertEquipmentForm(request.POST, currentUser=request.user)
+        if EquipmentForm.is_valid():
+            newEquipment = EquipmentForm.save(assetID)   
+            return redirect('ViewEquipments', 1)                
+    else:
         if request.method == 'POST':
             EquipmentForm = InsertEquipmentForm(request.POST, currentUser=request.user)
             if EquipmentForm.is_valid():
-                newEquipment = EquipmentForm.save()          
+                newEquipment = EquipmentForm.save()  
+                return redirect('ViewEquipments', 1)            
         else:
             EquipmentForm = InsertEquipmentForm(currentUser=request.user)
 
@@ -164,18 +184,36 @@ def createEquipment(request):
     context = {
         'errorMessage' : errorMessage,
         'EquipmentForm' : EquipmentForm,
+        'editEquipmentForm': editEquipmentForm
         
     }
     return HttpResponse(template.render(context, request))    
 
-def createRoom(request):
+def createRoom(request, assetID = None):
     errorMessage = None
     RoomForm = None
-    if not errorMessage:
+    editRoomForm = None
+    if Asset.objects.filter(pk=assetID).exists():
+        existingAsset = Asset.objects.get(pk=assetID) 
+        existingRoom = Rooms.objects.get(assetid=assetID)
+        editRoomForm = InsertRoomForm(currentUser=request,initial={
+                    'assetName': existingAsset.assetname,
+                    'campus': existingRoom.buildingid_building.campusid.campusname,
+                    'room_type': existingRoom.room_type.id,
+                    'buildings': existingRoom.buildingid_building.id,
+                    'capacity': existingRoom.capacity,
+                    'capacityRed': existingRoom.reducedMobCapacity
+        })
+        RoomForm = InsertRoomForm(request.POST, currentUser=request.user)   
+        if RoomForm.is_valid():
+            newRoom = RoomForm.save(assetID) 
+            return redirect('ViewRooms', 1)    
+    else:
         if request.method == 'POST':
             RoomForm = InsertRoomForm(request.POST, currentUser=request.user)
             if RoomForm.is_valid():
-                newRoom = RoomForm.save()          
+                newRoom = RoomForm.save()    
+                return redirect('ViewRooms', 1)         
         else:
             RoomForm = InsertRoomForm(currentUser=request.user)
 
@@ -184,6 +222,7 @@ def createRoom(request):
     context = {
         'errorMessage' : errorMessage,
         'RoomForm' : RoomForm,
+        'editRoomForm': editRoomForm
         
     }
     return HttpResponse(template.render(context, request))    

@@ -2,55 +2,104 @@
 
 
 {% block loggedInContent %}
-  <div style="margin: auto; width: 30%">
-	        <a href="ViewAssets">
-	            <button type="button" class="button is-success is-large is-fullwidth is-outlined" style="margin-bottom: 1rem;">
-	            	<span class="icon is-small">
-	            		<i class="mdi mdi-plus"></i>
-	            	</span>
-	            	<span>
-	            		Consultar Recursos
-	            	</span>
-	            </button>
-	        </a>
 
-	        <a href="ViewRooms">
-	            <button type="button" class="button is-info is-large is-fullwidth is-outlined" style="margin-bottom: 1rem;"> 
-	            	<span>
-	            		Consultar Salas
-	            	</span>
-	            </button>
-	        </a>
-          <a href="ViewServices">
-	            <button type="button" class="button is-info is-large is-fullwidth is-outlined" style="margin-bottom: 1rem;"> 
-	            	<span>
-	            	  Consultar Serviços
-	            	</span>
-	            </button>
-	        </a>
-           <a href="ViewEquipments">
-	            <button type="button" class="button is-info is-large is-fullwidth is-outlined" style="margin-bottom: 1rem;"> 
-	            	<span>
-	            		Consultar Equipamentos
-	            	</span>
-	            </button>
-	        </a>
-          <a href="ViewEquipments">
-	            <button type="button" class="button is-info is-large is-fullwidth is-outlined" style="margin-bottom: 1rem;"> 
-	            	<span>
-	            		Consultar Equipamentos
-	            	</span>
-	            </button>
-	        </a>
-        </div> 
-  <p><a href="ViewAssets">Consultar Recursos</a></p>
-  <p><a href="ViewRooms">Consultar Salas</a></p>
-  <p><a href="ViewServices">Consultar Serviços</a></p>
-  <p><a href="ViewEquipments">Consultar Equipamentos</a></p>
-  <p><a href="InsertService">Inserir Serviço</a></p>  
-  <p><a href="InsertEquipment">Inserir Equipamento</a></p>  
-  <p><a href="InsertRoom">Inserir Sala/Anfiteatro</a></p>  
+ <div class="columns">
+        <div class="column is-12" >
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'homepage' %}">Início</a></li>
+                    <li class="is-active"><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+                </ul>
+            </nav>
+        </div>
+ </div>
+
+
+
+<hr>
+
+
+<div class="columns" >
+    <div class="column is-3">
+        <div class="box">
+            <header >
+                <p class="card-header-title">Recursos </p>
+            </header>
+            <br>
+            <br>
+            <footer class="card-footer">
+                <a href="{% url 'ViewAssets'  %}" class="card-footer-item">Consultar</a>
+            </footer>    
+        </div>
+    </div>
+    <div class="column is-3">
+        <div class="box">
+            <header >
+                <p class="card-header-title">Espaços </p>
+            </header>
+            <br>
+            <br>
+            <footer class="card-footer">
+                <a href="{% url 'ViewRooms' 0 %}" class="card-footer-item">Consultar</a>
+                <a href="{% url 'InsertRoom'  %}" class="card-footer-item">Adicionar</a>
+                <a href="{% url 'pre_EditRoom' 1 %}" class="card-footer-item">Editar</a>
+                
+            </footer>    
+        </div>
+    </div>
+
+    <div class="column is-3">
+        <div class="box">
+            <header >
+                <p class="card-header-title">Serviços </p>
+            </header>
+            <br>
+            <br>
+            <footer class="card-footer">
+                <a href="{% url 'ViewServices' 0 %}" class="card-footer-item">Consultar</a>
+                <a href="{% url 'InsertService'  %}" class="card-footer-item">Adicionar</a>
+                <a href="{% url 'pre_EditService' 1 %}" class="card-footer-item">Editar</a>
+                
+            </footer>    
+        </div>
+    </div>
+
+    <div class="column is-3">
+        <div class="box">
+            <header >
+                <p class="card-header-title">Equipamentos</p>
+            </header>
+            <br>
+            <br>
+            <footer class="card-footer">
+                <a href="{% url 'ViewEquiments' 0 %}" class="card-footer-item">Consultar</a>
+                <a href="{% url 'InsertEquipment'  %}" class="card-footer-item">Adicionar</a>
+                <a href="{% url 'pre_EditEquipment' 1 %}" class="card-footer-item">Editar</a>
+                
+            </footer>    
+        </div>
+    </div>
+</div>
   
+  
+  
+  
+<hr>
+<div class="columns" >
+     <div class="column is-3">
+        <div class="box">
+            <header >
+                <p class="card-header-title">Recursos Disponíveis</p>
+            </header>
+            <br>
+            <br>
+            <footer class="card-footer">
+                <a href="" class="card-footer-item">Consultar</a>
+                <a href="" class="card-footer-item">Editar</a>
+            </footer>    
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block loggedOutContent %}
 {% endblock %}

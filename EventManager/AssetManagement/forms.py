@@ -1,19 +1,21 @@
 from django import forms
 from .models import Asset
 import datetime
-from pip._vendor.urllib3 import request
 from FormManagement.models import Form
 from AssetManagement.models import Service, Servicetype, Equipment, Equipmenttype, Campus
-from AssetManagement.models import Building, Rooms
-
+from AssetManagement.models import Building, Rooms, RoomType
+from django.utils.safestring import mark_safe
 
 class InsertServiceForm(forms.Form):
 	user = None
-	assetName = forms.CharField(label='Nome do Serviço', max_length=255, required=False)
+	assetName = forms.CharField(label='Nome do Serviço', max_length=255, required=True)
 	assetQuantity = forms.IntegerField(label='Quantidade', required=True)
 	
 	OPTIONS_serviceType = Service.makeOptions()
 	serviceType =  forms.CharField(widget=forms.Select(choices=OPTIONS_serviceType, attrs={'class' : 'input'}), label='Service Type', required=True)
+	description = forms.CharField(label='Descrição',  max_length=255, required=False)
+
+
 
 	def __init__(self, *args, **kwargs):
 		if kwargs:
@@ -28,10 +30,15 @@ class InsertServiceForm(forms.Form):
 			assetName = self.cleaned_data.get('assetName')
 			assetQuantity = self.cleaned_data.get('assetQuantity')
 			serviceType = self.cleaned_data.get('serviceType')
+			description = self.cleaned_data.get('description')
 		
 
-	def save(self):
-		newAsset = Asset()
+	def save(self, assetID = None):
+		if assetID is not None:
+			newAsset = Asset.objects.get(id=assetID)
+		else:
+			newAsset = Asset()
+		
 		newAsset.assetname = self.cleaned_data.get('assetName')
 		newAsset.quantity = self.cleaned_data.get('assetQuantity')
 		newAsset.save()
@@ -39,7 +46,9 @@ class InsertServiceForm(forms.Form):
 		newService = Service()
 		newService.assetid = newAsset
 		newService.servicetypeid_servicetype = Servicetype.objects.get(pk=self.cleaned_data.get('serviceType'))
+		newService.description = self.cleaned_data.get('description')
 		newService.save()
+	
 	class Meta:
 		model = Asset
 
@@ -67,8 +76,11 @@ class InsertEquipmentForm(forms.Form):
 			equipmentType = self.cleaned_data.get('equipmentType')
 		
 
-	def save(self):
-		newAsset = Asset()
+	def save(self, assetID = None):
+		if assetID is not None:
+			newAsset = Asset.objects.get(id=assetID)
+		else:
+			newAsset = Asset()
 		newAsset.assetname = self.cleaned_data.get('assetName')
 		newAsset.quantity = self.cleaned_data.get('assetQuantity')
 		newAsset.save()
@@ -85,13 +97,13 @@ class InsertEquipmentForm(forms.Form):
 
 class InsertRoomForm(forms.Form):
 	user = None
-	assetName = forms.CharField(label='Número/nome da Sala/Anf.', max_length=255, required=False)
+	assetName = forms.CharField(label='Número/Nome do Espaço', max_length=255, required=False)
 		
 	OPTIONS_campus = Campus.makeOptions()
 	campus =  forms.CharField(widget=forms.Select(choices=OPTIONS_campus, attrs={'class' : 'input'}), label='Campus', required=True)
 
 	OPTIONS_Rooms = Rooms.makeOptions()
-	room_type =  forms.CharField(widget=forms.Select(choices=OPTIONS_Rooms, attrs={'class' : 'input'}), label='Tipo de Sala', required=True)
+	room_type =  forms.CharField(widget=forms.Select(choices=OPTIONS_Rooms, attrs={'class' : 'input'}), label='Tipo de Espaço', required=True)
 
 
 	OPTIONS_buildings = Building.makeOptions()
@@ -121,18 +133,21 @@ class InsertRoomForm(forms.Form):
 			
 		
 
-	def save(self):
-		newAsset = Asset()
+	def save(self, assetID = None):
+		if assetID is not None:
+			newAsset = Asset.objects.get(id=assetID)
+		else:
+			newAsset = Asset()
 		newAsset.assetname = self.cleaned_data.get('assetName')
 		newAsset.quantity = 1
 		newAsset.save()
 
 		newRoom = Rooms()
 		newRoom.assetid = newAsset
-		newRoom.room_type = room_type
+		newRoom.room_type = RoomType.objects.get(pk=self.cleaned_data.get('room_type'))
 		newRoom.buildingid_building = Building.objects.get(pk=self.cleaned_data.get('buildings'))
-		newRoom.capacity = capacity
-		newRoom.reducedMobCapacity = capacityRed
+		newRoom.capacity = self.cleaned_data.get('capacity')
+		newRoom.reducedMobCapacity = self.cleaned_data.get('capacityRed')
 		newRoom.save()
 	
 

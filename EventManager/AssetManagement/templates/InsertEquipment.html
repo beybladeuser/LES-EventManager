@@ -2,12 +2,44 @@
 
 
 {% block loggedInContent %}
-<form method="post">
-  {% load crispy_forms_tags %} 
-  {% csrf_token %}
-  {{ EquipmentForm|crispy }}
-  <button type="submit" class="btn btn-primary">Adicionar Equipamento</button>
-</form>
+ <div class="columns" style="margin-top: 5%;">
+        <div class="column is-3">
+        </div>
+        <div class="column is-6">
+            <div class="box">
+                <header >
+                    <p class="card-header-title">
+                        {% if editEquipmentForm%}
+                            Editar Equipamento
+                        {% else %}    
+                            Adicionar Equipamento
+                        {%endif%}
+                    </p>
+                </header>  
+                <form method="post">
+                  {% load crispy_forms_tags %} 
+                  {% csrf_token %}
+                  <div class="card-content">
+                    <div class="content">
+                        {% if editEquipmentForm%}
+                           {{ editEquipmentForm|crispy }}
+                        {% else %}    
+                           {{ EquipmentForm|crispy }}
+                        {%endif%}
+                     
+                    </div>
+                  </div>
+                  <footer class="card-footer">
+                    <button class="button is-success card-footer-item" type="submit">Adicionar Equipamento</button>
+                    <a href="{% url 'assetHome'  %}" class="button is-white card-footer-item">Cancelar</a>
+                  </footer>
+                </form>
+            </div>
+          </div>
+  </div>
+
+
+
 {% endblock %}
 
 {% block loggedOutContent %}
