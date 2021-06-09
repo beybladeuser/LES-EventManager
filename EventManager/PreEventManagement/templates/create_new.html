@@ -1,8 +1,5 @@
 {% extends 'template_base.html' %}
 
-{% block PageTittle %}
-    Criar Evento
-{% endblock %}
 
 {% block loggedInContent %}
 
@@ -10,27 +7,28 @@
 <script type="text/javascript">
 	function eventtype_change(){
 		console.log(this.value);
+		let button_active = true;
 		for(subform of document.getElementsByClassName("subforms")){
 			//console.log(subform.id.substring(7) + " vs " + this.value + " ==> " + (subform.id.substring(7) == this.value))
-			subform.style.display = (
+			let shows = (
 				(
-					(
-						subform.id.startsWith("logisticsform") 
-						&& 
-						subform.id.substring(13+1) == this.value
-					)
-					||
-					(
-						subform.id.startsWith("proposalform") 
-						&& 
-						subform.id.substring(12+1) == this.value
-					)
+					subform.id.startsWith("logisticsform") 
+					&& 
+					subform.id.substring(13+1) == this.value
 				)
-				?"block"
-				:"none"
+				||
+				(
+					subform.id.startsWith("proposalform") 
+					&& 
+					subform.id.substring(12+1) == this.value
+				)
 			);
 
+			subform.style.display = shows?"block":"none";
+			if(shows && subform.classList.contains("nonexistent"))button_active = false;
+
 		}
+		document.getElementById("submitbutton").disabled = !button_active;
 	}
 
 	function prepare_form(){
@@ -117,7 +115,7 @@
 
 		{% for event_type in eventtypes %}
 			{% if event_type.id not in form.3.array %}
-				<div class="subforms" id="proposalform_{{event_type.id}}" style="display: {% if form.2.value is not None %}{% if event_type.id == form.2.value %}block{% else %}none{% endif %}{% else %}{% if event_type.id == form.2.choices.0.0 %}block{% else %}none{% endif %}{% endif %};">
+				<div class="subforms nonexistent" id="proposalform_{{event_type.id}}" style="display: {% if form.2.value is not None %}{% if event_type.id == form.2.value %}block{% else %}none{% endif %}{% else %}{% if event_type.id == form.2.choices.0.0 %}block{% else %}none{% endif %}{% endif %};">
 					Este tipo de Evento não tem um formulário de Proposta!
 				</div>
 			{% endif %}
@@ -165,13 +163,13 @@
 
 		{% for event_type in eventtypes %}
 			{% if event_type.id not in form.4.array %}
-				<div class="subforms" id="logisticsform_{{event_type.id}}" style="display: {% if form.2.value is not None %}{% if event_type.id == form.2.value %}block{% else %}none{% endif %}{% else %}{% if event_type.id == form.2.choices.0.0 %}block{% else %}none{% endif %}{% endif %};">
+				<div class="subforms nonexistent" id="logisticsform_{{event_type.id}}" style="display: {% if form.2.value is not None %}{% if event_type.id == form.2.value %}block{% else %}none{% endif %}{% else %}{% if event_type.id == form.2.choices.0.0 %}block{% else %}none{% endif %}{% endif %};">
 					Este tipo de Evento não tem um formulário de Logística!
 				</div>
 			{% endif %}
 		{% endfor %}
 	<br>
-	<input class="button is-success is-outlined" type="submit" value="Submeter" onclick="return prepare_form();">
+	<input id="submitbutton" class="button is-success is-outlined" type="submit" value="Submeter" onclick="return prepare_form();" {% if not enabled_by_default %}disabled{% endif %}>
 </form>
   
 {% endblock %}
