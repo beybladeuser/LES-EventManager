@@ -21,13 +21,6 @@
 	  }
 	},
 	{
-	  "model": "FormManagement.Formtype",
-	  "pk": 4,
-	  "fields": {
-		"typename": "Logistica"
-	  }
-	},
-	{
 	  "model": "PreEventManagement.Eventtype",
 	  "pk": 1,
 	  "fields": {
@@ -53,20 +46,6 @@
 	  "pk": 2,
 	  "fields": {
 		"typename": "Escolha Múltipla"
-	  }
-	},
-	{
-	  "model": "FormManagement.Questiontype",
-	  "pk": 3,
-	  "fields": {
-		"typename": "Seleção de Formulário de Registo"
-	  }
-	},
-	{
-	  "model": "FormManagement.Questiontype",
-	  "pk": 4,
-	  "fields": {
-		"typename": "Seleção de Formulário de FeedBack"
 	  }
 	},
 	{
