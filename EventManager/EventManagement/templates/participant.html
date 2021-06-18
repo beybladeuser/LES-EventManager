@@ -5,14 +5,52 @@
 {% endblock %}
 
 {% block currentPage %}
-    participantes  no evento {{event.eventname}}
+    Participantes  no evento {{event.eventname}}
 {% endblock %}
 
-{% block tableHead %}
-    <th>Nome</th>
-    <th>Registado em:</th>
-    <th>Presença</th>
+{% block tableHead %}   
+    <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+        Nome
+        {% if filterKey and filterKey == '30' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '31' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
+        Registado em
+        {% if filterKey and filterKey == '10' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '11' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+        Presença
+        {% if filterKey and filterKey == '20' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '21' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
     <th>Respostas</th>
+    <script>
+        function redirectToFilter(filterCode) {
+            window.location.href = "{% url 'consultar_participantes' event.id %}/" + filterCode
+        }
+    </script>
 {% endblock %}
 
 {% block listings %}

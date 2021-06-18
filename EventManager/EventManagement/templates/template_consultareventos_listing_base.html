@@ -10,7 +10,7 @@
 				<ul class="menu-list">
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
+							<input type="text" class="input" id="NameFilter" placeholder="Nome do evento" onkeyup="filter2()">
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
@@ -31,7 +31,7 @@
 			<nav aria-label="breadcrumbs" class="breadcrumb">
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
-					<li><a href="{% url 'eventHome' %}">Gestor de Inscrições</a></li>
+					
 					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
 					</li>
 				</ul>
