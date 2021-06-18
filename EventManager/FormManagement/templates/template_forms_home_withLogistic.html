@@ -21,11 +21,11 @@
     <div class="columns" >
         {% load form_extras %}
         {% for formType in formTypes %}
-            {% if forloop.counter == 4 %}
+            {% if forloop.counter == 5 %}
                 </div>
                 <div class="columns" >
             {% endif %}
-            <div class="column is-4" >
+            <div class="column is-3" >
                 <div class="box">
                     <header >
                         <p class="card-header-title">Formulário de {{formType.typename}}</p>
@@ -46,13 +46,11 @@
 
     <hr>
     <div class="columns" >
-        <div class="column is-4" >
+        <div class="column is-3" >
             <div class="box">
                 <header >
                     <p class="card-header-title">Questões</p>
                 </header>
-                <br>
-                <br>
                 <footer class="card-footer">
                     <a href="{% url 'listQuestions' %}" class="card-footer-item">Ver questões existentes</a>
                     <a href="{% url 'createQuestion' 0 0 %}" class="card-footer-item">Criar Nova</a>
