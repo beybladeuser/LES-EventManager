@@ -7,8 +7,6 @@
       <th>Campus</th>
       <th>Capacidade</th>
       <th>Lugares de cap. reduzida</th>
-      
-
     </tr>
     {% for room in Rooms %}
         <tr>
@@ -17,6 +15,9 @@
             <td>  <p>{{room.campus}}</p></td>
             <td>  <p>{{room.capacity}}</p></td>
             <td>  <p>{{room.reducedMobCapacity}}</p></td>
+            {%if isEdit is 1 %}
+                <td><p><a href="{% url 'EditRoom' room.assetid.id %}">Editar</a></p></td>
+            {%endif%}
         </tr>
     {% endfor %}
   </table>

@@ -103,18 +103,18 @@ class Form(models.Model):
         return False
     
     def isValid(self) :
-        if self.formtypeid_formtype.id == 1 :
-            hasRegisSelectQuestion = 0
-            hasFeedBackSelect = 0
-            if self.formquestions :
-                for question in self.formquestions :
-                    if question.questiontypeid_questiontype.id == 3 :
-                        hasRegisSelectQuestion = hasRegisSelectQuestion + 1
-                    if question.questiontypeid_questiontype.id == 4 :
-                        hasFeedBackSelect = hasFeedBackSelect + 1
-            if hasRegisSelectQuestion != 1 or hasFeedBackSelect != 1 :
-                #lacking both regis or feedback
-                return 1
+        #if self.formtypeid_formtype.id == 1 :
+        #    hasRegisSelectQuestion = 0
+        #    hasFeedBackSelect = 0
+        #    if self.formquestions :
+        #        for question in self.formquestions :
+        #            if question.questiontypeid_questiontype.id == 3 :
+        #                hasRegisSelectQuestion = hasRegisSelectQuestion + 1
+        #            if question.questiontypeid_questiontype.id == 4 :
+        #                hasFeedBackSelect = hasFeedBackSelect + 1
+        #    if hasRegisSelectQuestion != 1 or hasFeedBackSelect != 1 :
+        #        #lacking both regis or feedback
+        #        return 1
         return 0
 
     def canEdit(self, user) :
@@ -141,7 +141,8 @@ class Form(models.Model):
         return e1 and e2
     
     def canAssociateQuestionType(self, questionType) :
-        return not (self.formtypeid_formtype.id != 1 and (questionType.id == 3 or questionType.id == 4))
+        #return not (self.formtypeid_formtype.id != 1 and (questionType.id == 3 or questionType.id == 4 or questionType.id == 5 or questionType.id == 6))
+        return not (self.formtypeid_formtype.id != 1 and (questionType.id == 5 or questionType.id == 6))
     
     def duplicate(self, user) :
         result = Form()
