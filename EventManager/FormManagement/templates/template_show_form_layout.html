@@ -159,8 +159,8 @@
                                                     <a href="{% url 'createOption' question.id option.id %}" class="icon has-text-info" style="vertical-align: middle;" data-tooltip="Editar Opção">
                                                         <i class="mdi mdi-circle-edit-outline mdi-18px" aria-hidden="true"></i>
                                                     </a>
-                                                    <a href="{% url 'deleteOption' question.id option.id %}" class="icon has-text-info" style="vertical-align: middle;" data-tooltip="Remover Opção">
-                                                      <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+                                                    <a href="{% url 'deleteOption' question.id option.id %}" class="icon has-text-info" style="vertical-align: middle;" data-tooltip="Remover Opção" onclick="return confirm('Tem a certeza que deseja remover esta opção?');">
+                                                      <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
                                                     </a>
                                                 {% endif %}
                                             </div>
@@ -200,12 +200,12 @@
                     {% endif %}
                        
 					{% if form.canEdit %}
-						<a href="{% url 'deassociateQuestion' question.id form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desassociar Questão" >
-                       	    <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+						<a href="{% url 'deassociateQuestion' question.id form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desassociar Questão" onclick="return confirm('Tem a certeza que deseja deassociar esta questão?');">
+                       	    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
                        	</a>
 					{% else %}
 						<a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desassociar Questão" disabled>
-							<i class="fas fa-times fa-lg" aria-hidden="true"></i>
+							<i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
 						</a>
 					{% endif %}
 					
