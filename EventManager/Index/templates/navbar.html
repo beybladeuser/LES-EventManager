@@ -21,7 +21,7 @@
             {% if user.is_authenticated and not user|has_group:'Participante'%}
               <a href="{% url 'formsHome' %}" class="navbar-item is-tab router-link">Gestor de formularios</a>
             {% endif %}
-            <a href="{% url 'preEventHome' %}" class="navbar-item is-tab router-link">PreEvent</a>
+            <a href="{% url 'preEventHome' %}" class="navbar-item is-tab router-link">Gestor de eventos</a>
             {% if user|has_group:'Administrador'%}
               <a href="{% url 'utilizadores:consultar-utilizadores' %}" class="navbar-item is-tab router-link">
                 Utilizadores

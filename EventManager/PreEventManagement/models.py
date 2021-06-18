@@ -18,7 +18,6 @@ class AssetEvent(models.Model):
 
 
     def getAssetsByEvent(self, eventID):
-        result = None
         result = AssetEvent.objects.filter(eventid_event=eventID)
         return result
 

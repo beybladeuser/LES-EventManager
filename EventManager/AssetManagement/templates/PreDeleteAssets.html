@@ -1,6 +1,19 @@
 {% extends "template_base.html" %}
 {% block loggedInContent %}
+ <div class="columns">
+        <div class="column is-12" >
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'homepage' %}">Início</a></li>
+                    <li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+                    <li><a href="{% url 'ViewAssets' 0 %}">Consulta de Recursos</a></li>
+                    <li class="is-active"><a>Eliminar Recursos</a></li>
+                </ul>
+            </nav>
+        </div>
+ </div>
 
+ <hr>
 <h2>Pretende eliminar os recursos selecionados?</h2>
 <table style="width:100%">
     <tr>

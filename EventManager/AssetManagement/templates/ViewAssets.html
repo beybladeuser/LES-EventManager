@@ -1,12 +1,21 @@
 {% extends "template_base.html" %}
 {% block loggedInContent %}
 {% block tableHead %}
-    <th >Nome do Recurso</th>
-    <th >Quantidade</th>
-    <th >Tipo</th>
-    <th >Sub-Tipo</th>
-    <th width="180">Ações</th>
+  
 {% endblock %}
+  <div class="columns">
+        <div class="column is-12" >
+            <nav aria-label="breadcrumbs" class="breadcrumb">
+                <ul>
+                    <li><a href="{% url 'homepage' %}">Início</a></li>
+                    <li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+                    <li class="is-active"><a href="{% url 'assetHome' %}">Consulta de Recursos</a></li>
+                </ul>
+            </nav>
+        </div>
+ </div>
+ <hr>
+ 
   <table style="width:100%" >
     <tr>
       <th>ID</th>

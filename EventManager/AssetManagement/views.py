@@ -243,7 +243,7 @@ def pre_associate_asset(request):
     return HttpResponse(template.render(context, request))    
 
 
-def associate_asset(request, eventID):
+def associate_asset(request, eventID = 0):
      
     Asset_EventForm = None
     Asset_EventForm_EventID = None
@@ -251,8 +251,7 @@ def associate_asset(request, eventID):
         existingEvent = Event.objects.get(pk=eventID) 
         
         Asset_EventForm_EventID = AssociateAssetForm(currentUser=request,initial={
-                    'event': existingEvent.id,
-                    'assetToAssociate': eventID
+                    'event': existingEvent.id
         })
         
         Asset_EventForm = AssociateAssetForm(request.POST, currentUser=request.user)   
@@ -280,7 +279,11 @@ def associate_asset(request, eventID):
 
 def consultar_recursos_disp(request, eventID):
     template = loader.get_template('ViewAssociateAssetsOfEvent.html')
+
+
+    AssetEvent_ = AssetEvent.objects.filter(eventid_event=eventID)
+
     context = {
-        'Assets' : AssetEvent.getAssetsByEvent(None, eventID)
+        'Assets' : AssetEvent_
     }
     return HttpResponse(template.render(context, request))    
