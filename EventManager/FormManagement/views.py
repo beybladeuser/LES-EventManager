@@ -237,6 +237,7 @@ def createForm(request, formTypeID=None, formID=None) :
                 request.session['form_return_redirect'] = "/forms/listformsfromtype/" + str(newForm.formtypeid_formtype.id)
                 return redirect("checkFormLayout", newForm.id)
 
+
         else:
             if formCreate :
                 formCreation_form = formCreation(currentUser=request.user,initial={

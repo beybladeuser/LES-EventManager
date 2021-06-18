@@ -2,13 +2,19 @@
 {% block loggedInContent %}
   <table style="width:100%">
     <tr>
-      <th>Equipment Name</th>
-      <th>Equipment Type</th>
+      <th>Nome do Equipamento</th>
+      <th>Tipo de Equipamento</th>
+       {%if isEdit is 1 %}
+          <th>Editar</th>
+      {%endif%}
     </tr>
     {% for equipment in Equipments %}
         <tr>
             <td>  <p>{{equipment.assetid}}</p></td>
             <td>  <p>{{equipment.equipmenttypeid_equipmenttype}}</p></td>
+            {%if isEdit is 1 %}
+                <td><p><a href="{% url 'EditEquipment' equipment.assetid.id %}">Editar</a></p></td>
+            {%endif%}
         </tr>
     {% endfor %}
   </table>
