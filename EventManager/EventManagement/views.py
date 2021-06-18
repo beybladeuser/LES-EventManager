@@ -14,51 +14,35 @@ import datetime
 
 # Create your views here.
 
+
 def index(request):
 	template = loader.get_template('homePreEvent.html')
 	context = {}
 	return HttpResponse(template.render(context, request))
 
 
-def cancelregistration(request, RegistrationID = None) :
-    registration=None
-    if Resgistration.objects.filter(pk=RegistrationID).exists()  :
-        registration = Resgistration.objects.get(pk=RegistrationID)
-        
-    if  registration and registration.canCancel(request.user) :
-        registration.cancelregistrations(request.user)
-        errorMessage = "Cancel registration successful"
-        template = loader.get_template('messageeliminar.html')
-        context = {
-        'errorMessage' : errorMessage,
-        }
-        return HttpResponse(template.render(context, request))  
-    else:
-        errorMessage = "Already checked in"
-        template = loader.get_template('message.html')
-        context = {
-        'errorMessage' : errorMessage,
-        }
-    return HttpResponse(template.render(context, request))
-    
+
         
 
-
-def consultar_participantes(request,eventid_event) :
+#............................................funcoes de listagem............................................................
+def consultar_participantes(request,eventid_event, key = None) :
     if Event.objects.filter(pk=eventid_event).exists()  :
         event = Event.objects.get(pk=eventid_event)
         if event.canConsultParticipants(request.user) :
+            setToOrder = Resgistration.objects.filter(eventid_event=eventid_event)
+            orderedSet = Resgistration.sortByKey(setToOrder, key)
             template = loader.get_template('participant.html')
             context = {
-                'registrations': Resgistration.objects.filter(eventid_event=eventid_event).order_by('participantuserid'),
-                'event' : event
+                'registrations': orderedSet,
+                'event' : event,
+                'filterKey' : key,
             }
             return HttpResponse(template.render(context, request))
         else:
-            errorMessage = "can not access this page"
+            errorMessage = "Sem permissão para aceder a esta página"
                 
     else:
-        errorMessage = "Event does not exist"
+        errorMessage = "O evento não existe"
 
     template = loader.get_template('message.html')
     context = {
@@ -67,34 +51,63 @@ def consultar_participantes(request,eventid_event) :
     return HttpResponse(template.render(context, request))
 
 
-def consultar_inscricoes(request) :
+def consultar_participantesnaovalidados(request,eventid_event,key=None) :
+    if Event.objects.filter(pk=eventid_event).exists()  :
+        event = Event.objects.get(pk=eventid_event)
+        setToOrder = Resgistration.objects.filter(eventid_event=eventid_event)
+        orderedSet = Resgistration.sortByKey(setToOrder, key)
+        if event.canConsultParticipants(request.user) :
+            template = loader.get_template('nonvalidateparticipantes.html')
+            context = {
+                'registrations': orderedSet,
+                'event' : event,
+                'filterKey' : key
+            }
+            return HttpResponse(template.render(context, request))
+        else:
+            errorMessage = "Sem permissão para aceder a esta página"
+                
+    else:
+        errorMessage = "O evento não existe"
+
+    template = loader.get_template('message.html')
+    context = {
+        'errorMessage' : errorMessage,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def consultar_inscricoes(request,key = None) :
     registerEvents=None
     errorMessage=None
+    setToOrder = Resgistration.objects.filter(participantuserid=request.user.id)
+    orderedSet = Resgistration.sortByKey(setToOrder, key)
     if (not Resgistration.objects.filter(participantuserid=request.user.id).exists()) :
         errorMessage="Não está inscrito em nenhum evento"
         
-    registerEvents=Resgistration.objects.filter(participantuserid=request.user.id)
+    
     template = loader.get_template('myevents.html')
     context = {
-        'registerEvents': registerEvents,
-        'errorMessage' : errorMessage
+        'registerEvents': orderedSet,
+        'errorMessage' : errorMessage,
+        'filterKey' : key
     }
     return HttpResponse(template.render(context, request))
 
     
+#............................................OVER funcoes de listagem............................................
 
-
-    
+#............................................funcoes de cancelar e add regis............................................    
 def addregistration(request, EventID= None):
     errorMessage = None
     form = None
     if not EventID or not Event.objects.filter(id=EventID).exists() :
-        errorMessage = "Error: No Event given"
+        errorMessage = "Error: Sem evento"
     
     else :
         eventToRegister = Event.objects.get(id=EventID)
         if not Resgistration.canRegister(eventToRegister, request.user) :
-            errorMessage= "Already subscribed in this event"
+            errorMessage= "Já está marcado com presente neste evento"
         else :
             regis = Resgistration()
             regis.eventid_event = eventToRegister
@@ -107,7 +120,7 @@ def addregistration(request, EventID= None):
                     regis.save()
                     answeredForm = form.save()
 
-                    errorMessage = "Registration Successfull"
+                    errorMessage = "Inscrição feita com sucesso"
 
                     template = loader.get_template('message.html')
                     context = {
@@ -124,7 +137,28 @@ def addregistration(request, EventID= None):
     }
     return HttpResponse(template.render(context, request))
 
-
+def cancelregistration(request, RegistrationID = None) :
+    registration=None
+    if Resgistration.objects.filter(pk=RegistrationID).exists()  :
+        registration = Resgistration.objects.get(pk=RegistrationID)
+        
+    if  registration and registration.canCancel(request.user) :
+        registration.cancelregistrations(request.user)
+        errorMessage = "A sua inscrição foi cancelada"
+        template = loader.get_template('messageeliminar.html')
+        context = {
+        'errorMessage' : errorMessage,
+        }
+        return HttpResponse(template.render(context, request))  
+    else:
+        errorMessage = "Já está marcado como presente no evento"
+        template = loader.get_template('message.html')
+        context = {
+        'errorMessage' : errorMessage,
+        }
+    return HttpResponse(template.render(context, request))
+#............................................OVER funcoes de cancelar e add regis............................................
+#............................................funcao de ver resposta............................................
 def viewanswer(request, RegistrationID = None ):
     answers = Answer.objects.filter(resgistrationid = RegistrationID)
     registration = None
@@ -149,8 +183,10 @@ def viewanswer(request, RegistrationID = None ):
         'errorMessage':errorMessage,
     }
     return HttpResponse(template.render(context, request))
+#............................................OVER funcao de ver resposta............................................
 
 
+#............................................funcoes de alteracao de estado e presença............................................
 def checkout(request, RegistrationID=None):
     if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
         regist = Resgistration.objects.get(pk=RegistrationID)
@@ -183,7 +219,7 @@ def invalidateparticipant(request,RegistrationID=None):
     return redirect('consultar_participantesnaovalidados', regist.eventid_event.id)
 
     
-
+#nao esta a ser usado mas podera vir a ser preciso futuramente
 def pendenteparticipant(request,RegistrationID=None):
     if (RegistrationID and Resgistration.objects.filter(pk=RegistrationID).exists()):
         regist = Resgistration.objects.get(pk=RegistrationID)
@@ -191,25 +227,4 @@ def pendenteparticipant(request,RegistrationID=None):
             regist.changevalidateStatus(0)
     return redirect('consultar_participantesnaovalidados', regist.eventid_event.id)
 
-
-def consultar_participantesnaovalidados(request,eventid_event) :
-    if Event.objects.filter(pk=eventid_event).exists()  :
-        event = Event.objects.get(pk=eventid_event)
-        if event.canConsultParticipants(request.user) :
-            template = loader.get_template('nonvalidateparticipantes.html')
-            context = {
-                'registrations': Resgistration.objects.filter(eventid_event=eventid_event).order_by('state'),
-                'event' : event
-            }
-            return HttpResponse(template.render(context, request))
-        else:
-            errorMessage = "can not access this page"
-                
-    else:
-        errorMessage = "Event does not exist"
-
-    template = loader.get_template('message.html')
-    context = {
-        'errorMessage' : errorMessage,
-    }
-    return HttpResponse(template.render(context, request))
+#............................................OVER funcoes de alteracao de estado e presença............................................

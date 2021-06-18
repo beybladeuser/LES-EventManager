@@ -6,10 +6,12 @@
 #   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models, connection
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.conf import settings
 from Models.models import *
 import datetime
+import re
 
 class Asset(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
@@ -62,6 +64,16 @@ class Asset(models.Model):
     def __str__(self):
         return self.assetname
         
+
+    @staticmethod
+    def makeOptions():
+        if "asset" in connection.introspection.table_names():
+            assets = Asset.objects.filter()
+            options=([(asset.id, asset.assetname) for asset in assets])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
 
     class Meta:
         db_table = 'asset'
@@ -167,7 +179,7 @@ class Equipmenttype(models.Model):
 
 class Rooms(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
-    room_type = models.ForeignKey('Roomtype', models.DO_NOTHING, db_column='Room_Type')  # Field name made lowercase.
+    room_type = models.ForeignKey('roomtype', models.DO_NOTHING, db_column='Room_Type')  # Field name made lowercase.
     buildingid_building = models.ForeignKey(Building, models.DO_NOTHING, db_column='BuildingID_Building')  # Field name made lowercase.
     
     capacity =  models.IntegerField(db_column='Capacity')  # Field name made lowercase.
@@ -180,11 +192,13 @@ class Rooms(models.Model):
         self.campus = self.buildingid_building.campusid
         return self
     
+
+
     @staticmethod
     def makeOptions():
-        if "Roomtype" in connection.introspection.table_names():
+        if "roomtype" in connection.introspection.table_names():
             roomtypes = RoomType.objects.all()
-            options=([(RoomType.id, RoomType.typename) for roomtype in roomtypes])
+            options=([(roomtype.id, roomtype.typename) for roomtype in roomtypes])
             return options
         else:
             return (("1", "No Database created"),)
@@ -198,10 +212,13 @@ class RoomType(models.Model):
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
     class Meta:
-        db_table = 'Roomtype'
+        db_table = 'roomtype'
 
     def __str__(self):
        return self.typename
+
+   
+
     
 
 class Service(models.Model):

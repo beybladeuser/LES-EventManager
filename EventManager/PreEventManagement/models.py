@@ -10,13 +10,17 @@ from AssetManagement.models import *
 # Create your models here.
 class AssetEvent(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    assetid_asset = models.ForeignKey('AssetManagement.Asset', models.DO_NOTHING, db_column='AssetID_Asset')  # Field name made lowercase.
     eventid_event = models.ForeignKey('Event', models.DO_NOTHING, db_column='EventID_Event')  # Field name made lowercase.
+    assetid_asset = models.ForeignKey('AssetManagement.Asset', models.DO_NOTHING, db_column='AssetID_Asset')  # Field name made lowercase.
 
-    class Meta:
-        
+    class Meta:     
         db_table = 'asset_event'
 
+
+    def getAssetsByEvent(self, eventID):
+        result = None
+        result = AssetEvent.objects.filter(eventid_event=eventID)
+        return result
 
 class AssetLogistics(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
@@ -47,8 +51,23 @@ class Event(models.Model):
         return self.proponentid == user or user.groups.filter(pk=1).exists()
 
     class Meta:
-        
         db_table = 'event'
+        
+    def __str__(self):
+        return self.eventname
+
+    @staticmethod
+    def makeOptions():
+        if "event" in connection.introspection.table_names():
+            events = Event.objects.filter()
+            options=([(event.id, event.eventname) for event in events])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+
+
+
 
 
 class Eventtype(models.Model):

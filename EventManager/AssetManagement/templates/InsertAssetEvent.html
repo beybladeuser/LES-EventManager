@@ -9,10 +9,10 @@
             <div class="box">
                 <header >
                     <p class="card-header-title">
-                        {% if editEquipmentForm%}
-                            Editar Equipamento
+                        {% if Asset_EventForm_EventID%}
+                            Associar Recurso
                         {% else %}    
-                            Adicionar Equipamento
+                            Associar Recurso
                         {%endif%}
                     </p>
                 </header>  
@@ -21,16 +21,16 @@
                   {% csrf_token %}
                   <div class="card-content">
                     <div class="content">
-                        {% if editEquipmentForm%}
-                           {{ editEquipmentForm|crispy }}
+                        {% if Asset_EventForm_EventID %}
+                           {{ Asset_EventForm_EventID|crispy }}
                         {% else %}    
-                           {{ EquipmentForm|crispy }}
+                           {{ Asset_EventForm|crispy }}
                         {%endif%}
                      
                     </div>
                   </div>
                   <footer class="card-footer">
-                    <button class="button is-success card-footer-item" type="submit">Adicionar Equipamento</button>
+                    <button class="button is-success card-footer-item" type="submit">Associar Recurso</button>
                     <a href="{% url 'assetHome'  %}" class="button is-white card-footer-item">Cancelar</a>
                   </footer>
                 </form>
