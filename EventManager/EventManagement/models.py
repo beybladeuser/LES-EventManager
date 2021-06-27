@@ -42,6 +42,35 @@ class Resgistration(models.Model):
     #to be implemented
     def canCancelCheckout(self, user) :
         return True
+    
+    @staticmethod
+    def sortByKey(setToSort, key) :
+        if( not setToSort ) :
+            return None
+        
+        if key :
+            if key.find("00") > -1 :
+                return setToSort.order_by("eventid_event")
+            if key.find("01") > -1 :
+                return setToSort.order_by("-eventid_event")
+            if key.find("10") > -1 :
+                return setToSort.order_by("dateofregistration")
+            if key.find("11") > -1 :
+                return setToSort.order_by("-dateofregistration")
+            if key.find("20") > -1 :
+                return setToSort.order_by("waspresent")
+            if key.find("21") > -1 :
+                return setToSort.order_by("-waspresent")
+            if key.find("30") > -1 :
+                return setToSort.order_by("participantuserid")
+            if key.find("31") > -1 :
+                return setToSort.order_by("-participantuserid")
+            if key.find("40") > -1 :
+                return setToSort.order_by("state")
+            if key.find("41") > -1 :
+                return setToSort.order_by("-state")
+                
+        return setToSort.order_by("participantuserid") 
 
 
     class Meta:
