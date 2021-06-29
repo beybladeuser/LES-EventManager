@@ -62,8 +62,7 @@ class Asset(models.Model):
             result = room[0]
         return result
 
-
-        
+    
     @staticmethod
     def makeOptions():
         if "asset" in connection.introspection.table_names():
@@ -86,7 +85,25 @@ class AssetType(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
 
+    @staticmethod
+    def makeOptions():
+        if "assettype" in connection.introspection.table_names():
+            assettypes = AssetType.objects.filter()
+            options=([(assettype.id, assettype.typename) for assettype in assettypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
+
+    @staticmethod
+    def getTypes():
+        if "assettype" in connection.introspection.table_names():
+            assettypes = AssetType.objects.filter()
+            options=([(assettype.typename) for assettype in assettypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+    
     class Meta:        
         db_table = 'assettype'
     
@@ -191,6 +208,19 @@ class Equipmenttype(models.Model):
     def __str__(self):
        return self.typename
 
+    @staticmethod
+    def getEquipmenttypes():
+        if "equipmenttype" in connection.introspection.table_names():
+            equipmenttypes = Equipmenttype.objects.all()
+            options=([(equipmenttypes.typename) for equipmenttypes in equipmenttypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+
+
+
+
 
 class Rooms(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
@@ -267,4 +297,7 @@ class Servicetype(models.Model):
 
     def __str__(self):
        return self.typename
+
+   
+    
     

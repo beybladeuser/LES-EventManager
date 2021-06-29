@@ -1,4 +1,4 @@
-{% extends "template_listings_base.html" %}
+{% extends "template_assets_listings_base.html" %}
 
 
 {% block PageTittle %}
@@ -7,12 +7,20 @@
 
 {% block filterTypes %}
   {% for assetType in assetTypes %}
-      <option>{{assetType.type}}</option>
+      <option>{{assetType}}</option>
   {% endfor %}
 {% endblock %}
 
 
+{% block selectSubtype %}
+  {% for assetSubtype in assetSubtypes %}
+      <option>{{assetType}}</option>
+  {% endfor %}
+{% endblock %}
  
+
+
+
 {% block tableHead %}
    <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
         Nome
@@ -21,18 +29,6 @@
                 <i class="mdi mdi-menu-down"></i>
             </span>
         {% elif filterKey and filterKey == '01' %}
-            <span class="icon is-small">
-                <i class="mdi mdi-menu-up"></i>
-            </span>
-        {% endif %}
-    </th>
-    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
-        Quantidade
-        {% if filterKey and filterKey == '10' %}
-            <span class="icon is-small">
-                <i class="mdi mdi-menu-down"></i>
-            </span>
-        {% elif filterKey and filterKey == '11' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-up"></i>
             </span>
@@ -62,7 +58,20 @@
             </span>
         {% endif %}
     </th>
+    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
+        Quantidade
+        {% if filterKey and filterKey == '10' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '11' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
     <th width="250">Ações</th>
+    
+    </th>
 
    
 {% endblock %}
@@ -73,9 +82,9 @@
     {% for asset in Assets %}
       <tr id="row{{ forloop.counter }}">
           <td id="NameFilter{{ forloop.counter }}">  <p>{{asset.assetname}}</p></td>
-          <td id="QuantityFilter{{ forloop.counter }}">  <p>{{asset.quantity}}</p></td>
           <td id="TypeFilter{{ forloop.counter}}">  <p>{{asset.assettype}}</p></td>
           <td id="SubtypeFilter{{ forloop.counter }}">  <p>{{asset.subtype}}</p></td>
+          <td id="QuantityFilter{{ forloop.counter }}">  <p>{{asset.quantity}}</p></td>
           <td>  <p><a href="{% url 'PreDeleteAssets' asset.id %}">Eliminar</a></p></td>
       </tr>
     {% endfor %}

@@ -1,4 +1,4 @@
-{% extends "template_form_base.html" %}
+{% extends "template_asset_base.html" %}
 
 {% block style %}
 <style>
@@ -149,8 +149,21 @@
 					<div class="field">
 						<div class="control has-icons-left">
 							<select class="input" id="TypeFilter" onchange="filter2()">
-							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
+							  	<option>Selecione o tipo de recurso: {% block selectType %}{% endblock %}</option>
 							  	{% block filterTypes %}
+							
+								{% endblock %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="SubtypeFilter" onchange="filter2()">
+							  	<option>Selecione o sub-tipo de recurso: {% block selectSubtype %}{% endblock %}</option>
+							  	{% block filterSubtypes %}
 							
 								{% endblock %}
 							</select>
@@ -162,22 +175,14 @@
 
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="CriatorFilter" placeholder="Nome do criador" onkeyup="filter2()">
+							<input type="text" class="input" id="QuantityFilter" placeholder="Nome do criador" onkeyup="filter2()">
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
 						</div>
 					</div>
 
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-
+	
 					<div class="field is-grouped">
 						<p class="control is-expanded">
 							<input class="button is-light is-fullwidth" type="reset" onclick="clearFilters()" value="Limpar Filtros">
@@ -192,8 +197,7 @@
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
 					<li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
-					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
-					</li>
+					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a></li>
 				</ul>
 			</nav>
 			
@@ -305,10 +309,10 @@
 
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
-				{'filterName' : 'QuantityFilter', 'isDropDown' : true},
+				{'filterName' : 'QuantityFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
-				{'filterName' : 'EditorFilter', 'isDropDown' : false},
+				{'filterName' : 'SubtypeFilter', 'isDropDown' : false},
+				
 			];
 			var filteredRows = new Array();
 			function filter2(){

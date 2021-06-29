@@ -3,7 +3,7 @@ from django.template import loader
 from django.http import HttpResponse
 from .models import Asset, Equipment, Rooms, Service
 
-from AssetManagement.models import Building
+from AssetManagement.models import AssetType, Building
 from PreEventManagement.models import AssetEvent
 
 from django_tables2 import SingleTableMixin
@@ -51,7 +51,10 @@ def consultar_assets(request, assetID_filter = 0):
         i += 1
 
     context = {
-        'assetTypes': Asset.makeOptions(),
+        'assetTypes': AssetType.getTypes(),
+        'equipmentTypes': Equipment.makeOptions(),
+        'serviceTypes': Service.makeOptions(),
+        'roomTypes': Rooms.makeOptions(),
         'Assets': Assets
     }
     return HttpResponse(template.render(context, request))
