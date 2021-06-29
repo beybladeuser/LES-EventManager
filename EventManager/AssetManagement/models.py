@@ -16,8 +16,10 @@ import re
 class Asset(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     assetname = models.CharField(db_column='AssetName', max_length=255)  # Field name made lowercase.
+    assettype = models.ForeignKey('Assettype', models.DO_NOTHING, db_column='assettype_ID')  # Field name made lowercase.
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
     canAdd = False
+
 
     def delete_asset(self):        
         if Service.objects.filter(assetid=self.id).exists():
@@ -61,22 +63,35 @@ class Asset(models.Model):
         return result
 
 
-    def __str__(self):
-        return self.assetname
         
-
     @staticmethod
     def makeOptions():
         if "asset" in connection.introspection.table_names():
             assets = Asset.objects.filter()
-            options=([(asset.id, asset.assetname) for asset in assets])
+            options=([(asset.id, asset.assettype) for asset in assets])
             return options
         else:
             return (("1", "No Database created"),)
 
 
+    def __str__(self):
+        return self.assetname
+
     class Meta:
         db_table = 'asset'
+
+
+
+class AssetType(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
+
+
+    class Meta:        
+        db_table = 'assettype'
+    
+    def __str__(self):
+       return self.typename
 
 
 

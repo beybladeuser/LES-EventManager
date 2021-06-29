@@ -1,38 +1,84 @@
-{% extends "template_base.html" %}
-{% block loggedInContent %}
-{% block tableHead %}
-  
+{% extends "template_listings_base.html" %}
+
+
+{% block PageTittle %}
+  Asset Listings
 {% endblock %}
-  <div class="columns">
-        <div class="column is-12" >
-            <nav aria-label="breadcrumbs" class="breadcrumb">
-                <ul>
-                    <li><a href="{% url 'homepage' %}">Início</a></li>
-                    <li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
-                    <li class="is-active"><a href="{% url 'assetHome' %}">Consulta de Recursos</a></li>
-                </ul>
-            </nav>
-        </div>
- </div>
- <hr>
+
+{% block filterTypes %}
+  {% for assetType in assetTypes %}
+      <option>{{assetType.type}}</option>
+  {% endfor %}
+{% endblock %}
+
+
  
-  <table style="width:100%" >
-    <tr>
-      <th>ID</th>
-      <th>Nome do Recurso</th>
-      <th>Quantidade</th>
-      <th>Tipo</th>
-      <th>Sub-Tipo</th>
-    </tr>
-    {% for asset in Assets %}
-        <tr>
-            <td>  <p>{{asset.id}}</p></td>
-            <td>  <p>{{asset.assetname}}</p></td>
-            <td>  <p>{{asset.quantity}}</p></td>
-            <td>  <p>{{asset.type}}</p></td>
-            <td>  <p>{{asset.subtype}}</p></td>
-            <td>  <p><a href="{% url 'PreDeleteAssets' asset.id %}">Eliminar</a></p></td>
-        </tr>
-    {% endfor %}
-  </table>
+{% block tableHead %}
+   <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+        Nome
+        {% if filterKey and filterKey == '00' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '01' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
+        Quantidade
+        {% if filterKey and filterKey == '10' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '11' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+        Tipo
+        {% if filterKey and filterKey == '20' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '21' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+        Sub-Tipo
+        {% if filterKey and filterKey == '30' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '31' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th width="250">Ações</th>
+
+   
 {% endblock %}
+  
+
+{% block listings %}
+  {% load asset_extras %}
+    {% for asset in Assets %}
+      <tr id="row{{ forloop.counter }}">
+          <td id="NameFilter{{ forloop.counter }}">  <p>{{asset.assetname}}</p></td>
+          <td id="QuantityFilter{{ forloop.counter }}">  <p>{{asset.quantity}}</p></td>
+          <td id="TypeFilter{{ forloop.counter}}">  <p>{{asset.assettype}}</p></td>
+          <td id="SubtypeFilter{{ forloop.counter }}">  <p>{{asset.subtype}}</p></td>
+          <td>  <p><a href="{% url 'PreDeleteAssets' asset.id %}">Eliminar</a></p></td>
+      </tr>
+    {% endfor %}
+{% endblock  %}
+
+

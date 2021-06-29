@@ -10,6 +10,10 @@ from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView
 
 from .forms import *
+from .tables import *
+
+
+from .forms import *
 from utilizadores.views import user_check
 
 # Create your views here.
@@ -35,22 +39,19 @@ def consultar_assets(request, assetID_filter = 0):
     while i < sizeofAssets :
         if Asset.getServiceType(Assets[i]) is not None:
             Assets[i].subtype =  Asset.getServiceType(Assets[i])
-            Assets[i].type = "Serviço"
-
+            
         elif Asset.getEquipmentType(Assets[i]) is not None:
             Assets[i].subtype = Asset.getEquipmentType(Assets[i])
-            Assets[i].type = "Equipamento"
-
+            
         elif Asset.getRoom(Assets[i]) is not None:
             room = Asset.getRoom(Assets[i])
             buildingg = Rooms.room_GetBuilding(room)
             
-
-            Assets[i].type = "Sala/Anfiteatro"
             Assets[i].subtype = Building.CampusName_BuildingName(buildingg)
         i += 1
 
     context = {
+        'assetTypes': Asset.makeOptions(),
         'Assets': Assets
     }
     return HttpResponse(template.render(context, request))
