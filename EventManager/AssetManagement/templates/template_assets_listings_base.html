@@ -149,7 +149,7 @@
 					<div class="field">
 						<div class="control has-icons-left">
 							<select class="input" id="TypeFilter" onchange="filter2()">
-							  	<option>Selecione o tipo de recurso: {% block selectType %}{% endblock %}</option>
+							  	<option>Selecione o tipo de recurso: </option>
 							  	{% block filterTypes %}
 							
 								{% endblock %}
@@ -162,26 +162,39 @@
 					<div class="field">
 						<div class="control has-icons-left">
 							<select class="input" id="SubtypeFilter" onchange="filter2()">
-							  	<option>Selecione o sub-tipo de recurso: {% block selectSubtype %}{% endblock %}</option>
-							  	{% block filterSubtypes %}
+							  	<option>Selecione o sub-tipo de recurso: </option>
+							  	<option>yha </option>
+{% comment %} 							  	
+								{% block filterSubtype %}
 							
-								{% endblock %}
+								{% endblock %} {% endcomment %}
 							</select>
 							<span class="icon is-left">
 								<i class="	fa fa-angle-down mdi-24px"></i>
 							</span>
 						</div>
 					</div>
-
 					<div class="field">
 						<div class="control has-icons-left">
-							<input type="text" class="input" id="QuantityFilter" placeholder="Nome do criador" onkeyup="filter2()">
+							<input type="text" class="input" id="QuantityFilter" placeholder="Quantidade" onkeyup="filter2()">
 							<span class="icon is-left">
 								<i class="mdi mdi-magnify mdi-24px"></i>
 							</span>
 						</div>
 					</div>
 
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="EmUtilFilter" onchange="filter2()">
+							  	<option>Selecione se: </option>
+							  	<option>Sim</option>
+							  	<option>Não</option>
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
 	
 					<div class="field is-grouped">
 						<p class="control is-expanded">
@@ -208,6 +221,7 @@
 			
 			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
 				<thead>
+					
 					<tr>
 						{% block tableHead %}
 				
@@ -232,9 +246,9 @@
 				<span style="margin-right: 3%;">Mostrando</span>   
 				<div class="select" style="margin-right: 3%;">
 					<select onchange="pagging(0, this.value);">
-					  <option value=5>5</option>
-					  <option value=10>10</option>
 					  <option value=20>20</option>
+					  <option value=10>10</option>
+					  <option value=5>5</option>
 					</select>
 				</div>
 				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
@@ -309,13 +323,14 @@
 
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
-				{'filterName' : 'QuantityFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
 				{'filterName' : 'SubtypeFilter', 'isDropDown' : false},
+				{'filterName' : 'QuantityFilter', 'isDropDown' : false},
+				{'filterName' : 'EmUtilFilter', 'isDropDown' : true},
 				
 			];
 			var filteredRows = new Array();
-			function filter2(){
+				function filter2(){
 				filteredRows = new Array();
 				var id = 1;
         	    while (document.getElementById("row" + id)){
@@ -375,8 +390,8 @@
 			}
 
 			var currentPage = 0;
-			var currentSize=5;
-			function pagging(page=0, size=5){
+			var currentSize=20;
+			function pagging(page=0, size=20){
 				var test = typeof global_size;
 				if (!(typeof global_size === "undefined" )) {
 					size=global_size;
