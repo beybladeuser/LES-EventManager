@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
+
 {% extends 'template_base.html' %}
 
 {% block title %}- Notificações{% endblock title %}
@@ -32,18 +33,14 @@
                 </div>
                 <div class="main">
                     {% if categoria == 0 %}
-                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}" class="item active"><span
-                            class="name">Tudo</span></a>
+                        <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}" class="item active"><span class="name">Tudo</span></a>
                     {% else %}
-                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}" class="item"><span
-                            class="name">Tudo</span></a>
+                        <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}" class="item"><span class="name">Tudo</span></a>
                     {% endif %}
                     {% if categoria == 1 %}
-                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 1 0 %}" class="item active"><span
-                            class="name">Não Lidas</span></a>
+                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 1 0 %}" class="item active"><span class="name">Não Lidas</span></a>
                     {% else %}
-                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 1 0 %}" class="item"><span
-                            class="name">Não Lidas</span></a>
+                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 1 0 %}" class="item"><span class="name">Não Lidas</span></a>
                     {% endif %}
                     {% if categoria == 2 %}
                     <a href="{% url 'notificacoes:categorias-notificacao-automatica' 2 0 %}" class="item active"><span
