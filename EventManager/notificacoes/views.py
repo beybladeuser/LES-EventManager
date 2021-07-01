@@ -1,9 +1,6 @@
 from django.http import HttpResponse
 from .models import *
 from utilizadores.models import *
-from configuracao.models import *
-from coordenadores.models import *
-from atividades.models import *
 import math
 
 from django.shortcuts import render, get_object_or_404, redirect

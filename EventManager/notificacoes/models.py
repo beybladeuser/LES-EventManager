@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from notifications.base.models import AbstractNotification
 
+from notifications.base.models import AbstractNotification
 
 class Notificacao(AbstractNotification):
     titulo = models.CharField(max_length=255)

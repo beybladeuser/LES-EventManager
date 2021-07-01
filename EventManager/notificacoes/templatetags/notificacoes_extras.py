@@ -1,8 +1,6 @@
 from django import template
 from utilizadores.models import *
 from notificacoes.models import *
-from coordenadores.models import *
-from atividades.models import *
 from distutils.version import StrictVersion  # pylint: disable=no-name-in-module,import-error
 
 from django import get_version
