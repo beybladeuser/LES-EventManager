@@ -1,10 +1,9 @@
 {% load static %}
 {% load poll_extras %}
-{% load notificacoes_extras %}
+{% load notificacoes_extras %} 
 {% load notifications_tags %}
 
 <nav id="main-navbar" class="navbar" role="navigation" aria-label="main navigation">
-    
     <div class="navbar-brand">
         <a href="{% url 'homepage' %}" class="navbar-item logo">
             <img src="{% static 'img/logonavbar.png' %}" alt="Event Manager" />
@@ -43,34 +42,11 @@
           <div  class="navbar-item">
                 {% comment %}  {% endcomment %}
                 {% if user.is_authenticated %}
-                {% if request.user|has_group:'Administrador' %}
-                <div class="dropdown is-bottom-left is-mobile-modal">    
-                    <div onclick="notificacoes()">
-                      <div id="notificacoes_trigger" role="button" class="dropdown-trigger">
-                        <span role="button">
-                          <div type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text" style="margin-right: 0.9rem">
-                            <span>
-                              <span class="icon">
-                                <span id="badge-inject" style="display:none;" title="Badge top right"class="badge is-warning">{% live_notify_badge %}
-                                </span>  
-                                {{ request.user|atualizar_informacoes }}
-                                <i class=" mdi mdi-bell mdi-24px"></i>
-                              </span>
-                            </span>
-                          </div>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                {% endif %}
-             
-                {% comment %}  {% endcomment %}
-
-
-{% comment %} ======================================= NOTIFICAÇões {% endcomment %}
-
-
+                {% comment %} {% if request.user|has_group:'Administrador' %} {% endcomment %}
                 <div class="dropdown is-bottom-left is-mobile-modal">
+            
+                {% comment %} ======================================= NOTIFICAÇões {% endcomment %}
+
                   <div onclick="notificacoes()">
                     <div id="notificacoes_trigger" role="button" class="dropdown-trigger">
                       <span role="button">
@@ -86,6 +62,7 @@
                       </span>
                     </div>
                   </div>
+                  {% comment %} {% endif %}  {% endcomment %}
 
                   <div id="ver_notificacoes" class="modal">
                     <div class="modal-background">
@@ -94,7 +71,7 @@
                       <header class="modal-card-head">
                         <p class="modal-card-title">Notificações</p>
                         <button onclick="notificacoes()" class="delete" aria-label="close"></button>
-                      </header>
+                      </header> 
                       <section class="modal-card-body">
                         <nav class="panel">
                           <p class="panel-tabs">
@@ -215,8 +192,7 @@
             </div>
           </div>
 
-          <div id="mensagens-dropdown" class="dropdown is-right"
-            onclick="event.currentTarget.classList.toggle('is-active')">
+          <div id="mensagens-dropdown" class="dropdown is-right" onclick="event.currentTarget.classList.toggle('is-active')">
             <div class="dropdown-trigger">
               <span role="button" aria-haspopup="true" aria-controls="dropdown-menu6">
                 <div type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text"
@@ -317,44 +293,41 @@
                 {% endif %}
                 
                 {% if user.is_authenticated %}
-                <a href="/utilizadores/logout">
-
-                  <div type="button" class="button">
-                    <span class="icon is-small">
-                      <i class="mdi mdi-login-variant"></i>
-                    </span>
-                    <span>Sair</span>
-                  </div>
-                </a>
+                    <a href="/utilizadores/logout">
+                      <div type="button" class="button">
+                        <span class="icon is-small">
+                          <i class="mdi mdi-login-variant"></i>
+                        </span>
+                        <span>Sair</span>
+                      </div>
+                    </a>
+                
                 {% else %}
-      
-      
-                <div class="navbar-end">
-                  <div class="navbar-item">
-                    <div class="buttons">
-                      <a href="/utilizadores/escolherperfil">
+                    <div class="navbar-end">
+                      <div class="navbar-item">
+                        <div class="buttons">
+                          <a href="/utilizadores/escolherperfil">
 
-                        <bottom class="button is-primary">
-                          <strong>Registar</strong>
-                      </a>
+                            <bottom class="button is-primary">
+                              <strong>Registar</strong>
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
       
-      
-                <a href="/utilizadores/login">
-                  <div type="button" class="button">
-                    <span class="icon is-small">
-                      <i class="mdi mdi-login-variant"></i>
-                    </span>
-                    <span>Entrar</span>
-                  </div>
-                </a>
+                    <a href="/utilizadores/login">
+                      <div type="button" class="button">
+                        <span class="icon is-small">
+                          <i class="mdi mdi-login-variant"></i>
+                        </span>
+                        <span>Entrar</span>
+                      </div>
+                    </a>
+
                 {% endif %}
             </div>
         </div>
     </div>
-    
 </nav>
 <!-- END NAVBAR NOVA -->
 

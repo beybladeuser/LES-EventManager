@@ -9,7 +9,6 @@ from django.utils.html import format_html
 
 from notifications.signals import notify
 
-
 try:
     from django.urls import reverse
 except ImportError:
