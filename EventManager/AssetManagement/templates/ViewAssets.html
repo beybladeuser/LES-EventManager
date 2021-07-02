@@ -103,6 +103,11 @@
           <td id="QuantityFilter{{ forloop.counter }}">  <p>{{asset.quantity}}</p></td>
           <td id="EmUtilFilter{{ forloop.counter }}">  <p>  sim   </p></td>
           <td>
+            {% comment %} EDITAR {% endcomment %}
+            <a href="{% url 'EditService' form.formtypeid_formtype.id form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
+                            <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
+            </a>
+            {% comment %} Eliminar {% endcomment %}
             <a href="{% url 'DeleteAssets' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar recurso" onclick="return confirm('Tem a certeza que deseja apagar este recurso?');">
 		  	    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
 		    </a>
