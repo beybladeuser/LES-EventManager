@@ -20,10 +20,6 @@ urlpatterns = [
 
 
 
-    path('pre_EditService/<int:isPreEdit>/', views.consultar_services, name='pre_EditService'),
-    path('pre_EditEquipment/<int:isPreEdit>/', views.consultar_equipments, name='pre_EditEquipment'),
-    path('pre_EditRoom/<int:isPreEdit>/', views.consultar_rooms, name='pre_EditRoom'),
-
 
     path('EditAsset/<int:assetID>/', views.edit_assets, name='EditAsset'),
     path('EditService/<int:assetID>/', views.createService, name='EditService'),
