@@ -1,0 +1,247 @@
+{% extends 'template_asset_base.html' %}
+{% block style %}
+    <style>
+    .ph-button {
+        
+        border-style: solid;
+        border-width: 0px 0px 3px;
+        box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+        color: #FFFFFF;	   
+        border-radius: 6px;
+        cursor: pointer;
+        display: inline-block;
+        font-style: normal;
+        overflow: hidden;
+        text-align: center;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        transition: all 200ms ease-in-out 0s;
+        white-space: nowrap;	
+        font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+        font-weight: 700;	
+        padding: 19px 39px 18px;
+        font-size: 18px;
+        
+    }
+    /*Green
+    ==========================*/
+    .ph-btn-green {
+
+        border-color: #3AC162;
+        background-color: #5FCF80;
+
+    }
+    .ph-btn-green:hover, .ph-btn-green:focus, .ph-btn-green:active {
+        background-color: #4BC970;
+        border-color: #3AC162;    
+    }
+
+    /*Blue
+    ==========================*/
+    .ph-btn-blue {
+
+        border-color: #326E99;
+        background-color: #3F8ABF;
+    }
+
+    .ph-btn-blue:hover, .ph-btn-blue:focus, .ph-btn-blue:active {
+        background-color: #397CAC;
+        border-color: #326E99;   
+    }
+
+    /*Grey
+    ==========================*/
+    .ph-btn-grey {
+
+        background-color: #C6CCD2;
+        border-color: #AAB3BB;
+    }
+    .ph-btn-grey:hover, .ph-btn-grey:focus, .ph-btn-grey:active {
+        background-color: #B8BFC7;
+        border-color: #AAB3BB; 
+    }
+
+    /*Red
+    ==========================*/
+    .ph-btn-red {
+
+        background-color: #ED5A5A !important;
+        border-color: #EA4343 !important;
+
+    }
+    .ph-btn-red:hover, .ph-btn-red:focus, .ph-btn-red:active {
+        background: none repeat scroll 0 0 #EB4848 !important;
+        border-color: #E83131 !important;    
+    }
+
+
+    /*DEMO ONLY FOR CENTER POSITION*/
+    .ph-container {
+    
+    margin: 0 auto;
+    display: inline;
+
+    
+    }
+
+    .ph-float {
+    
+    float: left;
+    width: 22%;
+    padding: 10px;  
+    padding-top: 50px;  
+    text-align: center;
+
+    }
+
+    .ph-clear {
+    
+    clear: both;
+    
+    }
+    body {
+  font-family: Arial, sans-serif;
+  background: url(http://www.shukatsu-note.com/wp-content/uploads/2014/12/computer-564136_1280.jpg) no-repeat;
+  background-size: cover;
+  height: 100vh;
+    }
+
+    h1 {
+    text-align: center;
+    font-family: Tahoma, Arial, sans-serif;
+    color: #06D85F;
+    margin: 80px 0;
+    }
+
+    .box {
+    width: 40%;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.2);
+    padding: 35px;
+    border: 2px solid #fff;
+    border-radius: 20px/50px;
+    background-clip: padding-box;
+    text-align: center;
+    }
+
+    .button {
+    font-size: 1em;
+    padding: 10px;
+    color: #fff;
+    border: 2px solid #06D85F;
+    border-radius: 20px/50px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    }
+    .button:hover {
+    background: #06D85F;
+    }
+
+    .overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+    }
+    .overlay:target {
+    visibility: visible;
+    opacity: 1;
+    }
+
+    .popup {
+    margin: 70px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    transition: all 5s ease-in-out;
+    }
+
+    .popup h2 {
+    margin-top: 0;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+    }
+    .popup .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    }
+    .popup .close:hover {
+    color: #06D85F;
+    }
+    .popup .content {
+    max-height: 30%;
+    overflow: auto;
+    }
+
+    @media screen and (max-width: 700px){
+    .box{
+        width: 70%;
+    }
+    .popup{
+        width: 70%;
+    }
+    }
+
+
+
+
+
+
+
+    </style>
+{% endblock %}
+
+{% block loggedInContent %}
+
+<div class="box">
+	<a class="button" href="#popup1">Let me Pop up</a>
+</div>
+
+<div id="popup1" class="overlay">
+	<div class="popup">
+		<h2>Here i am</h2>
+		<a class="close" href="#">&times;</a>
+		<div class="content">
+			<div class="ph-container">
+                <div class="columns" >
+                        <div class="column is-4" >
+                            <div class="ph-float">
+                                <a href='#' class='ph-button ph-btn-blue'>Adicionar Espaço</a>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="column is-4" >
+                            <div class="ph-float">
+                                <a href='#' class='ph-button ph-btn-blue'>Adicionar Equipamento</a>
+                            </div>
+                        </div>
+
+                    <div class="ph-float">
+                        <a href='#' class='ph-button ph-btn-blue'>Adicionar Serviço</a>
+                    </div>
+                </div>
+                <div class="ph-clear"></div>   
+		</div>
+	</div>
+</div>
+
+  
+{% endblock %}
+
+{% block scripts%}
+
+{% endblock %}

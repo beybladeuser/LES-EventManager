@@ -1,10 +1,23 @@
-{% extends 'template_base.html' %}
+{% extends 'template_asset_base.html' %}
+{% load crispy_forms_tags %} 
+{% block NonErrorContent %}
 
+<div class="columns">
+    <div class="column is-12" >
+        <nav aria-label="breadcrumbs" class="breadcrumb">
+            <ul>
+                <li><a href="{% url 'homepage' %}">Início</a></li>
+                <li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+                <li><a href="{% url 'InsertEquipment' %}">Adicionar Equipamento</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
 
-{% block loggedInContent %}
- <div class="columns" style="margin-top: 5%;">
-        <div class="column is-3">
-        </div>
+<hr> 
+
+<div class="columns" style="margin-top: 5%;">
+        <div class="column is-3"></div>
         <div class="column is-6">
             <div class="box">
                 <header >
@@ -17,11 +30,10 @@
                     </p>
                 </header>  
                 <form method="post">
-                  {% load crispy_forms_tags %} 
                   {% csrf_token %}
                   <div class="card-content">
                     <div class="content">
-                        {% if editEquipmentForm%}
+                        {% if editEquipmentForm %}
                            {{ editEquipmentForm|crispy }}
                         {% else %}    
                            {{ EquipmentForm|crispy }}
@@ -35,12 +47,10 @@
                   </footer>
                 </form>
             </div>
-          </div>
+        </div>
   </div>
 
 
 
 {% endblock %}
 
-{% block loggedOutContent %}
-{% endblock %}

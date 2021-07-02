@@ -1,5 +1,187 @@
 {% extends 'template_asset_base.html' %}
 
+{%block style %}
+<style>
+    .ph-button1 {
+        
+        border-style: solid;
+        border-width: 0px 0px 3px;
+        box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+        color: #FFFFFF;	   
+        border-radius: 6px;
+        cursor: pointer;
+        display: inline-block;
+        font-style: normal;
+        overflow: hidden;
+        text-align: center;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        transition: all 200ms ease-in-out 0s;
+        white-space: nowrap;	
+        font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+        font-weight: 700;	
+        padding: 19px 39px 18px;
+        font-size: 18px;
+        
+    }
+    /*Green
+    ==========================*/
+    .ph-btn-green1 {
+
+        border-color: #3AC162;
+        background-color: #5FCF80;
+
+    }
+    .ph-btn-green:hover1, .ph-btn-green:focus1, .ph-btn-green:active1 {
+        background-color: #4BC970;
+        border-color: #3AC162;    
+    }
+
+    /*Blue
+    ==========================*/
+    .ph-btn-blue1 {
+
+        border-color: #326E99;
+        background-color: #3F8ABF;
+    }
+
+    .ph-btn-blue1:hover1, .ph-btn-blue:focus1, .ph-btn-blue:active1 {
+        background-color: #397CAC;
+        border-color: #326E99;   
+    }
+
+    /*Grey
+    ==========================*/
+    .ph-btn-grey1 {
+
+        background-color: #C6CCD2;
+        border-color: #AAB3BB;
+    }
+    .ph-btn-grey:hover, .ph-btn-grey:focus, .ph-btn-grey:active {
+        background-color: #B8BFC7;
+        border-color: #AAB3BB; 
+    }
+
+    /*Red
+    ==========================*/
+    .ph-btn-red1 {
+
+        background-color: #ED5A5A !important;
+        border-color: #EA4343 !important;
+
+    }
+    .ph-btn-red1:hover, .ph-btn-red:focus, .ph-btn-red:active {
+        background: none repeat scroll 0 0 #EB4848 !important;
+        border-color: #E83131 !important;    
+    }
+
+
+    /*DEMO ONLY FOR CENTER POSITION*/
+    .ph-container1 {
+    
+    margin: 0 auto;
+    display: inline;
+
+    
+    }
+
+    .ph-float1 {
+    
+    float: left;
+    width: 22%;
+    padding: 10px;  
+    padding-top: 50px;  
+    text-align: center;
+
+    }
+
+    .ph-clear1 {
+    
+    clear: both;
+    
+    }
+
+
+    h1 {
+    text-align: center;
+    font-family: Tahoma, Arial, sans-serif;
+    color: #06D85F;
+    margin: 80px 0;
+    }
+
+
+
+    .button1 {
+    font-size: 1em;
+    padding: 10px;
+    color: #fff;
+    border: 2px solid #06D85F;
+    border-radius: 20px/50px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    }
+    .button1:hover1 {
+    background: #06D85F;
+    }
+
+    .overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+    }
+    .overlay:target {
+    visibility: visible;
+    opacity: 1;
+    }
+
+    .popup {
+    margin: 70px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    transition: all 5s ease-in-out;
+    }
+
+    .popup h2 {
+    margin-top: 0;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+    }
+    .popup .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    }
+    .popup .close:hover {
+    color: #06D85F;
+    }
+    .popup .content {
+    max-height: 30%;
+    overflow: auto;
+    }
+
+   
+    .popup{
+        width: 70%;
+    }
+    }
+</style>
+{% endblock %}
+
 
 {% block loggedInContent %}
 
@@ -28,65 +210,39 @@
             <br>
             <br>
             <footer class="card-footer">
-                <a href="{% url 'ViewAssets' 0 %}" class="card-footer-item">Consultar</a>
-            </footer>    
-        </div>
-    </div>
-    <div class="column is-3">
-        <div class="box">
-            <header >
-                <p class="card-header-title">Espaços </p>
-            </header>
-            <br>
-            <br>
-            <footer class="card-footer">
-                <a href="{% url 'ViewRooms' 0 %}" class="card-footer-item">Consultar</a>
-                <a href="{% url 'InsertRoom'  %}" class="card-footer-item">Adicionar</a>
-                <a href="{% url 'pre_EditRoom' 1 %}" class="card-footer-item">Editar</a>
+                <a href="{% url 'ViewAssets' %}" class="card-footer-item">Consultar</a>
+                <a href="#popup" class="card-footer-item">Adicionar</a>
                 
+                <div id="popup" class="overlay">
+                    <div class="popup">
+                        <a class="close" href="#">&times;</a>
+                        <div class="content">
+                            <div class="ph-container">
+                                <div class="columns" >
+                                    <div class="column is-4" >
+                                        <div class="ph-float1">
+                                            <a href= {% url 'InsertRoom' %} class='ph-button1 ph-btn-blue1'>Adicionar Espaço</a>
+                                        </div>
+                                    </div>
+                                    <div class="column is-4" >
+                                        <div class="ph-float1">
+                                            <a href= {% url 'InsertEquipment'%} class='ph-button1 ph-btn-blue1'>Adicionar Equipamento</a>
+                                        </div>
+                                    </div>
+                                    <div class="column is-4" >
+                                        <div class="ph-float1">
+                                            <a href= {% url 'InsertService'%} class='ph-button1 ph-btn-blue1'>Adicionar Serviço</a>
+                                        </div>
+                                    </div>
+                                    <div class="ph-clear1"></div>   
+                                </div>
+                        </div>
+                    </div>
+                </div>
             </footer>    
         </div>
     </div>
-
-    <div class="column is-3">
-        <div class="box">
-            <header >
-                <p class="card-header-title">Serviços </p>
-            </header>
-            <br>
-            <br>
-            <footer class="card-footer">
-                <a href="{% url 'ViewServices' 0 %}" class="card-footer-item">Consultar</a>
-                <a href="{% url 'InsertService'  %}" class="card-footer-item">Adicionar</a>
-                <a href="{% url 'pre_EditService' 1 %}" class="card-footer-item">Editar</a>
-                
-            </footer>    
-        </div>
-    </div>
-
-    <div class="column is-3">
-        <div class="box">
-            <header >
-                <p class="card-header-title">Equipamentos</p>
-            </header>
-            <br>
-            <br>
-            <footer class="card-footer">
-                <a href="{% url 'ViewEquiments' 0 %}" class="card-footer-item">Consultar</a>
-                <a href="{% url 'InsertEquipment'  %}" class="card-footer-item">Adicionar</a>
-                <a href="{% url 'pre_EditEquipment' 1 %}" class="card-footer-item">Editar</a>
-                
-            </footer>    
-        </div>
-    </div>
-</div>
-  
-  
-  
-  
-<hr>
-<div class="columns" >
-     <div class="column is-3"> 
+    <div class="column is-3"> 
         <div class="box">
             <header >
                 <p class="card-header-title">Associar Recursos a Eventos</p>
@@ -98,7 +254,17 @@
             </footer>    
         </div>
     </div>
+
+    
+
+    
 </div>
+  
+  
+  
+  
+<hr>
+
 {% endblock %}
 {% block loggedOutContent %}
 {% endblock %}

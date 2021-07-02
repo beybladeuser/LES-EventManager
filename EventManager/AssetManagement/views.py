@@ -25,14 +25,11 @@ def home(request) :
     return HttpResponse(template.render(context, request))
 
 
-def consultar_assets(request, assetID_filter = 0):
+def consultar_assets(request):
     template = loader.get_template('ViewAssets.html')
     
 
-    if assetID_filter is None:
-        Assets = Asset.objects.filter(assetID_filter)
-    else:
-        Assets = Asset.objects.all()
+    Assets = Asset.objects.all()
    
     i = 0
     sizeofAssets = len(Assets)
@@ -126,6 +123,21 @@ def delete_assets(request, assetID = None):
     return redirect('ViewAssets')
 
 
+def edit_assets(request, assetID = None):
+    if(Service.objects.filter(assetid=assetID).exists()):
+        return redirect('EditService', assetID)
+    
+    elif(Equipment.objects.filter(assetid=assetID).exists()):
+        return redirect('EditEquipment', assetID)
+    
+    elif(Rooms.objects.filter(assetid=assetID).exists()):
+        return redirect('EditRoom', assetID)
+
+def createAsset(request):
+    template = loader.get_template('InsertAssetSelect.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
 
 
 def createService(request, assetID = None):
@@ -143,13 +155,13 @@ def createService(request, assetID = None):
         ServiceForm = InsertServiceForm(request.POST, currentUser=request.user)
         if ServiceForm.is_valid():
             newService = ServiceForm.save(assetID)
-            return redirect('ViewServices', 1)       
+            return redirect('ViewAssets')       
     else:
         if request.method == 'POST':
             ServiceForm = InsertServiceForm(request.POST, currentUser=request.user)
             if ServiceForm.is_valid():
                 newService = ServiceForm.save()
-                return redirect('ViewServices', 1)        
+                return redirect('ViewAssets')        
           
         else:
             ServiceForm = InsertServiceForm(currentUser=request.user)
@@ -178,13 +190,13 @@ def createEquipment(request, assetID = None):
         EquipmentForm = InsertEquipmentForm(request.POST, currentUser=request.user)
         if EquipmentForm.is_valid():
             newEquipment = EquipmentForm.save(assetID)   
-            return redirect('ViewEquipments', 1)                
+            return redirect('ViewAssets')                
     else:
         if request.method == 'POST':
             EquipmentForm = InsertEquipmentForm(request.POST, currentUser=request.user)
             if EquipmentForm.is_valid():
                 newEquipment = EquipmentForm.save()  
-                return redirect('ViewEquipments', 1)            
+                return redirect('ViewAssets')            
         else:
             EquipmentForm = InsertEquipmentForm(currentUser=request.user)
 
@@ -216,13 +228,13 @@ def createRoom(request, assetID = None):
         RoomForm = InsertRoomForm(request.POST, currentUser=request.user)   
         if RoomForm.is_valid():
             newRoom = RoomForm.save(assetID) 
-            return redirect('ViewRooms', 1)    
+            return redirect('ViewAssets')    
     else:
         if request.method == 'POST':
             RoomForm = InsertRoomForm(request.POST, currentUser=request.user)
             if RoomForm.is_valid():
                 newRoom = RoomForm.save()    
-                return redirect('ViewRooms', 1)         
+                return redirect('ViewAssets')         
         else:
             RoomForm = InsertRoomForm(currentUser=request.user)
 
