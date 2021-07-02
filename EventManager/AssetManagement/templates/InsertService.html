@@ -1,6 +1,22 @@
 {% extends 'template_base.html' %}
 
 {% block loggedInContent %}
+
+<div class="columns">
+    <div class="column is-12" >
+        <nav aria-label="breadcrumbs" class="breadcrumb">
+            <ul>
+                <li><a href="{% url 'homepage' %}">Início</a></li>
+                <li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+                <li class="is-active" ><a href="{% url 'InsertService' %}">Adicionar Serviço</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<hr> 
+
+
  <div class="columns" style="margin-top: 5%;">
         <div class="column is-3">
         </div>
