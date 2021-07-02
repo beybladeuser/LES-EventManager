@@ -183,19 +183,7 @@
 						</div>
 					</div>
 
-					<div class="field">
-						<div class="control has-icons-left">
-							<select class="input" id="EmUtilFilter" onchange="filter2()">
-							  	<option>Selecione se: </option>
-							  	<option>Sim</option>
-							  	<option>Não</option>
-							</select>
-							<span class="icon is-left">
-								<i class="	fa fa-angle-down mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-	
+				
 					<div class="field is-grouped">
 						<p class="control is-expanded">
 							<input class="button is-light is-fullwidth" type="reset" onclick="clearFilters()" value="Limpar Filtros">
@@ -325,9 +313,7 @@
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
 				{'filterName' : 'SubtypeFilter', 'isDropDown' : false},
-				{'filterName' : 'QuantityFilter', 'isDropDown' : false},
-				{'filterName' : 'EmUtilFilter', 'isDropDown' : true},
-				
+				{'filterName' : 'QuantityFilter', 'isDropDown' : false},				
 			];
 			var filteredRows = new Array();
 				function filter2(){

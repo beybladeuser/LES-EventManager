@@ -25,7 +25,9 @@ class Timebracket(models.Model):
     dayid_day = models.ForeignKey('Day', models.DO_NOTHING, db_column='DayID_Day')  # Field name made lowercase.
     starttime = models.TimeField(db_column='StartTime')  # Field name made lowercase.
     endtime = models.TimeField(db_column='EndTime')  # Field name made lowercase.
+    associated_to_event = models.BooleanField(db_column='AssociatedToEvent', default=False)
+
+
 
     class Meta:
-        
         db_table = 'timebracket'

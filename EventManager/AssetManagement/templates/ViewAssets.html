@@ -76,18 +76,6 @@
             </span>
         {% endif %}
     </th>
-    <th class="orderable {% if filterKey and filterKey == '50' or filterKey and filterKey == '51' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '50' %}'51'{% else %}'50'{% endif %})">
-        Em utilização
-        {% if filterKey and filterKey == '50' %}
-            <span class="icon is-small">
-                <i class="mdi mdi-menu-down"></i>
-            </span>
-        {% elif filterKey and filterKey == '51' %}
-            <span class="icon is-small">
-                <i class="mdi mdi-menu-up"></i>
-            </span>
-        {% endif %}
-    </th>
     <th width="250">Ações</th>
        
 {% endblock %}
@@ -101,8 +89,11 @@
           <td id="TypeFilter{{ forloop.counter}}">  <p>{{asset.assettype}}</p></td>
           <td id="SubtypeFilter{{ forloop.counter }}">  <p>{{asset.subtype}}</p></td>
           <td id="QuantityFilter{{ forloop.counter }}">  <p>{{asset.quantity}}</p></td>
-          <td id="EmUtilFilter{{ forloop.counter }}">  <p>  sim   </p></td>
           <td>
+            {% comment %} VER Agendamento {% endcomment %}
+            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Agendamento">
+                <i class="fa fa-search fa-lg" aria-hidden="true"></i>
+            </a>
             {% comment %} EDITAR {% endcomment %}
             <a href="{% url 'EditAsset' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
                 <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
