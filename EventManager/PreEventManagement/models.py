@@ -39,11 +39,10 @@ class Event(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     eventtypeid = models.ForeignKey('Eventtype', models.DO_NOTHING, db_column='EventTypeID')  # Field name made lowercase.
     formproposalid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormProposalID', related_name='Event2proposalForm')
-    formresgistrationid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormResgistrationID', related_name='Event2registerForm')  # Field name made lowercase.
-    formfeedbackid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormFeedBackID', related_name='Event2feedbackForm')  # Field name made lowercase.
-    formlogisticsid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormLogisticsID', related_name='Event2LogisticsForm')  # Field name made lowercase.
+    formresgistrationid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormResgistrationID', related_name='Event2registerForm', blank=True, null=True)  # Field name made lowercase.
+    formfeedbackid = models.ForeignKey('FormManagement.Form', models.DO_NOTHING, db_column='FormFeedBackID', related_name='Event2feedbackForm', blank=True, null=True)  # Field name made lowercase.
     campusid = models.ForeignKey(Campus, models.DO_NOTHING, db_column='CampusID')  # Field name made lowercase.
-    wasvalidated = models.TextField(db_column='wasValidated')  # Field name made lowercase. This field type is a guess.
+    wasvalidated = models.IntegerField(db_column='wasValidated')  # Field name made lowercase. This field type is a guess.
     proponentid = models.ForeignKey(settings.AUTH_USER_MODEL, models.DO_NOTHING, db_column='ProponentID')  # Field name made lowercase.
     eventname = models.CharField(db_column='eventName', max_length=255)  # Field name made lowercase.
 

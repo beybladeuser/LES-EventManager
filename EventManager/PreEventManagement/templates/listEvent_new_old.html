@@ -119,67 +119,45 @@
 
 	{% block listings %}
 	    {% load form_extras %}
-	    {% for entri in eventes %} {% if entri.proponentid == user or entri.wasvalidated == 2 or user|has_group:'Administrador' %}
+	    {% for entri in eventes %} {% if entri.proponentid == user or entri.wasvalidated == '1' or user|has_group:'Administrador' %}
 
 
             <tr class="rou" id="row{{ forloop.counter }}" onclick="rowclicked.call(this)">
                 <td data-label="Nome" id="NameFilter{{ forloop.counter }}">{{entri.eventname}}</td>
                 <td data-label="Tipo" id="TypeFilter{{ forloop.counter }}">{{entri.eventtypeid.typename}}</td>
                 <td data-label="Campus" id="CampusFilter{{ forloop.counter }}">{{entri.campusid.campusname}}</td>
-                <td data-label="Validated" id="ValidatedFilter{{ forloop.counter }}">{% if entri.wasvalidated == 0 %}Validação da Proposta Pendente{% elif entri.wasvalidated == 1 %}Validação da Logística Pendente{% else %}Validado{% endif %}</td>
+                <td data-label="Validated" id="ValidatedFilter{{ forloop.counter }}">{% if entri.wasvalidated == '1' %}sim{% else %}não{% endif %}</td>
 
                 <td data-label="Ações">
 
 
 
                     
-
-            		{% if entri.proponentid == user %}
-                		{% if entri.wasvalidated == 0 %}
-		                    <a href="{% url 'edit' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Proposta">
-		                        <i class="mdi mdi-circle-edit-outline mdi-18px" aria-hidden="true"></i>
-		                    </a>
-		                {% elif entri.wasvalidated == 1 %}
-		                    {% if entri.formresgistrationid is None %}
-			                    <a href="{% url 'fill_logistic' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Preencher Logística">
-			                        <i class="fas fa-chevron-circle-right" aria-hidden="true"></i>
-			                    </a>
-		                    {% else %}
-			                	<a href="{% url 'edit_logistic' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Logística" {% if entri.has_participants %}disabled{% endif %}>
-			                        <i class="mdi mdi-circle-edit-outline mdi-18px" aria-hidden="true"></i>
-			                    </a>
-			                {% endif %}
-		                 {% endif %}
-		            {% endif %}
-
-                    
-                    {% if user|has_group:'Administrador' %}
-	                    <a href="{% url 'validate' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="{% if entri.wasvalidated == 0 %}Validar Proposta{% elif entri.wasvalidated == 1 %}{% if entri.formresgistrationid is None %}Preencher logística antes de prosseguir!{% else %}Validar Logística{% endif %}{% else %}Validado!{% endif %}" onclick="return confirm('Pretende mesmo validar?');" {% if entri.wasvalidated == 1 and entri.formresgistrationid is None or entri.wasvalidated == 2 %}disabled{% endif %}>
-	                        <i class="far fa-check-square" aria-hidden="true"></i>
+                	{% if user|has_group:'Administrador' or entri.proponentid == user %}
+	                    <a href="{% url 'edit' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Evento" {% if entri.hasParticipants %}disabled{% endif %}>
+	                        <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
 	                    </a>
-                    {% endif %}
+
+	                    
+	                    {% if user|has_group:'Administrador' %}
+		                    <a href="{% url 'validate' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Validar Evento" onclick="return confirm('Pretende mesmo validar?');" {% if entri.wasvalidated == '1' %}disabled{% endif %}>
+		                        <i class="far fa-check-square" aria-hidden="true"></i>
+		                    </a>
+	                    {% endif %}
 
 
-                	{% if entri.wasvalidated == 2 %}
 
-	                	<a href="{% url 'addregistration' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Inscrever no Evento{% if entri.currently_enrolled == 2 %} (já inscrito e aprovado!){% elif entri.currently_enrolled == 1 %} (inscrição anulada!){% elif entri.currently_enrolled == 0 %} (já inscrito!){% endif %}" {% if entri.currently_enrolled != -1 %}disabled{% endif %}>
+	                    <a href="{% url 'delete' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Evento" onclick="return confirm('Tem a certeza que deseja apagar este Evento?');" {% if entri.hasParticipants %}disabled{% endif %}>
+	                        <i class="fas fa-times fa-lg" aria-hidden="true"></i>
+	                    </a>
+                	{% else %}
+
+	                	<a href="{% url 'addregistration' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Inscrever no Evento" onclick="return confirm('Tem a certeza que se deseja inscrever neste evento?');" {% if entri.currently_enrolled %}disabled{% endif %}>
 	                        <i class="fas fa-address-book" aria-hidden="true"></i>
 	                    </a>
 
-	                    {% if entri.formfeedbackid is not None %}
-		                    <a href="{% url 'feedback' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Deixar feedback{% if not entri.user_was_present %} (ainda não marcado como tendo estado presente!){% elif entri.user_feedback_already %} (feedback já submetido!){% endif %}" {% if entri.user_feedback_already or not entri.user_was_present %}disabled{% endif %}>
-		                        <i class="far fa-comments" aria-hidden="true"></i>
-		                    </a>
-		                {% endif %}
                 	{% endif %}
-
-
-                    {% if entri.proponentid == user or user|has_group:'Administrador' %}
-                    <a href="{% url 'delete' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Evento{% if entri.has_participants %} (utilizadores inscritos!){% endif %}" onclick="return confirm('Tem a certeza que deseja apagar este Evento?');" {% if entri.has_participants %}disabled{% endif %}>
-                        <i class="fas fa-times fa-lg" aria-hidden="true"></i>
-                    </a>
-                    {% endif %}
-
+                    
 
 
                 </td>
@@ -204,25 +182,17 @@
 	            	</td>
 
 	            	<td colspan="2">
-	            		<i>Logistics:</i>
-	            		<br><br>
-	            		<b>Feedback form:</b><br> 
-	            		{% if entri.formfeedbackid is None %}
-	            			----
-	            		{% else %}
-	            			<a href="{% url 'checkFormLayout' entri.formfeedbackid.id %}">
-	            				{{entri.formfeedbackid.formname}}({{entri.formfeedbackid.id}})
-	            			</a>
-	            		{% endif %}
-	            		<br><br>
-	            		<b>Resgistration form:</b><br> 
-	            		{% if entri.formresgistrationid is None %}
-	            			----
-	            		{% else %}
-	            			<a href="{% url 'checkFormLayout' entri.formresgistrationid.id %}">
-	            				{{entri.formresgistrationid.formname}}({{entri.formresgistrationid.id}})
-	            			</a>
-	            		{% endif %}
+	            		<i> Logistics questions:</i><br><br>
+	            		{% for logistic_QA in entri.logistic_QAs %}
+		            		<b>{{logistic_QA.question.question}}</b><br>
+		            		{% if logistic_QA.answer.has_text %} 
+		            			{{logistic_QA.answer.text}}({{logistic_QA.answer.answer}})
+		            		{% else %} 
+		            			{{logistic_QA.answer.answer}} 
+		            		{% endif %}
+		            		<br>
+		            		<br>
+		            	{% endfor %}
 	            	</td>
 
 	            	<td>
