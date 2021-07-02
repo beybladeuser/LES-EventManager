@@ -16,7 +16,6 @@ class Schedule(models.Model):
     eventid = models.ForeignKey('PreEventManagement.Event', models.DO_NOTHING, db_column='EventID')  # Field name made lowercase.
 
     class Meta:
-        
         db_table = 'schedule'
 
 class Timebracket(models.Model):
