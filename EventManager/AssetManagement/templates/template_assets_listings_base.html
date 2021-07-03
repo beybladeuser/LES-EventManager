@@ -162,8 +162,8 @@
 			 
 						<div class="field" id="SubtypeFilterBase1" style="display:none">
 							<div class="control has-icons-left">
-								<select class="input" id="SubtypeFilter1" onchange="filter2()">
-									
+								<select class="input" id="SubtypeFilter_1" onchange="filter2()">
+									<option>Selecione o subtipo: </option>
 								
 									<option>Microfone</option>
 									
@@ -181,7 +181,8 @@
 
 						<div class="field" id="SubtypeFilterBase2" style="display:none">
 							<div class="control has-icons-left">
-								<select class="input" id="SubtypeFilter2" onchange="filter2()">
+								<select class="input" id="SubtypeFilter_2" onchange="filter2()">
+									<option>Selecione o subtipo: </option>
 									<option>Sala de Aula</option>
 								
 								</select>
@@ -193,7 +194,8 @@
 
 						<div class="field" id="SubtypeFilterBase3" style="display:none">
 							<div class="control has-icons-left">
-								<select class="input" id="SubtypeFilter3" onchange="filter2()">
+								<select class="input" id="SubtypeFilter_3" onchange="filter2()">
+										<option>Selecione o subtipo: </option>
 										<option>Alojamento</option>
 								
 								</select>
@@ -313,7 +315,7 @@
 				var option = caller.options[caller.selectedIndex].text.toLowerCase();
 				for (let index = 1; index <= 3; index++)
 				{
-					var temp = document.getElementById("SubtypeFilter"+index);
+					var temp = document.getElementById("SubtypeFilter_"+index);
 					temp.selectedIndex=0;
 				}
 
@@ -339,9 +341,9 @@
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'SubtypeFilter1', 'isDropDown' : true},
-				{'filterName' : 'SubtypeFilter2', 'isDropDown' : true},
-				{'filterName' : 'SubtypeFilter3', 'isDropDown' : true},
+				{'filterName' : 'SubtypeFilter_1', 'isDropDown' : true},
+				{'filterName' : 'SubtypeFilter_2', 'isDropDown' : true},
+				{'filterName' : 'SubtypeFilter_3', 'isDropDown' : true},
 				{'filterName' : 'QuantityFilter', 'isDropDown' : false},				
 			];
 			var filteredRows = new Array();
@@ -354,7 +356,7 @@
 						var temp = filters[index].filterName;
 						if (temp.indexOf("SubtypeFilter")>-1)
 						{
-							temp=temp.substring(0, temp.length - 1);
+							temp=temp.substring(0, temp.length - 2);
 						}
 						var fieldVal = document.getElementById(temp + id).textContent.toLowerCase();
 						var FilterOBJ = document.getElementById(filters[index].filterName);

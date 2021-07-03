@@ -43,61 +43,65 @@
                 {% comment %}  {% endcomment %}
                 {% if user.is_authenticated %}
                 {% comment %} {% if request.user|has_group:'Administrador' %} {% endcomment %}
-                <div class="dropdown is-bottom-left is-mobile-modal">
-            
-                {% comment %} ======================================= NOTIFICAÇões {% endcomment %}
+              <div class="dropdown is-bottom-left is-mobile-modal">
 
-                  <div onclick="notificacoes()">
-                    <div id="notificacoes_trigger" role="button" class="dropdown-trigger">
-                      <span role="button">
-                        <div type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text" style="margin-right: 0.9rem">
-                          <span>
-                            <span class="icon">
-                              <span id="badge-inject" style="display:none;" title="Badge top right" class="badge is-warning">{% live_notify_badge %}</span>
-                              {{ request.user|atualizar_informacoes }}
-                              <i class=" mdi mdi-bell mdi-24px"></i>
-                            </span>
+          <div onclick="notificacoes()">
+            <div id="notificacoes_trigger" role="button" class="dropdown-trigger">
+              <span role="button">
+
+                <div type="button" data-badge="0" class="button has-badge-rounded has-badge-warning is-text"
+                  style="margin-right: 0.9rem">
+                  <span>
+
+                    <span class="icon">
+                      <span id="badge-inject" style="display:none;" title="Badge top right"
+                        class="badge is-warning">{% live_notify_badge %}</span>
+
+                      {{ request.user|atualizar_informacoes }}
+                      <i class=" mdi mdi-bell mdi-24px"></i>
+                    </span>
+                  </span>
+                </div>
+              </span>
+            </div>
+          </div>
+
+          <div id="ver_notificacoes" class="modal">
+            <div class="modal-background">
+            </div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Notificações</p>
+                <button onclick="notificacoes()" class="delete" aria-label="close"></button>
+              </header>
+              <section class="modal-card-body">
+                <nav class="panel">
+                  <p class="panel-tabs">
+                    <a class="tablinks is-active" onclick="openNotificacoes(event, 'Todas')">Todas</a>
+                    <a class="tablinks" onclick="openNotificacoes(event, 'Novas')">Novas</a>
+                    <a class="tablinks" onclick="openNotificacoes(event, 'Anteriores')">Anteriores</a>
+                  </p>
+                  <div id="Todas" style="display:block" class="tabcontent">
+                    {% notification_list %}
+                    {% for notificacao in request.user|notificacoes_lidas %}
+                    <div data-tooltip="Click para ver detalhes">
+                      {% if notificacao.unread == False %}
+                      <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}"
+                        class="panel-block">
+                        {% else %}
+                        <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}"
+                          class="panel-block" style="background: Gainsboro;">
+                          {% endif %}
+
+                          {% if notificacao.level == "info" %}
+                          <span class="icon has-text-info">
+                            <i class="fas fa-info-circle"></i>
                           </span>
-                        </div>
-                      </span>
-                    </div>
-                  </div>
-                
-                  {% comment %} {% endif %}  {% endcomment %}
-
-                  <div id="ver_notificacoes" class="modal">
-                    <div class="modal-background">
-                    </div>
-                    <div class="modal-card">
-                      <header class="modal-card-head">
-                        <p class="modal-card-title">Notificações</p>
-                        <button onclick="notificacoes()" class="delete" aria-label="close"></button>
-                      </header> 
-                      <section class="modal-card-body">
-                        <nav class="panel">
-                          <p class="panel-tabs">
-                            <a class="tablinks is-active" onclick="openNotificacoes(event, 'Todas')">Todas</a>
-                            <a class="tablinks" onclick="openNotificacoes(event, 'Novas')">Novas</a>
-                            <a class="tablinks" onclick="openNotificacoes(event, 'Anteriores')">Anteriores</a>
-                          </p>
-                          <div id="Todas" style="display:block" class="tabcontent">
-                            {% notification_list %}
-                            {% for notificacao in request.user|notificacoes_lidas %}
-                            <div data-tooltip="Click para ver detalhes">
-                              {% if notificacao.unread == False %}
-                              <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}" class="panel-block">
-                              {% else %}
-                                <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}" class="panel-block" style="background: Gainsboro;">
-                              {% endif %}
-                              {% if notificacao.level == "info" %}
-                                <span class="icon has-text-info">
-                                  <i class="fas fa-info-circle"></i>
-                                </span>
-                              {% elif notificacao.level == "success" %}
-                                <span class="icon has-text-success">
-                                  <i class="fas fa-check-square"></i>
-                                </span>
-                              {% elif notificacao.level == "warning" %}
+                          {% elif notificacao.level == "success" %}
+                          <span class="icon has-text-success">
+                            <i class="fas fa-check-square"></i>
+                          </span>
+                          {% elif notificacao.level == "warning" %}
                           <span class="icon has-text-warning">
                             <i class="fas fa-exclamation-triangle"></i>
                           </span>
@@ -106,54 +110,64 @@
                             <i class="fas fa-ban"></i>
                           </span>
                           {% endif %}
+
+
                           <p>
                             <strong>
                               {{notificacao.description}}
                             </strong>
                           </p>
+
                         </a>
                     </div>
-                    
                     {%endfor%}
                     {% if request.user|nr_notificacoes > 0 %}
                     <div class="panel-block">
-                      <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}" class="dropdown-item is-disabled">
+                      <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}"
+                        class="dropdown-item is-disabled">
                         <button class="button is-link is-outlined is-fullwidth">
                           Ver todas as notificações
                         </button>
                       </a>
                     </div>
                     {% else %}
-                    <p id="sem-mensagens" style="text-align:center;margin-top:2%;"><strong>Não tem nenhuma notificação.</strong></p>
-                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}" class="dropdown-item is-disabled">
+                    <p id="sem-mensagens" style="text-align:center;margin-top:2%;"><strong>Não tem nenhuma
+                        notificação.</strong></p>
+                    <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}"
+                      class="dropdown-item is-disabled">
                       <button class="button is-link is-outlined is-fullwidth">
                         Caixa de entrada
                       </button>
                     </a>
                     {% endif %}
+
                   </div>
-                  
-                  
                   <div id="Novas" style="display:none" class="tabcontent">
+
                     {% notification_list %}
+
                     {% if request.user|has_notification %}
                     <div class="panel-block">
-                      <a onclick="alert.render('Tem a certeza que pretende marcar todas as notificações como lidas?','{% url 'notificacoes:ler-notificacoes'%}')" role="listitem" tabindex="0" class="dropdown-item is-disabled">
+                      <a onclick="alert.render('Tem a certeza que pretende marcar todas as notificações como lidas?','{% url 'notificacoes:ler-notificacoes'%}')"
+                        role="listitem" tabindex="0" class="dropdown-item is-disabled">
+
                         <button class="button is-link is-outlined is-fullwidth">
                           Marcar notificações como lidas
                         </button>
                       </a>
                     </div>
                     {% else %}
-                    <p id="sem-notificacoes" style="text-align:center;margin-top:2%;"><strong>Não tem nenhuma notificação nova.</strong></p>
+                    <p id="sem-notificacoes" style="text-align:center;margin-top:2%;"><strong>Não tem nenhuma
+                        notificação nova.</strong></p>
+
                     {% endif %}
+
                   </div>
-
-
                   <div id="Anteriores" style="display:none" class="tabcontent">
                     {% for notificacao in request.user|notificacoes_lidas %}
                     <div data-tooltip="Click para ver detalhes">
-                      <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}" class="panel-block">
+                      <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}"
+                        class="panel-block">
                         {% if notificacao.level == "info" %}
                         <span class="icon has-text-info">
                           <i class="fas fa-info-circle"></i>
@@ -171,23 +185,34 @@
                           <i class="fas fa-ban"></i>
                         </span>
                         {% endif %}
+
+
                         <p><strong>{{notificacao.description}}</strong></p>
+
                       </a>
                     </div>
                     {%endfor%}
                     {% if request.user|nr_notificacoes_lidas > 0 %}
                     <div class="panel-block">
+
+
                       <a onclick="alert.render('Tem a certeza que pretende eliminar todas as notificações lidas?','{% url 'notificacoes:limpar-notificacoes' 2 %}')"
                         role="listitem" tabindex="0" class="dropdown-item is-disabled">
+
                         <button class="button is-link is-outlined is-fullwidth">
                           Limpar notificações lidas
                         </button>
                       </a>
+
                     </div>
                     {% else %}
-                    <p style="text-align:center;margin-top:2%"><strong>Não tem nenhuma notificação anterior.</strong></p>
+                    <p style="text-align:center;margin-top:2%"><strong>Não tem nenhuma notificação anterior.</strong>
+                    </p>
                     {% endif %}
+
                   </div>
+
+
                 </nav>
               </section>
             </div>
