@@ -6,15 +6,16 @@ from AssetManagement.models import Service, Servicetype, Equipment, Equipmenttyp
 from AssetManagement.models import Building, Rooms, RoomType
 from django.utils.safestring import mark_safe
 from PreEventManagement.models import AssetEvent, Event
+from django.forms import ModelForm, TextInput, EmailInput
 
 class InsertServiceForm(forms.Form):
 	user = None
-	assetName = forms.CharField(label='Nome do Serviço', max_length=255, required=True)
-	assetQuantity = forms.IntegerField(label='Quantidade', required=True)
+	assetName = forms.CharField(label='Nome do Serviço', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
+	assetQuantity = forms.IntegerField(label='Quantidade', required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 	
 	OPTIONS_serviceType = Service.makeOptions()
 	serviceType =  forms.CharField(widget=forms.Select(choices=OPTIONS_serviceType, attrs={'class' : 'input'}), label='Service Type', required=True)
-	description = forms.CharField(label='Descrição',  max_length=255, required=False)
+	description = forms.CharField(label='Descrição',  max_length=255, required=False, widget=forms.TextInput(attrs={'class' : 'input'}))
 
 
 
@@ -56,8 +57,8 @@ class InsertServiceForm(forms.Form):
 
 class InsertEquipmentForm(forms.Form):
 	user = None
-	assetName = forms.CharField(label='Nome do Equipamento', max_length=255, required=False)
-	assetQuantity = forms.IntegerField(label='Quantidade', required=True)
+	assetName = forms.CharField(label='Nome do Equipamento', max_length=255, required=False, widget=forms.TextInput(attrs={'class' : 'input'}))
+	assetQuantity = forms.IntegerField(label='Quantidade', required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 	
 	OPTIONS_equipmentType = Equipment.makeOptions()
 	equipmentType =  forms.CharField(widget=forms.Select(choices=OPTIONS_equipmentType, attrs={'class' : 'input'}), label='Equipment Type', required=True)
@@ -98,7 +99,7 @@ class InsertEquipmentForm(forms.Form):
 
 class InsertRoomForm(forms.Form):
 	user = None
-	assetName = forms.CharField(label='Número/Nome do Espaço', max_length=255, required=False)
+	assetName = forms.CharField(label='Número/Nome do Espaço', max_length=255, required=False, widget=forms.TextInput(attrs={'class' : 'input'}))
 		
 	OPTIONS_campus = Campus.makeOptions()
 	campus =  forms.CharField(widget=forms.Select(choices=OPTIONS_campus, attrs={'class' : 'input'}), label='Campus', required=True)
@@ -110,8 +111,8 @@ class InsertRoomForm(forms.Form):
 	OPTIONS_buildings = Building.makeOptions()
 	buildings =  forms.CharField(widget=forms.Select(choices=OPTIONS_buildings, attrs={'class' : 'input'}), label='Edifício', required=True)
 
-	capacity = forms.IntegerField(label='Capacidade', required=True)
-	capacityRed = forms.IntegerField(label='Lugares de cap. reduzida', required=True)
+	capacity = forms.IntegerField(label='Capacidade', required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
+	capacityRed = forms.IntegerField(label='Lugares de cap. reduzida', required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 
 
 
