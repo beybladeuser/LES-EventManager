@@ -17,6 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 import notifications.urls
 
+from django.conf import settings # new
+from django.conf.urls.static import static # new
+
+
+
 urlpatterns = [
     path('forms/', include('FormManagement.urls')),
     path('preEvent/', include('PreEventManagement.urls')),
@@ -28,7 +33,7 @@ urlpatterns = [
     path('', include('Index.urls')),
     path('admin/', admin.site.urls),
 
-
+    path('', include("notifications.urls", namespace='notifications')),
     # path('', include("notifications.urls", namespace='notifications')),
 
   

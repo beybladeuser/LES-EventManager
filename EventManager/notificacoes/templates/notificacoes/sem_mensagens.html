@@ -8,17 +8,20 @@
 
 {% block title %}- Mensagens{% endblock title %}
 
-{% block content %}
 {% load static %}
 {% block load %}
-<link rel="stylesheet" href="{% static 'css/notificacoes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notificacoes.css' %}">
 {% endblock load %}
 {% load poll_extras %}
 {% load notificacoes_extras %}
+
+
+
+{% block loggedInContent %}
 <div>
     <nav aria-label="breadcrumbs" class="breadcrumb">
         <ul>
-            <li><a href="{% url 'home' %}">Início</a></li>
+            <li><a href="{% url 'homepage' %}">Início</a></li>
             <li class="is-active"><a>Mensagens</a></li>
         </ul>
     </nav>
@@ -163,4 +166,4 @@
     </div>
 </div>
 
-{% endblock content %}
+{% endblock loggedInContent %}

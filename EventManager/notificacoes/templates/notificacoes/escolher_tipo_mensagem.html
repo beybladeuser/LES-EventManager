@@ -6,12 +6,12 @@
 
 
 
-{% block content %}
+{% block loggedInContent %}
 
 <div>
     <nav aria-label="breadcrumbs" class="breadcrumb">
         <ul>
-            <li><a href="{% url 'home' %}">Início</a></li>
+            <li><a href="{% url 'homepage' %}">Início</a></li>
             <li class="is-active"><a>Mensagens</a></li>
         </ul>
     </nav>
@@ -110,4 +110,4 @@
         onclick="history.back();">Voltar</button>
 
 </div>
-{% endblock content %}
+{% endblock loggedInContent %}

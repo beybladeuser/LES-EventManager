@@ -3,23 +3,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-</head>
+</head> 
 
 {% extends 'template_base.html' %}
 
 {% block title %}- Notificações{% endblock title %}
 
-{% block content %}
 {% load static %}
 {% block load %}
-<link rel="stylesheet" href="{% static 'css/notificacoes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notificacoes.css' %}">
 {% endblock load %}
 {% load poll_extras %}
 {% load notificacoes_extras %}
+
+
+
+
+{% block loggedInContent %}
 <div>
     <nav aria-label="breadcrumbs" class="breadcrumb">
         <ul>
-            <li><a href="{% url 'home' %}">Início</a></li>
+            <li><a href="{% url 'homepage' %}">Início</a></li>
             <li class="is-active"><a>Notificações</a></li>
         </ul>
     </nav>
@@ -164,4 +168,4 @@
     </div>
 </div>
 
-{% endblock content %}
+{% endblock loggedInContent %}

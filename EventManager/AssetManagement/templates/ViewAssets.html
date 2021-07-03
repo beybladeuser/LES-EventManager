@@ -11,19 +11,27 @@
       
   {% endfor %}
 {% endblock %}
+
+{% comment %} {% block SubtypeEquipment %}
+  {% for equipmentType in equipmentTypes %}
+      <option >{{equipmentType}}</option>
+      
+  {% endfor %}
+{% endblock %}  {% endcomment %}
  
+{% comment %} {% block SubtypeRoom %}
+  {% for roomType in roomTypes %}
+      <option >{{roomType}}</option>
+      
+  {% endfor %}
+{% endblock SubtypeRoom %}  {% endcomment %}
 
-{% if assetType == 'Equipamento'%}
-    {% block filterSubtype %}
-
-
-        {% for equipmentType in equipmentTypes %}
-            <option>{{equipmentType.typename}}</option>
-        {% endfor %}
-    {% endblock %}
-{% endif %}
-
-*
+{% comment %} {% block SubtypeService %}
+  {% for serviceType in serviceTypes %}
+      <option >{{getServiceType}}</option>
+      
+  {% endfor %}
+{% endblock %}   {% endcomment %}
 
 
 
@@ -87,7 +95,7 @@
       <tr id="row{{ forloop.counter }}">
           <td id="NameFilter{{ forloop.counter }}">  <p>{{asset.assetname}}</p></td>
           <td id="TypeFilter{{ forloop.counter}}">  <p>{{asset.assettype}}</p></td>
-          <td id="SubtypeFilter{{ forloop.counter }}">  <p>{{asset.subtype}}</p></td>
+          <td id="SubtypeFilter{{ forloop.counter }} ">  <p>{{asset.subtype}}</p></td>
           <td id="QuantityFilter{{ forloop.counter }}">  <p>{{asset.quantity}}</p></td>
           <td>
             {% comment %} VER Agendamento {% endcomment %}

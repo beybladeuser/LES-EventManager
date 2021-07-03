@@ -45,6 +45,8 @@ class Asset(models.Model):
             result = service[0].servicetypeid_servicetype.typename
         return result
 
+
+
     service_subclass_type = property(getServiceType)
 
     def getEquipmentType(self):
@@ -262,6 +264,15 @@ class RoomType(models.Model):
     def __str__(self):
        return self.typename
 
+
+    @staticmethod
+    def getRoomTypes():
+        if "roomtype" in connection.introspection.table_names():
+            roomtypes = RoomType.objects.all()
+            options=([(roomtype.typename) for roomtype in roomtypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
    
 
     
@@ -298,6 +309,14 @@ class Servicetype(models.Model):
     def __str__(self):
        return self.typename
 
-   
+    @staticmethod
+    def getServiceType():
+        if "servicetype" in connection.introspection.table_names():
+            servicetypes = Servicetype.objects.all()
+            options=([(servicetype.typename) for servicetype in servicetypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
     
     
