@@ -1,0 +1,74 @@
+{% extends 'template_base.html' %}
+
+
+{% block loggedInContent %}
+
+
+<!--<script type="text/javascript">
+	function eventtype_change(){
+		console.log(this.value);
+		let button_active = true;
+		for(subform of document.getElementsByClassName("subforms")){
+			//console.log(subform.id.substring(7) + " vs " + this.value + " ==> " + (subform.id.substring(7) == this.value))
+			let shows = (
+				(
+					subform.id.startsWith("logisticsform") 
+					&& 
+					subform.id.substring(13+1) == this.value
+				)
+				||
+				(
+					subform.id.startsWith("proposalform") 
+					&& 
+					subform.id.substring(12+1) == this.value
+				)
+			);
+
+			subform.style.display = shows?"block":"none";
+			if(shows && subform.classList.contains("nonexistent"))button_active = false;
+
+		}
+		document.getElementById("submitbutton").disabled = !button_active;
+	}
+
+	function prepare_form(){
+		for(subform of document.getElementsByClassName("subforms")){
+			if(subform.style.display == "none")subform.remove();
+		}
+		return true;
+	}
+</script>-->
+
+<form class="box" action="" method="POST">{% csrf_token %}
+	
+
+	{% for id, question in form.questions.items %}
+
+		<div class="field">
+
+			{% if question.type == 'open' %}
+				<label class="label">{{question.identifier}}</label>
+
+				<input class="input" type="text" name="{{question.name}}" style="margin: auto; width: 30%" {% if question.value is not None %}value="{{question.value}}"{% endif %} {% if question.required %}required{% endif %}>
+				{% if question.required %}*{% endif %}
+
+			{% elif question.type == 'dropdown' %}
+				<label class="label" for="{{question.name}}">{{question.identifier}}</label>
+
+				<select class="select" name="{{question.name}}" {% if question.value is not None %}value="{{question.value}}"{% endif %} {% if question.required %}required{% endif %}>
+					{% for choice in question.choices %}
+						<option value="{{choice.0}}" {% if choice.0|slugify == question.value|slugify %}selected{% endif %}>{{choice.1}}</option>
+					{% endfor %}
+				</select>
+				{% if question.required %}*{% endif %}
+				
+			{% endif %}
+			<br>
+		</div>
+	{% endfor %}
+	<input id="submitbutton" class="button is-success is-outlined" type="submit" value="Submeter" onclick="return prepare_form();">
+</form>
+  
+{% endblock %}
+{% block loggedOutContent %}
+{% endblock %}
