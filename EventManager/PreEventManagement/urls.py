@@ -12,6 +12,8 @@ urlpatterns = [
     path('edit/<int:id>', views.edit, name='edit'),
     path('delete/<int:id>', views.delete, name='delete'),
     path('validate/<int:id>', views.validate, name='validate'),
-    path('enroll/<int:id>', views.enroll, name='enroll'),
+    path('fill_logistic/<int:id>', views.fill_logistic, name='fill_logistic'),
+    path('edit_logistic/<int:id>', views.edit_logistic, name='edit_logistic'),
+    path('feedback/<int:id>', views.feedback, name='feedback'),
 
 ]

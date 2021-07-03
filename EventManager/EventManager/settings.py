@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+from django.conf import settings
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'EventManagement.apps.EventmanagementConfig',
     'PreEventManagement.apps.PreeventmanagementConfig',
     'Schedules.apps.SchedulesConfig',
-    #'Sessions.apps.SessionsConfig',
+    # 'Sessions.apps.SessionsConfig',
     'utilizadores.apps.UtilizadoresConfig',
     'Index.apps.IndexConfig',
     'crispy_forms',
@@ -48,7 +48,29 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'notificacoes',
+    'notifications',
+    'clear_cache',
 ]
+
+DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True}
+
+NOTIFICATIONS_NOTIFICATION_MODEL = 'notificacoes.Notificacao'
+CONFIG_DEFAULTS = {
+    'PAGINATE_BY': 20,
+    'USE_JSONFIELD': False,
+    'SOFT_DELETE': False,
+    'NUM_TO_FETCH': 10,
+}
+
+
+def get_config():
+    user_config = getattr(settings, 'DJANGO_NOTIFICATIONS_CONFIG', {})
+
+    config = CONFIG_DEFAULTS.copy()
+    config.update(user_config)
+
+    return config
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
