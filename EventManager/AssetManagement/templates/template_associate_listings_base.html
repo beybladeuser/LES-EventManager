@@ -1,0 +1,414 @@
+{% extends "template_asset_base.html" %}
+
+{% block style %}
+	<style>
+		th.orderable {
+			cursor: pointer;
+		}
+
+		th.orderable:hover {
+			border-color: #7a7a7a;
+		}
+
+		th.orderable.is-sorting {
+			border-color: #7a7a7a;
+		}
+
+		.table-wrapper .table {
+			margin-bottom: 0
+		}
+
+		.table-wrapper:not(:last-child) {
+			margin-bottom: 1.5rem
+		}
+
+		@media screen and (max-width:1023px) {
+			.table-wrapper {
+				overflow-x: auto
+			}
+		}
+
+		@media screen and (max-width:768px) {
+			.table.has-mobile-cards thead {
+				display: none
+			}
+
+			.table.has-mobile-cards tfoot th {
+				border: 0;
+				display: inherit
+			}
+
+			.table.has-mobile-cards tr {
+				-webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
+				box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
+				max-width: 100%;
+				position: relative;
+				display: block
+			}
+
+			.table.has-mobile-cards tr td {
+				border: 0;
+				display: inherit
+			}
+
+			.table.has-mobile-cards tr td:last-child {
+				border-bottom: 0
+			}
+
+			.table.has-mobile-cards tr:not(:last-child) {
+				margin-bottom: 1rem
+			}
+
+			.table.has-mobile-cards tr:not([class*=is-]) {
+				background: inherit
+			}
+
+			.table.has-mobile-cards tr:not([class*=is-]):hover {
+				background-color: inherit
+			}
+
+			.table.has-mobile-cards tr.detail {
+				margin-top: -1rem
+			}
+
+			.table.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td {
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				width: auto;
+				-webkit-box-pack: justify;
+				-ms-flex-pack: justify;
+				justify-content: space-between;
+				text-align: right;
+				border-bottom: 1px solid #f5f5f5
+			}
+
+			.table.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td:before {
+				content: attr(data-label);
+				font-weight: 600;
+				padding-right: .5em;
+				text-align: left
+			}
+		}
+	</style>
+
+	<style>
+	.main-table > tbody > tr:not(.detail) {
+		cursor: pointer;
+	}
+
+	.main-table > tbody > tr.detail {
+		box-shadow: inset 0 1px 3px #dbdbdb;
+		background: #fafafa;
+		background-color: rgb(250, 250, 250);
+	}
+
+	.main-table > tbody > tr.detail .detail-container {
+		padding: 1rem;
+	}
+
+	.main-table > tbody > tr.detail:hover {
+		background-color: #fafafa !important;
+	}
+
+	.main-table > tbody > tr.detail:not(.is-active) {
+		display: none;
+	}
+
+	.main-table > tbody > tr.detail .is-active {
+		display: block;
+	}
+
+	.icon.is-expanded {
+		transform: rotate(90deg);
+	}
+
+	.icon {
+		transition: transform 150ms ease-out, opacity 86ms ease-out;
+	}
+	</style>
+{% endblock %}
+
+{% block NonErrorContent %}
+	<div class="columns">
+		<div class="column is-3">
+			<div class="menu">
+				<div class="menu-label">
+					Filtros
+				</div>
+				<ul class="menu-list">
+					<div class="field">
+						<div class="control has-icons-left">
+							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
+							<span class="icon is-left">
+								<i class="mdi mdi-magnify mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="TypeFilter" onchange="filter2();">
+							  	<option>Estado dos Recursos </option>
+							  	{% comment %} {% block filterTypes %}
+							
+								{% endblock %} {% endcomment %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+				
+
+					<div class="field is-grouped">
+						<p class="control is-expanded">
+							<input class="button is-light is-fullwidth" type="reset" onclick="clearFilters()" value="Limpar Filtros">
+						</p>
+					</div>
+				</ul>
+			</div>
+		</div>
+
+		<div class="column">
+			<nav aria-label="breadcrumbs" class="breadcrumb">
+				<ul>
+					<li><a href="{% url 'homepage' %}">Início</a></li>
+					<li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+					<li class="is-active"><a>Associar Recursos</a></li>
+				</ul>
+			</nav>
+			
+			{% block preListingBlock %}
+			
+
+			{% endblock %}
+			
+			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
+				<thead>
+					
+					<tr>
+						{% block tableHead %}
+				
+						{% endblock %}
+					</tr>
+				</thead>
+				<tbody>
+					{% block listings %}
+					
+					{% endblock %}
+				</tbody>
+
+				
+			</table>
+		</div>
+	</div>
+	
+	<div class="level">
+		<div class="level-left"></div>
+		<div class="level-right" style="white-space: nowrap;">
+			<div class="level-item" style="width: fit-content;">
+				<span style="margin-right: 3%;">Mostrando</span>   
+				<div class="select" style="margin-right: 3%;">
+					<select onchange="pagging(0, this.value);">
+					  <option value=20>20</option>
+					  <option value=10>10</option>
+					  <option value=5>5</option>
+					</select>
+				</div>
+				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
+				<span style="margin-right: 3%; ">{% block showType %} {% endblock %} por página</span>
+
+			</div>
+			<div class="level-item">
+				
+				<nav class="pagination" role="navigation" aria-label="pagination">
+					
+					
+					<ul class="pagination-list">
+						<li>
+							
+							<a class="pagination-link is-current" id="CurrentPage">1</a>
+							
+						</li>
+					</ul>
+					<button id="BackPage" role="button" class="pagination-previous" onclick="pagging(currentPage-1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-left mdi-24px"></i>
+						</span>
+					</button>
+					
+					<button id="NextPage" role="button" class="pagination-next" onclick="pagging(currentPage+1)">
+						<span class="icon" aria-hidden="true">
+							<i class="mdi mdi-chevron-right mdi-24px"></i>
+						</span>
+					</button>
+					
+				</nav>
+			</div>
+		</div>
+	</div>
+		
+{% endblock %}
+
+{% block scripts %}
+		<script>
+			function displaySubType(caller) {
+				var option = caller.options[caller.selectedIndex].text.toLowerCase();
+				for (let index = 1; index <= 3; index++)
+				{
+					var temp = document.getElementById("SubtypeFilter"+index);
+					temp.selectedIndex=0;
+				}
+
+				if (option.indexOf("equipamento")>-1) {
+					toDisplay=1;
+				}
+				if (option.indexOf("espaço")>-1) {
+					toDisplay=2;
+				}
+				if (option.indexOf("serviço")>-1) {
+					toDisplay=3;
+				}
+				for (let index = 1; index <= 3; index++)
+				{
+					var temp = document.getElementById("SubtypeFilterBase"+index);
+					if (index == toDisplay)
+						temp.style.display="";
+					else
+						temp.style.display="none";
+				}
+			}
+
+			var filters = [
+				{'filterName' : 'NameFilter', 'isDropDown' : false},
+				{'filterName' : 'TypeFilter', 'isDropDown' : true},
+	
+			];
+			var filteredRows = new Array();
+				function filter2(){
+				filteredRows = new Array();
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					var toBeHidden = false;
+					for (let index = 0; index < filters.length; index++) {
+						var temp = filters[index].filterName;
+						if (temp.indexOf("SubtypeFilter")>-1)
+						{
+							temp=temp.substring(0, temp.length - 1);
+						}
+						var fieldVal = document.getElementById(temp + id).textContent.toLowerCase();
+						var FilterOBJ = document.getElementById(filters[index].filterName);
+        	    		var filter;
+
+						if (filters[index].isDropDown) {
+        	        		filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	    		}
+        	    		else {
+        	    		    filter = FilterOBJ.value.toLowerCase();
+        	    		}
+
+						if (filters[index].isDropDown && filter.indexOf("selecione")>-1) {
+							filter = "";
+        	    		}
+
+						if ( fieldVal.indexOf(filter)<=-1 ) {
+							toBeHidden = true;
+						}
+					}
+					
+					if ( !toBeHidden ) {
+        	            //document.getElementById("row" + id).style.display = "none";
+						filteredRows.push(document.getElementById("row" + id));
+        	        }
+        	        //else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	        //}
+        	        id++;
+        	    }
+				document.getElementById("FilteredCount").textContent = filteredRows.length;
+				
+				pagging();
+			}
+
+			function getNPages(size=10) {
+				return Math.floor(filteredRows.length / size);
+			}
+
+			function getSizeOfPage(page=0, size=10) {
+				if (page == getNPages(size)){
+					return filteredRows.length % size;
+				}
+				return size;
+			}
+
+			function hideAllEntries() {
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+					document.getElementById("row" + id).style.display = "none";
+					id++;
+				}
+			}
+
+			var currentPage = 0;
+			var currentSize=20;
+			function pagging(page=0, size=20){
+				var test = typeof global_size;
+				if (!(typeof global_size === "undefined" )) {
+					size=global_size;
+				}
+				if (page > getNPages(size) || page < 0) {
+					return;
+				}
+				var displayingN = 0;
+				var trueSize = getSizeOfPage(page, size);
+				hideAllEntries();
+        	    while (displayingN < trueSize) {
+					filteredRows[displayingN + page*size].style.display = "";
+					displayingN++;
+
+				}
+				currentPage = page;
+				document.getElementById("CurrentPage").textContent = String(currentPage + 1);
+				if (getSizeOfPage(page + 1, size) <= 0 || page + 1 > getNPages(size)) {
+					document.getElementById("NextPage").disabled = true;
+				}
+				else {
+					document.getElementById("NextPage").disabled = false;
+				}
+
+				if (page - 1 < 0) {
+					document.getElementById("BackPage").disabled = true;
+				}
+				else {
+					document.getElementById("BackPage").disabled = false;
+				}
+			}
+
+			function toggle(objName){
+				var OBJ = document.getElementById(objName);
+				if (OBJ.style.display == "none") {
+					OBJ.style.display = "";
+				}
+				else {
+					OBJ.style.display = "none";
+				}
+			}
+
+			function clearFilters() {
+				filters.forEach(element => {
+					var elementOBJ = document.getElementById(element.filterName);
+					if (element.isDropDown) {
+						elementOBJ.selectedIndex = 0;
+					}
+					else {
+						elementOBJ.value = "";
+					}
+				});
+				filter2();
+			}
+
+			filter2();
+		</script>
+    	
+{% endblock %}

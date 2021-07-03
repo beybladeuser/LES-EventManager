@@ -1,6 +1,28 @@
 {% extends 'template_base.html' %}
 
 {% block loggedInContent %}
+
+<div class="columns">
+    <div class="column is-12" >
+        <nav aria-label="breadcrumbs" class="breadcrumb">
+            <ul>
+                <li><a href="{% url 'homepage' %}">Início</a></li>
+                <li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+                {% if editService_form%}
+                    <li><a href="{% url 'ViewAssets' %}">Consultar Recursos</a></li>
+                    <li class="is-active" ><a href="{% url 'InsertService' %}">Editar Serviço</a></li>
+                {% else %}    
+                    <li class="is-active" ><a href="{% url 'InsertService' %}">Adicionar Serviço</a></li>
+                {%endif%}
+               
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<hr> 
+
+
  <div class="columns" style="margin-top: 5%;">
         <div class="column is-3">
         </div>
@@ -29,7 +51,12 @@
                     </div>
                   </div>
                   <footer class="card-footer">
-                    <button class="button is-success card-footer-item" type="submit">Adicionar Serviço</button>
+                    {% if editService_form%}
+                        <button class="button is-success card-footer-item" type="submit">Editar Serviço</button>
+                    {% else %}    
+                        <button class="button is-success card-footer-item" type="submit">Adicionar Serviço</button>
+                    {%endif%}
+                    
                     <a href="{% url 'assetHome'  %}" class="button is-white card-footer-item">Cancelar</a>
                   </footer>
                 </form>

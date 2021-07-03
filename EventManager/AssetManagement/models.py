@@ -16,8 +16,10 @@ import re
 class Asset(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     assetname = models.CharField(db_column='AssetName', max_length=255)  # Field name made lowercase.
+    assettype = models.ForeignKey('Assettype', models.DO_NOTHING, db_column='assettype_ID')  # Field name made lowercase.
     quantity = models.IntegerField(db_column='Quantity')  # Field name made lowercase.
     canAdd = False
+
 
     def delete_asset(self):        
         if Service.objects.filter(assetid=self.id).exists():
@@ -43,6 +45,8 @@ class Asset(models.Model):
             result = service[0].servicetypeid_servicetype.typename
         return result
 
+
+
     service_subclass_type = property(getServiceType)
 
     def getEquipmentType(self):
@@ -60,23 +64,53 @@ class Asset(models.Model):
             result = room[0]
         return result
 
-
-    def __str__(self):
-        return self.assetname
-        
-
+    
     @staticmethod
     def makeOptions():
         if "asset" in connection.introspection.table_names():
             assets = Asset.objects.filter()
-            options=([(asset.id, asset.assetname) for asset in assets])
+            options=([(asset.id, asset.assettype) for asset in assets])
             return options
         else:
             return (("1", "No Database created"),)
 
 
+    def __str__(self):
+        return self.assetname
+
     class Meta:
         db_table = 'asset'
+
+
+
+class AssetType(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    typename = models.CharField(db_column='TypeName', unique=True, max_length=255)  # Field name made lowercase.
+
+    @staticmethod
+    def makeOptions():
+        if "assettype" in connection.introspection.table_names():
+            assettypes = AssetType.objects.filter()
+            options=([(assettype.id, assettype.typename) for assettype in assettypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+
+    @staticmethod
+    def getTypes():
+        if "assettype" in connection.introspection.table_names():
+            assettypes = AssetType.objects.filter()
+            options=([(assettype.typename) for assettype in assettypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+    
+    class Meta:        
+        db_table = 'assettype'
+    
+    def __str__(self):
+       return self.typename
 
 
 
@@ -176,6 +210,19 @@ class Equipmenttype(models.Model):
     def __str__(self):
        return self.typename
 
+    @staticmethod
+    def getEquipmenttypes():
+        if "equipmenttype" in connection.introspection.table_names():
+            equipmenttypes = Equipmenttype.objects.all()
+            options=([(equipmenttypes.typename) for equipmenttypes in equipmenttypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+
+
+
+
 
 class Rooms(models.Model):
     assetid = models.OneToOneField(Asset, models.DO_NOTHING, db_column='AssetID', primary_key=True)  # Field name made lowercase.
@@ -217,6 +264,15 @@ class RoomType(models.Model):
     def __str__(self):
        return self.typename
 
+
+    @staticmethod
+    def getRoomTypes():
+        if "roomtype" in connection.introspection.table_names():
+            roomtypes = RoomType.objects.all()
+            options=([(roomtype.typename) for roomtype in roomtypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
    
 
     
@@ -252,4 +308,15 @@ class Servicetype(models.Model):
 
     def __str__(self):
        return self.typename
+
+    @staticmethod
+    def getServiceType():
+        if "servicetype" in connection.introspection.table_names():
+            servicetypes = Servicetype.objects.all()
+            options=([(servicetype.typename) for servicetype in servicetypes])
+            return options
+        else:
+            return (("1", "No Database created"),)
+
+    
     

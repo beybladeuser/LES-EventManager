@@ -1,4 +1,133 @@
-{% extends "template_form_base.html" %}
+{% extends "template_asset_base.html" %}
+
+{% block style %}
+	<style>
+		th.orderable {
+			cursor: pointer;
+		}
+
+		th.orderable:hover {
+			border-color: #7a7a7a;
+		}
+
+		th.orderable.is-sorting {
+			border-color: #7a7a7a;
+		}
+
+		.table-wrapper .table {
+			margin-bottom: 0
+		}
+
+		.table-wrapper:not(:last-child) {
+			margin-bottom: 1.5rem
+		}
+
+		@media screen and (max-width:1023px) {
+			.table-wrapper {
+				overflow-x: auto
+			}
+		}
+
+		@media screen and (max-width:768px) {
+			.table.has-mobile-cards thead {
+				display: none
+			}
+
+			.table.has-mobile-cards tfoot th {
+				border: 0;
+				display: inherit
+			}
+
+			.table.has-mobile-cards tr {
+				-webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
+				box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
+				max-width: 100%;
+				position: relative;
+				display: block
+			}
+
+			.table.has-mobile-cards tr td {
+				border: 0;
+				display: inherit
+			}
+
+			.table.has-mobile-cards tr td:last-child {
+				border-bottom: 0
+			}
+
+			.table.has-mobile-cards tr:not(:last-child) {
+				margin-bottom: 1rem
+			}
+
+			.table.has-mobile-cards tr:not([class*=is-]) {
+				background: inherit
+			}
+
+			.table.has-mobile-cards tr:not([class*=is-]):hover {
+				background-color: inherit
+			}
+
+			.table.has-mobile-cards tr.detail {
+				margin-top: -1rem
+			}
+
+			.table.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td {
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				width: auto;
+				-webkit-box-pack: justify;
+				-ms-flex-pack: justify;
+				justify-content: space-between;
+				text-align: right;
+				border-bottom: 1px solid #f5f5f5
+			}
+
+			.table.has-mobile-cards tr:not(.detail):not(.is-empty):not(.table-footer) td:before {
+				content: attr(data-label);
+				font-weight: 600;
+				padding-right: .5em;
+				text-align: left
+			}
+		}
+	</style>
+
+	<style>
+        .main-table > tbody > tr:not(.detail) {
+            cursor: pointer;
+        }
+
+        .main-table > tbody > tr.detail {
+            box-shadow: inset 0 1px 3px #dbdbdb;
+            background: #fafafa;
+            background-color: rgb(250, 250, 250);
+        }
+
+        .main-table > tbody > tr.detail .detail-container {
+            padding: 1rem;
+        }
+
+        .main-table > tbody > tr.detail:hover {
+            background-color: #fafafa !important;
+        }
+
+        .main-table > tbody > tr.detail:not(.is-active) {
+            display: none;
+        }
+
+        .main-table > tbody > tr.detail .is-active {
+            display: block;
+        }
+
+        .icon.is-expanded {
+            transform: rotate(90deg);
+        }
+
+        .icon {
+            transition: transform 150ms ease-out, opacity 86ms ease-out;
+        }
+	</style>
+{% endblock %}
 
 {% block NonErrorContent %}
 	<div class="columns">
@@ -16,6 +145,35 @@
 							</span>
 						</div>
 					</div>
+
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="TypeFilter" onchange="filter2()">
+							  	<option>Selecione o tipo de recurso: </option>
+							  	{% block filterTypes %}
+							
+								{% endblock %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="SubtypeFilter" onchange="filter2()">
+							  	<option>Selecione o sub-tipo de recurso: </option>
+							  	<option>yha </option>
+{% comment %} 							  	
+								{% block filterSubtype %}
+							
+								{% endblock %} {% endcomment %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
 					<div class="field">
 						<div class="control has-icons-left">
 							<input type="text" class="input" id="QuantityFilter" placeholder="Quantidade" onkeyup="filter2()">
@@ -27,34 +185,21 @@
 
 					<div class="field">
 						<div class="control has-icons-left">
-							<select class="input" id="TypeFilter" onchange="filter2()">
-							  	<option>Selecione o tipo de {% block selectType %}{% endblock %}</option>
-							  	{% block filterTypes %}
-							
-								{% endblock %}
+							<select class="input" id="EmUtilFilter" onchange="filter2()">
+							  	<option>Selecione se: </option>
+							  	<option>Sim</option>
+							  	<option>Não</option>
 							</select>
 							<span class="icon is-left">
 								<i class="	fa fa-angle-down mdi-24px"></i>
 							</span>
 						</div>
 					</div>
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="SubTypeFilter" placeholder="Nome do criador" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="EditorFilter" placeholder="Nome do último editor" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
+	
+					<div class="field is-grouped">
+						<p class="control is-expanded">
+							<input class="button is-light is-fullwidth" type="reset" onclick="clearFilters()" value="Limpar Filtros">
+						</p>
 					</div>
 				</ul>
 			</div>
@@ -64,9 +209,8 @@
 			<nav aria-label="breadcrumbs" class="breadcrumb">
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
-					<li><a href="{% url 'formsHome' %}">Gestor de formularios</a></li>
-					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a>
-					</li>
+					<li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a></li>
 				</ul>
 			</nav>
 			
@@ -77,6 +221,7 @@
 			
 			<table class="main-table table has-mobile-cards is-fullwidth is-striped is-hoverable" style="table-layout: fixed;">
 				<thead>
+					
 					<tr>
 						{% block tableHead %}
 				
@@ -101,9 +246,9 @@
 				<span style="margin-right: 3%;">Mostrando</span>   
 				<div class="select" style="margin-right: 3%;">
 					<select onchange="pagging(0, this.value);">
-					  <option value=5>5</option>
-					  <option value=10>10</option>
 					  <option value=20>20</option>
+					  <option value=10>10</option>
+					  <option value=5>5</option>
 					</select>
 				</div>
 				<span style="margin-right: 3%; display: none;">out of <span id="FilteredCount"></span></span>
@@ -143,15 +288,49 @@
 
 {% block scripts %}
 		<script>
-        
+        	function filter(filterName, isDropDown)
+        	{
+        	    var FilterOBJ = document.getElementById(filterName);
+        	    var filter;
+        	    if (isDropDown) {
+        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
+        	    }
+        	    else {
+        	        filter = FilterOBJ.value.toLowerCase();
+        	    }
+
+				if (isDropDown && filter.indexOf("selecione")>-1) {
+					filter = "";
+        	    }
+				
+				var id = 1;
+        	    while (document.getElementById("row" + id)){
+
+        	        var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
+        	        
+
+
+        	        if ( fieldVal.indexOf(filter)>-1 ) {
+        	            document.getElementById("row" + id).style.display = "";
+        	        }
+        	        else {
+        	            document.getElementById("row" + id).style.display = "none";
+        	        }
+        	        id++;
+        	    }
+
+        	}
+
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'CriatorFilter', 'isDropDown' : false},
-				{'filterName' : 'EditorFilter', 'isDropDown' : false},
+				{'filterName' : 'SubtypeFilter', 'isDropDown' : false},
+				{'filterName' : 'QuantityFilter', 'isDropDown' : false},
+				{'filterName' : 'EmUtilFilter', 'isDropDown' : true},
+				
 			];
 			var filteredRows = new Array();
-			function filter2(){
+				function filter2(){
 				filteredRows = new Array();
 				var id = 1;
         	    while (document.getElementById("row" + id)){
@@ -211,8 +390,8 @@
 			}
 
 			var currentPage = 0;
-			var currentSize=5;
-			function pagging(page=0, size=5){
+			var currentSize=20;
+			function pagging(page=0, size=20){
 				var test = typeof global_size;
 				if (!(typeof global_size === "undefined" )) {
 					size=global_size;
@@ -253,6 +432,19 @@
 				else {
 					OBJ.style.display = "none";
 				}
+			}
+
+			function clearFilters() {
+				filters.forEach(element => {
+					var elementOBJ = document.getElementById(element.filterName);
+					if (element.isDropDown) {
+						elementOBJ.selectedIndex = 0;
+					}
+					else {
+						elementOBJ.value = "";
+					}
+				});
+				filter2();
 			}
 
 			filter2();

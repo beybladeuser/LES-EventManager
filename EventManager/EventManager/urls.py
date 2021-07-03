@@ -15,6 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+import notifications.urls
+
+from django.conf import settings # new
+from django.conf.urls.static import static # new
+
 
 
 urlpatterns = [
@@ -23,7 +28,13 @@ urlpatterns = [
     path('event/', include('EventManagement.urls')),
     path('asset/', include('AssetManagement.urls')),
     path('utilizadores/', include('utilizadores.urls')),
+    path('notificacoes/', include('notificacoes.urls')),
     path('schedules/', include('Schedules.urls')),
     path('', include('Index.urls')),
     path('admin/', admin.site.urls),
+
+    path('', include("notifications.urls", namespace='notifications')),
+    # path('', include("notifications.urls", namespace='notifications')),
+
+  
 ]
