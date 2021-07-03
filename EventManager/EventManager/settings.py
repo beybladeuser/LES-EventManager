@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'notificacoes',
     'notifications',
+    'clear_cache',
 ]
 
 DJANGO_NOTIFICATIONS_CONFIG = { 'USE_JSONFIELD': True}

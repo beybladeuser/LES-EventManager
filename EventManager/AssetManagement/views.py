@@ -49,9 +49,9 @@ def consultar_assets(request):
 
     context = {
         'assetTypes': AssetType.getTypes(),
-        'equipmentTypes': Equipmenttype.getEquipmenttypes(),
-        'serviceTypes': Service.makeOptions(),
-        'roomTypes': RoomType.getRoomTypes(),
+        # 'equipmentTypes': Equipmenttype.getEquipmenttypes(),
+        # 'serviceTypes': Service.makeOptions(),
+        # 'roomTypes': RoomType.getRoomTypes(),
         'Assets': Assets
     }
     return HttpResponse(template.render(context, request))

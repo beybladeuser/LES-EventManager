@@ -145,78 +145,22 @@
 							</span>
 						</div>
 					</div>
-
+					
 					<div class="field">
 						<div class="control has-icons-left">
-							<select class="input" id="TypeFilter" onchange="displaySubType(this); filter2();">
-							  	<option>Selecione o tipo de recurso: </option>
-							  	{% block filterTypes %}
+							<select class="input" id="TypeFilter" onchange="filter2();">
+							  	<option>Estado dos Recursos </option>
+							  	{% comment %} {% block filterTypes %}
 							
-								{% endblock %}
+								{% endblock %} {% endcomment %}
 							</select>
 							<span class="icon is-left">
 								<i class="	fa fa-angle-down mdi-24px"></i>
 							</span>
 						</div>
 					</div>
-			 
-						<div class="field" id="SubtypeFilterBase1" style="display:none">
-							<div class="control has-icons-left">
-								<select class="input" id="SubtypeFilter1" onchange="filter2()">
-									
-								
-									<option>Microfone</option>
-									
-									<option>Projetor</option>
-									{% comment %} 							  	
-									{% block filterSubtype %}
-								
-									{% endblock %} {% endcomment %}
-								</select>
-								<span class="icon is-left">
-									<i class="	fa fa-angle-down mdi-24px"></i>
-								</span>
-							</div>
-						</div>
-
-						<div class="field" id="SubtypeFilterBase2" style="display:none">
-							<div class="control has-icons-left">
-								<select class="input" id="SubtypeFilter2" onchange="filter2()">
-									<option>Sala de Aula</option>
-								
-								</select>
-								<span class="icon is-left">
-									<i class="	fa fa-angle-down mdi-24px"></i>
-								</span>
-							</div>
-						</div>
-
-						<div class="field" id="SubtypeFilterBase3" style="display:none">
-							<div class="control has-icons-left">
-								<select class="input" id="SubtypeFilter3" onchange="filter2()">
-										<option>Alojamento</option>
-								
-								</select>
-								<span class="icon is-left">
-									<i class="	fa fa-angle-down mdi-24px"></i>
-								</span>
-							</div>
-						</div>
-
-
-
-
-
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="QuantityFilter" placeholder="Quantidade" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
-
 				
+
 					<div class="field is-grouped">
 						<p class="control is-expanded">
 							<input class="button is-light is-fullwidth" type="reset" onclick="clearFilters()" value="Limpar Filtros">
@@ -231,7 +175,7 @@
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
 					<li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
-					<li class="is-active"><a>Consultar Recursos</a></li>
+					<li class="is-active"><a>Associar Recursos</a></li>
 				</ul>
 			</nav>
 			
@@ -339,10 +283,7 @@
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'SubtypeFilter1', 'isDropDown' : true},
-				{'filterName' : 'SubtypeFilter2', 'isDropDown' : true},
-				{'filterName' : 'SubtypeFilter3', 'isDropDown' : true},
-				{'filterName' : 'QuantityFilter', 'isDropDown' : false},				
+	
 			];
 			var filteredRows = new Array();
 				function filter2(){
