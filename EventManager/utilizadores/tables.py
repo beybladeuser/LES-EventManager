@@ -67,7 +67,7 @@ class UtilizadoresTable(django_tables.Table):
                 """
             elif record.valido == "True":
                 primeiro_botao = f"""
-                <a data-tooltip="Rejeitar" onclick="alert.render('Tem a certeza que pretende rejeitar este utilizador?','{reverse('utilizadores:rejeitar', args=[record.first_name, record.id])}')">
+                <a data-tooltip="Rejeitar" onclick="return confirm('Tem a certeza que pretende rejeitar este utilizador?');" href="{reverse('utilizadores:rejeitar', args=[record.first_name, record.id])})">
                     <span class="icon has-text-danger">
                         <i class="fas fa-ban"></i>
                     </span>
@@ -80,7 +80,7 @@ class UtilizadoresTable(django_tables.Table):
                         <i class="fas fa-check" style="color: #32CD32"></i>
                     </span>
                 </a>
-                <a data-tooltip="Rejeitar" onclick="alert.render('Tem a certeza que pretende rejeitar este utilizador?','{reverse('utilizadores:rejeitar', args=[record.first_name, record.id])}')">
+                <a data-tooltip="Rejeitar" onclick="return confirm('Tem a certeza que pretende rejeitar este utilizador?');" href="{reverse('utilizadores:rejeitar', args=[record.first_name, record.id])}">
                     <span class="icon has-text-danger">
                         <i class="fas fa-ban"></i>
                     </span>
@@ -98,16 +98,17 @@ class UtilizadoresTable(django_tables.Table):
             """
         terceiro_botao = ""
         if record.firstProfile == 'Participante':
-            alerta = "Tem a certeza que pretende eliminar este utilizador?<br><br><b>Atenção!</b><br><br>A <b>incrição</b> deste participante será apagada permanentemente."
+            alerta = "Tem a certeza que pretende eliminar este utilizador? Atenção! A incrição deste participante será apagada permanentemente."
         elif record.firstProfile == 'Proponente':
-            alerta = "Tem a certeza que pretende eliminar este utilizador?<br><br><b>Atenção!</b><br><br>As suas <b>tarefas</b> deixarão de estar atribuídas."
+            alerta = "Tem a certeza que pretende eliminar este utilizador? Atenção! As suas tarefas deixarão de estar atribuídas."
         elif record.firstProfile == 'Administrador':
             if not self.request.user.groups.filter(name='Administrador').exists():
                 terceiro_botao = " "
             elif record.valido != "True" or Administrador.objects.filter(valido="True").count() > 1:
-                alerta = "Tem a certeza que pretende eliminar este utilizador?<br><br><b>Atenção!</b><br><br>Todas as informações relativas aos dias abertos pelo qual este administrador está responsável serão apagadas permanentemente!"
+                alerta = "Tem a certeza que pretende eliminar este utilizador? Atenção! Todas as informações relativas aos dias abertos pelo qual este administrador está responsável serão apagadas permanentemente!"
             elif self.request.user != record.user_ptr:
                 terceiro_botao = """
+                
                 <a onclick="alert.warning('Não pode apagar este administrador porque é o unico que existe.')"
                     data-tooltip="Apagar">
                     <span class="icon has-text-danger">
@@ -117,8 +118,7 @@ class UtilizadoresTable(django_tables.Table):
                 """
         if self.request.user != record.user_ptr and terceiro_botao == "":
             terceiro_botao = f"""
-                <a onclick="alert.render('{alerta}','{reverse('utilizadores:apagar-utilizador', args=[record.id])}')"
-                    data-tooltip="Apagar">
+                <a data-tooltip="Apagar" onclick="return confirm('{alerta}');" href="{reverse('utilizadores:apagar-utilizador', args=[record.id])}">
                     <span class="icon has-text-danger">
                         <i class="mdi mdi-trash-can mdi-24px"></i>
                     </span>

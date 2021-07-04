@@ -17,7 +17,7 @@ from django.core.paginator import Paginator
 #from inscricoes.models import Inscricao
 from django.db import transaction
 #from atividades.models import Sessao
-#from notificacoes.models import *
+from notificacoes.models import *
 #from coordenadores.models import Tarefa
 from django.db.models import F
 from django_tables2 import SingleTableMixin
