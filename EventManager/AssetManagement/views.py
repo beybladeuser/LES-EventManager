@@ -269,7 +269,11 @@ def associate_asset(request, eventID = 0, assetID = 0):
     existingEvent = Event.objects.get(pk=eventID) 
     asset = Asset.objects.get(pk = assetID)
     Form = None
-
+    AssetEvent_ = AssetEvent()
+    AssetEvent_.eventid_event = Event.objects.get(pk=eventID)
+    AssetEvent_.assetid_asset = Asset.objects.get(pk=assetID)
+    isAssociated
+    AssetEvent_.save()
 
     return redirect('ViewAssetsToAssociate', eventID)         
 
@@ -303,6 +307,7 @@ def consultar_recursos_do_evento(request, eventID = 0):
 
     template = loader.get_template('ViewAssetsOfEvent.html')
     context = {
-        'Assets' : AssetEvent.objects.filter(eventid_event=eventID)
+        'Assets' : AssetEvent.objects.filter(eventid_event=eventID),
+        'assetTypes' :AssetType.getTypes(),
     }
     return HttpResponse(template.render(context, request))    

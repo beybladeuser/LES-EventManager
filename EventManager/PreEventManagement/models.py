@@ -12,7 +12,8 @@ class AssetEvent(models.Model):
 	id = models.AutoField(db_column='ID', primary_key=True)# Field name made lowercase.
 	eventid_event = models.ForeignKey('Event', models.DO_NOTHING, db_column='EventID_Event')# Field name made lowercase.
 	assetid_asset = models.ForeignKey('AssetManagement.Asset', models.DO_NOTHING, db_column='AssetID_Asset')# Field name made lowercase.
-
+	isAssociated = models.BooleanField(db_column='IsAssociated', default=False)
+	
 	class Meta:
 		db_table = 'asset_event'
 
@@ -20,9 +21,10 @@ class AssetEvent(models.Model):
 	def getAssetsByEvent(self, eventID):
 		result = AssetEvent.objects.filter(eventid_event=eventID)
 		return result
+		
 	def create(self, EventID, AssetID):
 		eventid_event = EventID
-		assetid_asset = assetid_asset
+		assetid_asset = AssetID
 		return self
 
 class AssetLogistics(models.Model):

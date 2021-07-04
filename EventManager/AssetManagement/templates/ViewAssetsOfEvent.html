@@ -11,28 +11,6 @@
   {% endfor %}
 {% endblock %}
 
-{% block SubtypeEquipment %}
-  {% for equipmentType in equipmentTypes %}
-      <option >{{equipmentType}}</option>      
-  {% endfor %}
-{% endblock %}  
- 
-{% block SubtypeRoom %}
-  {% for roomType in roomTypes %}
-      <option >{{roomType}}</option>
-      
-  {% endfor %}
-{% endblock SubtypeRoom %}
-
-{% block SubtypeService %}
-  {% for serviceType in serviceTypes %}
-      <option >{{getServiceType}}</option>
-      
-  {% endfor %}
-{% endblock %}   
-
-
-
 {% block tableHead %}
     <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
         Nome
