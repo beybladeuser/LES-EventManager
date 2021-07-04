@@ -26,7 +26,7 @@ urlpatterns = [
     path('EditEquipment/<int:assetID>/', views.createEquipment, name='EditEquipment'),
     path('EditRoom/<int:assetID>/', views.createRoom, name='EditRoom'),
 
-    path('PreAssociateAsset/', views.pre_associate_asset, name='PreAssociateAsset'),
+    path('ViewAssociateAsset/', views.view_associate_asset, name='ViewAssociateAsset'),
     path('AssociateAsset/<int:eventID>/', views.associate_asset, name='AssociateAsset'),
     path('ViewAssociateAssetOfEvent/<int:eventID>/', views.consultar_recursos_disp, name='ViewAssociateAssetOfEvent'),
 

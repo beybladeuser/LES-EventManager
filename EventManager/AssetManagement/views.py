@@ -15,6 +15,7 @@ from .tables import *
 
 from .forms import *
 from utilizadores.views import user_check
+import PreEventManagement
 
 # Create your views here.
 def home(request) :
@@ -248,15 +249,22 @@ def createRoom(request, assetID = None):
     }
     return HttpResponse(template.render(context, request))    
 
-
-
-def pre_associate_asset(request):
+def view_associate_asset(request):
     template = loader.get_template('ViewAssociateAssets.html')
+    events = Event.objects.all()
+
+    for event in events:
+        if AssetEvent.objects.filter(eventid_event= event.id).exists():
+            event.hasAssets = 1
+        else:
+            event.hasAssets = 0
     context = {
-        'Events': Event.objects.filter()
-        
+        'events': events,        
     }
-    return HttpResponse(template.render(context, request))    
+    return HttpResponse(template.render(context, request))
+
+
+
 
 
 def associate_asset(request, eventID = 0):
