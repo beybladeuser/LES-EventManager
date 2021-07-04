@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 from FormManagement.models import Form, Formtype, QuestionsForm, Questions, Multipleoptions, Questiontype, Answer
-# from Models.models import *
+#from Models.models import *
 
 from django_tables2 import SingleTableMixin
 from django_filters.views import FilterView

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # 'Sessions.apps.SessionsConfig',
     'utilizadores.apps.UtilizadoresConfig',
     'Index.apps.IndexConfig',
+    'notificacoes.apps.NotificacoesConfig',
     'crispy_forms',
     'django_tables2',
     'django.contrib.admin',
@@ -49,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'notificacoes',
     'notifications',
     'clear_cache',
 ]
