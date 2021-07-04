@@ -31,12 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'Models.apps.ModelsConfig',
+    #'Models.apps.ModelsConfig',
     'FormManagement.apps.FormmanagementConfig',
     'AssetManagement.apps.AssetmanagementConfig',
     'EventManagement.apps.EventmanagementConfig',
     'PreEventManagement.apps.PreeventmanagementConfig',
     'Schedules.apps.SchedulesConfig',
+    'notificacoes.apps.NotificacoesConfig',
     # 'Sessions.apps.SessionsConfig',
     'utilizadores.apps.UtilizadoresConfig',
     'Index.apps.IndexConfig',
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'notificacoes',
+    # 'notificacoes',
     'notifications',
     'clear_cache',
 ]

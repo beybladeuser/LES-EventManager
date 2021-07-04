@@ -9,7 +9,7 @@ from django.db import models, connection
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.conf import settings
-from Models.models import *
+# from Models.models import *
 import datetime
 import re
 

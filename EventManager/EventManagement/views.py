@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.db import connection
 from FormManagement.models import Form, Formtype, QuestionsForm, Questions, Multipleoptions, Questiontype, Answer
 from .forms import EventManagerForm
-from Models.models import *
+# from Models.models import *
 
 from .models import *
 
