@@ -20,8 +20,8 @@
             </span>
         {% endif %}
     </th>
-    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
-        Data do Evento
+    <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+        Estado do Evento
         {% if filterKey and filterKey == '00' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-down"></i>
@@ -51,21 +51,40 @@
 
 {% block listings %}
   {% load asset_extras %}
-    {% for asset in Assets %}
+    {% for event in events %}
       <tr id="row{{ forloop.counter }}">
           <td id="NameFilter{{ forloop.counter }}">  <p>{{event.eventname}}</p></td>
-         
+          <td id="StateEventFilter{{ forloop.counter }}">  
+            {% if event.wasvalidated is 1 %}
+                    <p>Validado</p>
+            {% elif event.wasvalidated is 0 %}
+                    <p>Validação da Proposta Pendente</p>
+            {% endif %}
+          </td>
+          <td id="StateAssetFilter{{ forloop.counter }}">  
+            {% if event.hasAssets is 1 %}
+                    <p>Possui recursos associados</p>
+            {% elif event.hasAssets is 0 %}
+                    <p>Não possui recursos associados</p>
+            {% endif %}
+
+          </td>
+
           <td>
+            {% comment %} AASSOCIAR RECURSOS {% endcomment %}
+            <a href="{% url 'ViewAssetsToAssociate' event.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar recursos">
+                <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
+            </a>
             {% comment %} VER Agendamento {% endcomment %}
-            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Agendamento">
+            <a href="{% url 'ViewAssetsOfEvent' event.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Recursos Associados">
                 <i class="fa fa-search fa-lg" aria-hidden="true"></i>
             </a>
             {% comment %} EDITAR {% endcomment %}
-            <a href="{% url 'EditAsset' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
+            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
                 <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
             </a>
             {% comment %} Eliminar {% endcomment %}
-            <a href="{% url 'DeleteAssets' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar recurso" onclick="return confirm('Tem a certeza que deseja apagar este recurso?');">
+            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar recurso" onclick="return confirm('Tem a certeza que deseja apagar este recurso?');">
 		  	    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
 		    </a>
           </td>

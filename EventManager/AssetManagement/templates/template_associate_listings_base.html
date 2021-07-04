@@ -145,11 +145,23 @@
 							</span>
 						</div>
 					</div>
-					
 					<div class="field">
 						<div class="control has-icons-left">
-							<select class="input" id="TypeFilter" onchange="filter2();">
-							  	<option>Estado dos Recursos </option>
+							<select class="input" id="StateEventFilter" onchange="filter2();">
+							  	<option>Selecione o estado dos Eventos </option>
+							  	{% comment %} {% block filterTypes %}
+							
+								{% endblock %} {% endcomment %}
+							</select>
+							<span class="icon is-left">
+								<i class="	fa fa-angle-down mdi-24px"></i>
+							</span>
+						</div>
+					</div>
+					<div class="field">
+						<div class="control has-icons-left">
+							<select class="input" id="StateAssetFilter" onchange="filter2();">
+							  	<option>Selecione o estado dos Recursos </option>
 							  	{% comment %} {% block filterTypes %}
 							
 								{% endblock %} {% endcomment %}
@@ -282,7 +294,8 @@
 
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
-				{'filterName' : 'TypeFilter', 'isDropDown' : true},
+				{'filterName' : 'StateEventFilter', 'isDropDown' : true},
+				{'filterName' : 'StateAssetFilter', 'isDropDown' : true},
 	
 			];
 			var filteredRows = new Array();

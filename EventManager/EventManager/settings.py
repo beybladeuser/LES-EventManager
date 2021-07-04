@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'EventManagement.apps.EventmanagementConfig',
     'PreEventManagement.apps.PreeventmanagementConfig',
     'Schedules.apps.SchedulesConfig',
+    'notificacoes.apps.NotificacoesConfig',
     # 'Sessions.apps.SessionsConfig',
     'utilizadores.apps.UtilizadoresConfig',
     'Index.apps.IndexConfig',
@@ -113,7 +114,7 @@ DATABASES = {
         'USER' : 'root',
         'PASSWORD' : '',
         'HOST' : '127.0.0.1',
-        'PORT' : '3306',
+        'PORT' : '3307',
         'OPTIONS' : {
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'"
         }
