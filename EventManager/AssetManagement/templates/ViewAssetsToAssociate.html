@@ -1,0 +1,97 @@
+{% extends "template_AssetsToAssociate_listings_base.html" %}
+
+
+{% block PageTittle %}
+  Asset Listings
+{% endblock %}
+
+{% block filterTypes %}
+  {% for assetType in assetTypes %}
+      <option >{{assetType}}</option>
+  {% endfor %}
+{% endblock %}
+
+{% block SubtypeEquipment %}
+  {% for equipmentType in equipmentTypes %}
+      <option >{{equipmentType}}</option>      
+  {% endfor %}
+{% endblock %}  
+ 
+{% block SubtypeRoom %}
+  {% for roomType in roomTypes %}
+      <option >{{roomType}}</option>
+      
+  {% endfor %}
+{% endblock SubtypeRoom %}
+
+{% block SubtypeService %}
+  {% for serviceType in serviceTypes %}
+      <option >{{getServiceType}}</option>
+      
+  {% endfor %}
+{% endblock %}   
+
+
+
+{% block tableHead %}
+    <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+        Nome
+        {% if filterKey and filterKey == '00' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '01' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+        Tipo
+        {% if filterKey and filterKey == '20' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '21' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+    <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+        Sub-Tipo
+        {% if filterKey and filterKey == '30' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '31' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
+   
+    <th width="250">Ações</th>
+       
+{% endblock %}
+  
+
+{% block listings %}
+  {% load asset_extras %}
+    {% for asset in Assets %}
+      <tr id="row{{ forloop.counter }}">
+          <td id="NameFilter{{ forloop.counter }}"><p>{{asset.assetname}}</p></td>
+          <td id="TypeFilter{{ forloop.counter}}"><p>{{asset.assettype}}</p></td>
+          <td id="SubtypeFilter{{ forloop.counter }}"><p>{{asset.subtype}}</p></td>
+          <td>
+            <a href="{% url 'AssociateAsset' eventID asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar Recurso" onclick="return confirm('Tem a certeza que deseja associar este recurso ao Evento?');">
+                <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
+            </a>
+
+          </td>
+      </tr>
+    {% endfor %}
+{% endblock  %}
+
+
+

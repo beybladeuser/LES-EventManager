@@ -27,8 +27,10 @@ urlpatterns = [
     path('EditRoom/<int:assetID>/', views.createRoom, name='EditRoom'),
 
     path('ViewAssociateAsset/', views.view_associate_asset, name='ViewAssociateAsset'),
-    path('AssociateAsset/<int:eventID>/', views.associate_asset, name='AssociateAsset'),
-    path('ViewAssociateAssetOfEvent/<int:eventID>/', views.consultar_recursos_disp, name='ViewAssociateAssetOfEvent'),
+    
+    path('ViewAssetsToAssociate/<int:eventID>/', views.consultar_recursos_para_add, name='ViewAssetsToAssociate'),
+    
+    path('AssociateAsset/<int:eventID>/<int:assetID>/', views.associate_asset, name='AssociateAsset'),
 
-
+    path('ViewAssetsOfEvent/<int:eventID>/', views.consultar_recursos_do_evento, name='ViewAssetsOfEvent'),
 ]

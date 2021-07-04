@@ -264,50 +264,48 @@ def view_associate_asset(request):
     return HttpResponse(template.render(context, request))
 
 
+def associate_asset(request, eventID = 0, assetID = 0):
+         
+    existingEvent = Event.objects.get(pk=eventID) 
+    asset = Asset.objects.get(pk = assetID)
+    Form = None
 
+   
+    newAsset_Event = Form.save() 
+      
 
+    return redirect('ViewAssetsToAssociate', eventID)         
 
-def associate_asset(request, eventID = 0):
-     
-    Asset_EventForm = None
-    Asset_EventForm_EventID = None
-    if Event.objects.filter(pk=eventID).exists():
-        existingEvent = Event.objects.get(pk=eventID) 
-        
-        Asset_EventForm_EventID = AssociateAssetForm(currentUser=request,initial={
-                    'event': existingEvent.id
-        })
-        
-        Asset_EventForm = AssociateAssetForm(request.POST, currentUser=request.user)   
-        if Asset_EventForm.is_valid():
-            newAsset_Event = Asset_EventForm.save() 
-            return redirect('PreAssociateAsset')    
-    else:
-        if request.method == 'POST':
-            Asset_EventForm = AssociateAssetForm(request.POST, currentUser=request.user)
-            if Asset_EventForm.is_valid():
-                newAsset_Event = Asset_EventForm.save()    
-                return redirect('PreAssociateAsset')         
-        else:
-            newAsset_Event = Asset_EventForm(currentUser=request.user)
+def consultar_recursos_para_add(request, eventID = 0):
+    
+    Assets = Asset.objects.all()
+    i = 0
+    sizeofAssets = len(Assets)
+    while i < sizeofAssets :
+        if Asset.getServiceType(Assets[i]) is not None:
+            Assets[i].subtype =  Asset.getServiceType(Assets[i])
+            
+        elif Asset.getEquipmentType(Assets[i]) is not None:
+            Assets[i].subtype = Asset.getEquipmentType(Assets[i])
+            
+        elif Asset.getRoom(Assets[i]) is not None:
+            room = Asset.getRoom(Assets[i])
+            buildingg = Rooms.room_GetBuilding(room)
+            
+            Assets[i].subtype = Building.CampusName_BuildingName(buildingg)
+        i += 1
 
-
-    template = loader.get_template('InsertAssetEvent.html')
+    template = loader.get_template('ViewAssetsToAssociate.html')
     context = {
-        'Asset_EventForm' : Asset_EventForm,
-        'Asset_EventForm_EventID': Asset_EventForm_EventID
+        'Assets' : Assets,
+        'eventID' : eventID,
     }
     return HttpResponse(template.render(context, request))    
 
+def consultar_recursos_do_evento(request, eventID = 0):
 
-
-def consultar_recursos_disp(request, eventID):
-    template = loader.get_template('ViewAssociateAssetsOfEvent.html')
-
-
-    AssetEvent_ = AssetEvent.objects.filter(eventid_event=eventID)
-
+    template = loader.get_template('ViewAssetsOfEvent.html')
     context = {
-        'Assets' : AssetEvent_
+        'Assets' : AssetEvent.objects.filter(eventid_event=eventID)
     }
     return HttpResponse(template.render(context, request))    

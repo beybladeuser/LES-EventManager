@@ -20,7 +20,18 @@
             </span>
         {% endif %}
     </th>
-
+    <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
+        Estado do Evento
+        {% if filterKey and filterKey == '00' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '01' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
         Estado dos Recursos
         {% if filterKey and filterKey == '20' %}
@@ -43,27 +54,29 @@
     {% for event in events %}
       <tr id="row{{ forloop.counter }}">
           <td id="NameFilter{{ forloop.counter }}">  <p>{{event.eventname}}</p></td>
-          <td id="TypeFilter{{ forloop.counter }}">  
-          
-          {% if event.hasAssets is 1 %}
-                <p>Possui recursos associados</p>
-          {% elif event.hasAssets is 0 %}
-                <p>Não possui recursos associados</p>
-          
-          {% endif %}
-          
-          
-          
-          
-          
+          <td id="StateEventFilter{{ forloop.counter }}">  
+            {% if event.wasvalidated is 1 %}
+                    <p>Validado</p>
+            {% elif event.wasvalidated is 0 %}
+                    <p>Validação da Proposta Pendente</p>
+            {% endif %}
+          </td>
+          <td id="StateAssetFilter{{ forloop.counter }}">  
+            {% if event.hasAssets is 1 %}
+                    <p>Possui recursos associados</p>
+            {% elif event.hasAssets is 0 %}
+                    <p>Não possui recursos associados</p>
+            {% endif %}
+
           </td>
 
           <td>
-            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar recursos">
+            {% comment %} AASSOCIAR RECURSOS {% endcomment %}
+            <a href="{% url 'ViewAssetsToAssociate' event.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar recursos">
                 <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
             </a>
             {% comment %} VER Agendamento {% endcomment %}
-            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Agendamento">
+            <a href="{% url 'ViewAssetsOfEvent' event.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Recursos Associados">
                 <i class="fa fa-search fa-lg" aria-hidden="true"></i>
             </a>
             {% comment %} EDITAR {% endcomment %}
