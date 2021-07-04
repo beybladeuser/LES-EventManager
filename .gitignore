@@ -1,16 +1,18 @@
 EventManager/AssetManagement/__pycache__
+EventManager/AssetManagement/templatetags/__pycache__
 EventManager/EventManagement/__pycache__
 EventManager/EventManager/__pycache__
+EventManager/EventManagement/templatetags/__pycache__
 EventManager/FormManagement/__pycache__
+EventManager/FormManagement/templatetags/__pycache__
 EventManager/Index/__pycache__
 EventManager/Models/__pycache__
 EventManager/PreEventManagement/__pycache__
 EventManager/Schedules/__pycache__
 EventManager/utilizadores/__pycache__
 EventManager/utilizadores/templatetags/__pycache__
-EventManager/FormManagement/templatetags/__pycache__
-EventManager/AssetManagement/templatetags/__pycache__
-EventManager/EventManagement/templatetags/__pycache__
+EventManager/notificacoes/__pycache__
+EventManager/notificacoes/templatetags/__pycache__
 
 
 EventManager/AssetManagement/migrations/*
@@ -29,4 +31,6 @@ EventManager/Schedules/migrations/*
 !/EventManager/Schedules/migrations/__init__.py
 EventManager/utilizadores/migrations/*
 !/EventManager/utilizadores/migrations/__init__.py
+EventManager/notificacoes/migrations/*
+!/EventManager/notificacoes/migrations/__init__.py
 
