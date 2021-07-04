@@ -270,9 +270,6 @@ def associate_asset(request, eventID = 0, assetID = 0):
     asset = Asset.objects.get(pk = assetID)
     Form = None
 
-   
-    newAsset_Event = Form.save() 
-      
 
     return redirect('ViewAssetsToAssociate', eventID)         
 
