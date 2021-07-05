@@ -5,6 +5,10 @@ from EventManagement.models import Resgistration
 import datetime
 from django.utils.safestring import mark_safe
 
+from utilizadores.models import *
+from notificacoes.models import *
+from notifications.signals import notify
+
 # Create your forms here.
 
 class formCreation(forms.Form):
@@ -73,6 +77,11 @@ class formCreation(forms.Form):
 		if FormID and Form.objects.filter(id=FormID).exists():
 			newForm = Form.objects.get(pk=FormID)
 			isEdit = True
+
+			titulo = "Formulário Editado"
+			descricao = "O formulário \"" + newForm.formname + "\" foi editado por " + self.user.username
+			user_recipient = Utilizador.objects.get(id=newForm.createdby.id)
+			
 		else :
 			newForm = Form()
 			isEdit = False
@@ -93,10 +102,10 @@ class formCreation(forms.Form):
 			wasChanged = True
 
 		if not FormID :
-			newForm.dateofcreation = datetime.datetime.now()
+			newForm.dateofcreation = datetime.now()
 
 		if wasChanged :
-			newForm.dateoflastedit = datetime.datetime.now()
+			newForm.dateoflastedit = datetime.now()
 
 		if not FormID :
 			newForm.createdby = self.user
@@ -104,6 +113,10 @@ class formCreation(forms.Form):
 		if wasChanged :
 			newForm.lasteditedby = self.user
 			newForm.save()
+			if isEdit :
+				notify.send(sender=self.user, recipient=user_recipient, verb=descricao, action_object=newForm, target=None, level="info", description=titulo, public=False, timestamp=datetime.now())
+
+			
 		return newForm
 
 
@@ -172,11 +185,11 @@ class openEndedQuestionCreation(forms.Form):
 
 		if not self.questionToEdit :
 			newQuestion.createdby = self.user
-			newQuestion.dateofcreation = datetime.datetime.now()
+			newQuestion.dateofcreation = datetime.now()
 		
 		if wasChanged :
 			newQuestion.lasteditedby = self.user
-			newQuestion.dateoflastedit = datetime.datetime.now()
+			newQuestion.dateoflastedit = datetime.now()
 	
 			newQuestion.save()
 
@@ -292,7 +305,7 @@ class EventManagerForm(forms.Form) :
 				else :
 					return None
 				
-				answerModel.dateofcreation = datetime.datetime.now()
+				answerModel.dateofcreation = datetime.now()
 				if question.questiontypeid_questiontype.id == 1 :
 					answerModel.answer = answer
 				elif question.questiontypeid_questiontype.id == 2 :
