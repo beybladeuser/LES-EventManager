@@ -659,6 +659,12 @@ def alterar_utilizador(request):
             utilizador_object = Participante.objects.get(id=user.id)
             utilizador_form = ParticipanteAlterarPerfilForm(instance=utilizador_object)
             perfil= "Participante"
+        elif user.groups.filter(name = "Proponente").exists():
+            tipo=1
+            u = "Proponente" 
+            utilizador_object = Proponente.objects.get(id=user.id)
+            utilizador_form = ParticipanteAlterarPerfilForm(instance=utilizador_object)
+            perfil= "Proponente"
         else:
             return redirect('utilizadores:mensagem',5)     
     else:

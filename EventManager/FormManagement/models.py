@@ -121,7 +121,7 @@ class Form(models.Model):
         return self.userHasEditPermitions(user) and not self.archived and not self.getAssociatedEvents()
 
     def canDuplicate(self, user) :
-        return not user.groups.filter(pk=2).exists() and self.isValid() == 0
+        return not user.groups.filter(pk=2).exists() and self.isValid() == 0 and self.formtypeid_formtype.canCreate(user)
 
     def canDisplay(self, user) :
         return (user.id == self.createdby.id or user.groups.filter(pk=1).exists() or self.published) and not user.groups.filter(pk=2).exists()
