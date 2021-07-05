@@ -116,6 +116,9 @@ def pre_delete_assets(request, assetID = None):
 
 
 def delete_assets(request, assetID = None):
+    AssetsAssociated = AssetEvent.objects.filter(assetid_asset=assetID)
+    for assetAssociated in AssetsAssociated:
+        assetAssociated.delete()
 
     pre_delete_asset = Asset.objects.filter(id=assetID)
     pre_delete_asset.id = assetID
@@ -333,6 +336,13 @@ def consultar_recursos_do_evento(request, eventID = 0):
         'Assets' : AssetsEvent,
         'assetTypes' : AssetType.getTypes(),
         'isViewAssets': 1,
-        'eventName': Event.objects.get(pk=eventID).eventname
+        'eventName': Event.objects.get(pk=eventID).eventname,
+        'eventID':eventID,
     }
     return HttpResponse(template.render(context, request))    
+
+def desassociar_recurso(request, eventID = 0 , assetID = 0):
+
+    assetevent = AssetEvent.objects.filter(eventid_event=eventID, assetid_asset=assetID)
+    assetevent.delete() 
+    return redirect('ViewAssetsOfEvent', eventID)

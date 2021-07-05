@@ -27,6 +27,7 @@ class AssetEvent(models.Model):
 		assetid_asset = AssetID
 		return self
 
+
 class AssetLogistics(models.Model):
 	id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
 	eventid_event = models.ForeignKey('Event', models.DO_NOTHING, db_column='EventID_Event')  # Field name made lowercase.
