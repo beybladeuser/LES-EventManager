@@ -58,9 +58,9 @@
   {% load asset_extras %}
     {% for asset in Assets %}
       <tr id="row{{ forloop.counter }}">
-          <td id="NameFilter{{ forloop.counter }}"><p>{{asset.assetname}}</p></td>
-          <td id="TypeFilter{{ forloop.counter}}"><p>{{asset.assettype}}</p></td>
-          <td id="SubtypeFilter{{ forloop.counter }}"><p>{{asset.subtype}}</p></td>
+          <td id="NameFilter{{ forloop.counter }}"><p>{{asset.assetid_asset.assetname}}</p></td>
+          <td id="TypeFilter{{ forloop.counter}}"><p>{{asset.assetid_asset.assettype}}</p></td>
+          <td id="SubtypeFilter{{ forloop.counter }}"><p>{{asset.assetid_asset.subtype}}</p></td>
           <td>
             {% comment %} <a href="{% url 'AssociateAsset' eventID asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar Recurso" onclick="return confirm('Tem a certeza que deseja associar este recurso ao Evento?');">
                 <i class="fas fa-plus fa-lg" aria-hidden="true"></i>

@@ -268,11 +268,11 @@ def associate_asset(request, eventID = 0, assetID = 0):
          
     existingEvent = Event.objects.get(pk=eventID) 
     asset = Asset.objects.get(pk = assetID)
-    Form = None
+
     AssetEvent_ = AssetEvent()
     AssetEvent_.eventid_event = Event.objects.get(pk=eventID)
     AssetEvent_.assetid_asset = Asset.objects.get(pk=assetID)
-    isAssociated
+    AssetEvent_.isAssociated
     AssetEvent_.save()
 
     return redirect('ViewAssetsToAssociate', eventID)         
@@ -306,6 +306,23 @@ def consultar_recursos_para_add(request, eventID = 0):
 def consultar_recursos_do_evento(request, eventID = 0):
 
     template = loader.get_template('ViewAssetsOfEvent.html')
+    AssetsEvent = AssetEvent.objects.filter(eventid_event=eventID),
+    
+
+    for assetevent in AssetsEvent:
+        asset = Asset.objects.get(pk=assetevent.assetid_asset)
+        if Asset.getServiceType(asset) is not None:
+            asset.subtype =  Asset.getServiceType(asset)
+            
+        elif Asset.getEquipmentType(asset) is not None:
+            asset.subtype = Asset.getEquipmentType(asset)
+            
+        elif Asset.getRoom(asset) is not None:
+            room = Asset.getRoom(asset)
+            buildingg = Rooms.room_GetBuilding(room)
+            
+            asset.subtype = Building.CampusName_BuildingName(buildingg)
+    
     context = {
         'Assets' : AssetEvent.objects.filter(eventid_event=eventID),
         'assetTypes' :AssetType.getTypes(),
