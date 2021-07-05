@@ -155,8 +155,11 @@ class Form(models.Model):
         else :
             copyTxt = ""
         name = self.formname.replace(copyTxt, '')
+        name = name.replace('(', '\(')
+        name = name.replace(')', '\)')
         result.formname = name + " (Copy_" + str(Form.objects.filter(formname__regex=r"^"+ name, formtypeid_formtype=self.formtypeid_formtype).count()) + ")"
-
+        result.formname = result.formname.replace('\(', '(')
+        result.formname = result.formname.replace('\)', ')')
 
         result.dateofcreation = datetime.datetime.now()
         result.dateoflastedit = datetime.datetime.now()
