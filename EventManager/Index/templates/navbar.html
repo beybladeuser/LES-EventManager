@@ -18,7 +18,7 @@
     <div class="navbar-menu">
         {% comment %}  {% endcomment %}
         <div class="navbar-start">
-            {% if user.is_authenticated and not user|has_group:'Participante'%}
+            {% if user.is_authenticated and not user|has_group:'Participante' and not user|has_group:'Proponente'%}
               <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Gestor de Recursos</a>
             {% endif %}
             <!--<a href="" class="navbar-item is-tab router-link">Event</a>-->
@@ -121,6 +121,44 @@
                         </a>
                     </div>
                     {%endfor%}
+                    {% for notificacao in request.user|notificacoes_nao_lidas %}
+                    <div data-tooltip="Click para ver detalhes">
+                      {% if notificacao.unread == False %}
+                      <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}"
+                        class="panel-block">
+                        {% else %}
+                        <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}"
+                          class="panel-block" style="background: Gainsboro;">
+                          {% endif %}
+
+                          {% if notificacao.level == "info" %}
+                          <span class="icon has-text-info">
+                            <i class="fas fa-info-circle"></i>
+                          </span>
+                          {% elif notificacao.level == "success" %}
+                          <span class="icon has-text-success">
+                            <i class="fas fa-check-square"></i>
+                          </span>
+                          {% elif notificacao.level == "warning" %}
+                          <span class="icon has-text-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </span>
+                          {% elif notificacao.level == "error" %}
+                          <span class="icon has-text-danger">
+                            <i class="fas fa-ban"></i>
+                          </span>
+                          {% endif %}
+
+
+                          <p>
+                            <strong>
+                              {{notificacao.description}}
+                            </strong>
+                          </p>
+
+                        </a>
+                    </div>
+                    {%endfor%}
                     {% if request.user|nr_notificacoes > 0 %}
                     <div class="panel-block">
                       <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 0 %}"
@@ -145,10 +183,47 @@
                   <div id="Novas" style="display:none" class="tabcontent">
 
                     {% notification_list %}
+                    {% for notificacao in request.user|notificacoes_nao_lidas %}
+                    <div data-tooltip="Click para ver detalhes">
+                      {% if notificacao.unread == False %}
+                      <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}"
+                        class="panel-block">
+                        {% else %}
+                        <a href="{% url 'notificacoes:categorias-notificacao-automatica' 0 notificacao.id %}"
+                          class="panel-block" style="background: Gainsboro;">
+                          {% endif %}
 
+                          {% if notificacao.level == "info" %}
+                          <span class="icon has-text-info">
+                            <i class="fas fa-info-circle"></i>
+                          </span>
+                          {% elif notificacao.level == "success" %}
+                          <span class="icon has-text-success">
+                            <i class="fas fa-check-square"></i>
+                          </span>
+                          {% elif notificacao.level == "warning" %}
+                          <span class="icon has-text-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </span>
+                          {% elif notificacao.level == "error" %}
+                          <span class="icon has-text-danger">
+                            <i class="fas fa-ban"></i>
+                          </span>
+                          {% endif %}
+
+
+                          <p>
+                            <strong>
+                              {{notificacao.description}}
+                            </strong>
+                          </p>
+
+                        </a>
+                    </div>
+                    {%endfor%}
                     {% if request.user|has_notification %}
                     <div class="panel-block">
-                      <a onclick="alert.render('Tem a certeza que pretende marcar todas as notificações como lidas?','{% url 'notificacoes:ler-notificacoes'%}')"
+                      <a href="{% url 'notificacoes:ler-notificacoes'%}" onclick="return confirm('Tem a certeza que pretende marcar todas as notificações como lidas?');"
                         role="listitem" tabindex="0" class="dropdown-item is-disabled">
 
                         <button class="button is-link is-outlined is-fullwidth">
@@ -196,7 +271,7 @@
                     <div class="panel-block">
 
 
-                      <a onclick="alert.render('Tem a certeza que pretende eliminar todas as notificações lidas?','{% url 'notificacoes:limpar-notificacoes' 2 %}')"
+                      <a href="{% url 'notificacoes:limpar-notificacoes' 2 %}" onclick="return confirm('Tem a certeza que pretende eliminar todas as notificações lidas?');"
                         role="listitem" tabindex="0" class="dropdown-item is-disabled">
 
                         <button class="button is-link is-outlined is-fullwidth">

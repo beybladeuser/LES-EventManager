@@ -572,18 +572,12 @@ def criar_mensagem_admin(request, id):
                 if tipo_utilizadores == "Participante":
                     utilizadores = Participante.objects.all()
                     grupo = "Grupo de participantes"
-                elif tipo_utilizadores == "ProfessorUniversitario":
-                    utilizadores = ProfessorUniversitario.objects.all()
-                    grupo = "Grupo de professores universitários"
-                elif tipo_utilizadores == "Coordenador":
-                    utilizadores = Coordenador.objects.all()
-                    grupo = "Grupo de coordenadores"
-                elif tipo_utilizadores == "Colaborador":
-                    utilizadores = Colaborador.objects.all()
-                    grupo = "Grupo de colaboradores"
                 elif tipo_utilizadores == "Administrador":
                     utilizadores = Administrador.objects.all() 
-                    grupo = "Grupo de administradores do dia aberto"   
+                    grupo = "Grupo de administradores"
+                elif tipo_utilizadores == "Proponente":
+                    utilizadores = Proponente.objects.all() 
+                    grupo = "Grupo de proponentes"   
                 else:
                     return redirect("utilizadores:mensagem",5)
                 

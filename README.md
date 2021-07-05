@@ -23,6 +23,8 @@ How to run this:
   (Django) c:\folder_example> python -m pip install django-filter
 
   (Django) c:\folder_example> python -m pip install django-notifications-latest
+  
+  (Django) c:\folder_example> python -m pip install django-notifications-hq
 
   (Django) c:\folder_example> python -m pip install django-clear-cache
 ```

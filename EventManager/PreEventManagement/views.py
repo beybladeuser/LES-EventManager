@@ -64,7 +64,7 @@ def listing(request, sort_key="00"):
 	for event in events:
 		try:
 			proposal_form = event.formproposalid
-		#	logistic_form = event.formlogisticsid
+	
 		except:
 			raise Exception("An event (" + event.eventname + ") was created but there is no proposal form for it's type (or there are more than one).")
 
@@ -311,14 +311,11 @@ def create(request):
 		return HttpResponse(template.render(context, request))
 	else:
 		formboi = CreationForm(request.user, request)
-		#form_name = request.POST['name']
-		#form_campus = Campus.objects.get(id=request.POST['campus'])
-		#form = Form.objects.get(id=request.POST['form_id'])
-
+	
 
 
 		proposal_form_type = Formtype.objects.get(id=1)
-		#logistic_form_type = Formtype.objects.get(id=4)
+	
 
 
 		name = formboi.inputs[0]["value"]
@@ -327,11 +324,10 @@ def create(request):
 		event_type = Eventtype.objects.get(id=int(formboi.inputs[2]["value"]))
 		
 		proposal_form = formboi.inputs[3]['array'][event_type.id]['formobj']
-		#proposal_form = Form.objects.filter(formtypeid_formtype=proposal_form_type, eventtypeid=event_type, archived=False)[0]
-		#logistic_form = Form.objects.filter(formtypeid_formtype=logistic_form_type, eventtypeid=event_type, archived=False)[0]
+	
 
 		proposal_answers = formboi.inputs[3]["array"][event_type.id]["questions"].values()
-		#logistic_answers = formboi.inputs[4]["array"][event_type.id]["questions"].values()
+
 
 
 		ev = Event(
@@ -343,7 +339,7 @@ def create(request):
 			proponentid=request.user,
 			eventname=name,
 			formproposalid=proposal_form,
-			#formlogisticsid=logistic_form
+		
 		)
 		ev.save()
 
@@ -390,7 +386,7 @@ def edit(request, id):
 		formboi.inputs[2]["value"] = event.eventtypeid.id
 
 		proposal_form = event.formproposalid
-		#logistic_form = event.formlogisticsid
+		
 
 		for proposal_question in proposal_form.getQuestions():
 			answer_queryset = Answer.objects.filter(eventid_event=event, associatedformid=proposal_form, questionsid_questions=proposal_question)
@@ -444,7 +440,7 @@ def edit(request, id):
 		event.proponentid=request.user
 		event.eventname=name
 		event.formproposalid=proposal_form
-		#event.formlogisticsid=logistic_form
+	
 		
 		event.save()
 
