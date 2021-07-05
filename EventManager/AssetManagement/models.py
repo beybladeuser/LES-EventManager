@@ -232,6 +232,9 @@ class Rooms(models.Model):
     capacity =  models.IntegerField(db_column='Capacity')  # Field name made lowercase.
     reducedMobCapacity =  models.IntegerField(db_column='Reduced Mobility Capacity', default=0)  # Field name made lowercase.
 
+    def __str__(self):
+       return self.assetid.assetname
+
     def room_GetBuilding(self):
         return self.buildingid_building
 

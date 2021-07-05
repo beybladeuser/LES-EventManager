@@ -18,7 +18,7 @@
     <div class="navbar-menu">
         {% comment %}  {% endcomment %}
         <div class="navbar-start">
-            {% if user.is_authenticated and not user|has_group:'Participante'%}
+            {% if user.is_authenticated and not user|has_group:'Participante' and not user|has_group:'Proponente'%}
               <a href="{% url 'assetHome' %}" class="navbar-item is-tab router-link">Gestor de Recursos</a>
             {% endif %}
             <!--<a href="" class="navbar-item is-tab router-link">Event</a>-->

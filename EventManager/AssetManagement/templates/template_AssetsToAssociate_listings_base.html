@@ -93,39 +93,39 @@
 	</style>
 
 	<style>
-        .main-table > tbody > tr:not(.detail) {
-            cursor: pointer;
-        }
+	.main-table > tbody > tr:not(.detail) {
+		cursor: pointer;
+	}
 
-        .main-table > tbody > tr.detail {
-            box-shadow: inset 0 1px 3px #dbdbdb;
-            background: #fafafa;
-            background-color: rgb(250, 250, 250);
-        }
+	.main-table > tbody > tr.detail {
+		box-shadow: inset 0 1px 3px #dbdbdb;
+		background: #fafafa;
+		background-color: rgb(250, 250, 250);
+	}
 
-        .main-table > tbody > tr.detail .detail-container {
-            padding: 1rem;
-        }
+	.main-table > tbody > tr.detail .detail-container {
+		padding: 1rem;
+	}
 
-        .main-table > tbody > tr.detail:hover {
-            background-color: #fafafa !important;
-        }
+	.main-table > tbody > tr.detail:hover {
+		background-color: #fafafa !important;
+	}
 
-        .main-table > tbody > tr.detail:not(.is-active) {
-            display: none;
-        }
+	.main-table > tbody > tr.detail:not(.is-active) {
+		display: none;
+	}
 
-        .main-table > tbody > tr.detail .is-active {
-            display: block;
-        }
+	.main-table > tbody > tr.detail .is-active {
+		display: block;
+	}
 
-        .icon.is-expanded {
-            transform: rotate(90deg);
-        }
+	.icon.is-expanded {
+		transform: rotate(90deg);
+	}
 
-        .icon {
-            transition: transform 150ms ease-out, opacity 86ms ease-out;
-        }
+	.icon {
+		transition: transform 150ms ease-out, opacity 86ms ease-out;
+	}
 	</style>
 {% endblock %}
 
@@ -148,7 +148,7 @@
 
 					<div class="field">
 						<div class="control has-icons-left">
-							<select class="input" id="TypeFilter" onchange="filter2()">
+							<select class="input" id="TypeFilter" onchange="displaySubType(this); filter2();">
 							  	<option>Selecione o tipo de recurso: </option>
 							  	{% block filterTypes %}
 							
@@ -159,43 +159,70 @@
 							</span>
 						</div>
 					</div>
-					<div class="field">
-						<div class="control has-icons-left">
-							<select class="input" id="SubtypeFilter" onchange="filter2()">
-							  	<option>Selecione o sub-tipo de recurso: </option>
-							  	<option>yha </option>
-{% comment %} 							  	
-								{% block filterSubtype %}
+			 
+						<div class="field" id="SubtypeFilterBase1" style="display:none">
+							<div class="control has-icons-left">
+								<select class="input" id="SubtypeFilter_1" onchange="filter2()">
+								<option>Selecione o subtipo: </option>
+									{% block SubtypeEquipment %}
+								
+									{% endblock %}
 							
-								{% endblock %} {% endcomment %}
-							</select>
-							<span class="icon is-left">
-								<i class="	fa fa-angle-down mdi-24px"></i>
-							</span>
+								</select>
+								<span class="icon is-left">
+									<i class="	fa fa-angle-down mdi-24px"></i>
+								</span>
+							</div>
 						</div>
-					</div>
-					<div class="field">
-						<div class="control has-icons-left">
-							<input type="text" class="input" id="QuantityFilter" placeholder="Quantidade" onkeyup="filter2()">
-							<span class="icon is-left">
-								<i class="mdi mdi-magnify mdi-24px"></i>
-							</span>
-						</div>
-					</div>
 
-					<div class="field">
-						<div class="control has-icons-left">
-							<select class="input" id="EmUtilFilter" onchange="filter2()">
-							  	<option>Selecione se: </option>
-							  	<option>Sim</option>
-							  	<option>Não</option>
-							</select>
-							<span class="icon is-left">
-								<i class="	fa fa-angle-down mdi-24px"></i>
-							</span>
+						<div class="field" id="SubtypeFilterBase2" style="display:none">
+							<div class="control has-icons-left">
+								<select class="input" id="SubtypeFilter_2" onchange="filter2()">
+									<option>Selecione o subtipo: </option>
+									{% block SubtypeRoom %}
+								
+									{% endblock %}
+								
+								</select>
+								<span class="icon is-left">
+									<i class="	fa fa-angle-down mdi-24px"></i>
+								</span>
+							</div>
 						</div>
-					</div>
-	
+
+						<div class="field" id="SubtypeFilterBase3" style="display:none">
+							<div class="control has-icons-left">
+								<select class="input" id="SubtypeFilter_3" onchange="filter2()">
+								<option>Selecione o subtipo: </option>
+									{% block SubtypeService %}
+								
+									{% endblock %}
+								
+								</select>
+								<span class="icon is-left">
+									<i class="	fa fa-angle-down mdi-24px"></i>
+								</span>
+							</div>
+						</div>
+
+					
+
+						<div class="field">
+							<div class="control has-icons-left">
+								<select class="input" id="StateFilter" onchange="filter2();">
+									<option>Selecione o estado do recurso: </option>
+									<option>Por Associar</option>
+									<option>Associado</option>
+								</select>
+								<span class="icon is-left">
+									<i class="	fa fa-angle-down mdi-24px"></i>
+								</span>
+							</div>
+						</div>
+
+			
+
+				
 					<div class="field is-grouped">
 						<p class="control is-expanded">
 							<input class="button is-light is-fullwidth" type="reset" onclick="clearFilters()" value="Limpar Filtros">
@@ -210,7 +237,9 @@
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
 					<li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
-					<li class="is-active"><a>{% block currentPage %}{% endblock %}</a></li>
+					<li><a href="{% url 'ViewAssociateAsset' %}">Consultar recursos associados a Eventos</a></li>
+					{% block choosePath %}
+					{% endblock %}
 				</ul>
 			</nav>
 			
@@ -288,46 +317,40 @@
 
 {% block scripts %}
 		<script>
-        	function filter(filterName, isDropDown)
-        	{
-        	    var FilterOBJ = document.getElementById(filterName);
-        	    var filter;
-        	    if (isDropDown) {
-        	        filter = FilterOBJ.options[FilterOBJ.selectedIndex].text.toLowerCase();
-        	    }
-        	    else {
-        	        filter = FilterOBJ.value.toLowerCase();
-        	    }
+			function displaySubType(caller) {
+				var option = caller.options[caller.selectedIndex].text.toLowerCase();
+				for (let index = 1; index <= 3; index++)
+				{
+					var temp = document.getElementById("SubtypeFilter_"+index);
+					temp.selectedIndex=0;
+				}
 
-				if (isDropDown && filter.indexOf("selecione")>-1) {
-					filter = "";
-        	    }
-				
-				var id = 1;
-        	    while (document.getElementById("row" + id)){
-
-        	        var fieldVal = document.getElementById(filterName + id).textContent.toLowerCase();
-        	        
-
-
-        	        if ( fieldVal.indexOf(filter)>-1 ) {
-        	            document.getElementById("row" + id).style.display = "";
-        	        }
-        	        else {
-        	            document.getElementById("row" + id).style.display = "none";
-        	        }
-        	        id++;
-        	    }
-
-        	}
+				if (option.indexOf("equipamento")>-1) {
+					toDisplay=1;
+				}
+				if (option.indexOf("espaço")>-1) {
+					toDisplay=2;
+				}
+				if (option.indexOf("serviço")>-1) {
+					toDisplay=3;
+				}
+				for (let index = 1; index <= 3; index++)
+				{
+					var temp = document.getElementById("SubtypeFilterBase"+index);
+					if (index == toDisplay)
+						temp.style.display="";
+					else
+						temp.style.display="none";
+				}
+			}
 
 			var filters = [
 				{'filterName' : 'NameFilter', 'isDropDown' : false},
 				{'filterName' : 'TypeFilter', 'isDropDown' : true},
-				{'filterName' : 'SubtypeFilter', 'isDropDown' : false},
-				{'filterName' : 'QuantityFilter', 'isDropDown' : false},
-				{'filterName' : 'EmUtilFilter', 'isDropDown' : true},
-				
+				{'filterName' : 'SubtypeFilter_1', 'isDropDown' : true},
+				{'filterName' : 'SubtypeFilter_2', 'isDropDown' : true},
+				{'filterName' : 'SubtypeFilter_3', 'isDropDown' : true},
+						
 			];
 			var filteredRows = new Array();
 				function filter2(){
@@ -336,7 +359,12 @@
         	    while (document.getElementById("row" + id)){
 					var toBeHidden = false;
 					for (let index = 0; index < filters.length; index++) {
-						var fieldVal = document.getElementById(filters[index].filterName + id).textContent.toLowerCase();
+						var temp = filters[index].filterName;
+						if (temp.indexOf("SubtypeFilter")>-1)
+						{
+							temp=temp.substring(0, temp.length - 2);
+						}
+						var fieldVal = document.getElementById(temp + id).textContent.toLowerCase();
 						var FilterOBJ = document.getElementById(filters[index].filterName);
         	    		var filter;
 

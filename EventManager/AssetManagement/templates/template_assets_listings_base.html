@@ -164,14 +164,9 @@
 							<div class="control has-icons-left">
 								<select class="input" id="SubtypeFilter_1" onchange="filter2()">
 									<option>Selecione o subtipo: </option>
+									{% block SubtypeEquipment %}
 								
-									<option>Microfone</option>
-									
-									<option>Projetor</option>
-									{% comment %} 							  	
-									{% block filterSubtype %}
-								
-									{% endblock %} {% endcomment %}
+									{% endblock %}
 								</select>
 								<span class="icon is-left">
 									<i class="	fa fa-angle-down mdi-24px"></i>
@@ -183,7 +178,9 @@
 							<div class="control has-icons-left">
 								<select class="input" id="SubtypeFilter_2" onchange="filter2()">
 									<option>Selecione o subtipo: </option>
-									<option>Sala de Aula</option>
+									{% block SubtypeRoom %}
+								
+									{% endblock %}
 								
 								</select>
 								<span class="icon is-left">
@@ -195,8 +192,10 @@
 						<div class="field" id="SubtypeFilterBase3" style="display:none">
 							<div class="control has-icons-left">
 								<select class="input" id="SubtypeFilter_3" onchange="filter2()">
-										<option>Selecione o subtipo: </option>
-										<option>Alojamento</option>
+									<option>Selecione o subtipo: </option>
+									{% block SubtypeService %}
+								
+									{% endblock %}	
 								
 								</select>
 								<span class="icon is-left">
