@@ -164,10 +164,11 @@
 		                    {% else %}
 		                    	Validado!
 		                    {% endif %}
-	                    {% endcomment %}{% if entri.wasvalidated == 0 %}Validar Proposta{% elif entri.wasvalidated == 1 %}{% if entri.formresgistrationid is None %}Preencher logística antes de prosseguir!{% else %}Validar Logística{% endif %}{% elif entri.wasvalidated == -1 %}Pendendo modificações à proposta por parte do proponente!{% elif entri.wasvalidated == -2 %}Pendendo modificações à logística por parte do proponente!{% else %}Validado!{% endif %}" 
-	                    onclick="return confirm('Pretende mesmo validar?');" 
+	                    {% endcomment %}{% if entri.wasvalidated == 0 %}Validar Proposta{% elif entri.wasvalidated == 1 %}{% if entri.formresgistrationid is None %}Preencher logística antes de prosseguir!{% else %}Validar Logística{% endif %}{% elif entri.wasvalidated == -1 %}Pendendo modificações à proposta por parte do proponente!{% elif entri.wasvalidated == -2 %}Pendendo modificações à logística por parte do proponente!{% else %}Validado!{% endif %}"
 	                    {% if entri.wasvalidated == 1 and entri.formresgistrationid is None or entri.wasvalidated == 2 or entri.wasvalidated == -1 or entri.wasvalidated == -2 %}
-	                    	disabled
+	                    	disabled onclick="return false;"
+	                    {% else %}
+	                    	onclick="return confirm('Pretende mesmo validar?');" 
 	                    {% endif %}>
 	                    	<i class="far fa-check-square" aria-hidden="true"></i>
 	                    </a>
@@ -191,15 +192,16 @@
 	                    	Validado!
 	                    {% endif %}
 	                    {% endcomment %}{% if entri.wasvalidated == 0 %}Recusar Proposta{% elif entri.wasvalidated == 1 %}{% if entri.formresgistrationid is None %}Logística por preencher!{% else %}Recusar Logística{% endif %}{% elif entri.wasvalidated == -1 %}Proposta já recusada!{% elif entri.wasvalidated == -2 %}Logística já recusada!{% else %}Validado!{% endif %}"
-	                    onclick="return confirm('Pretende mesmo recusar?');" 
 	                    {% if entri.wasvalidated == 1 and entri.formresgistrationid is None or entri.wasvalidated == 2 or entri.wasvalidated == -1 or entri.wasvalidated == -2 %}
-	                    	disabled
+	                    	disabled onclick="return false;"
+	                    {% else %}
+	                    	onclick="return confirm('Pretende mesmo recusar?');" 
 	                    {% endif %}>
 	                        <i class="fas fa-times" aria-hidden="true"></i>
 	                    </a>
 
 	                    {% if entri.wasvalidated == 1 and entri.formresgistrationid is not None %}
-		                    <a href="{% url 'ViewAssetsToAssociate' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Verificar Recursos">
+		                    <a href="{% url 'ViewAssetsOfEvent' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Verificar Recursos">
 		                    	<i class="fas fa-clipboard-list"></i>
 		                    </a>
 	                    {% endif %}
@@ -216,7 +218,7 @@
 			                        <i class="fas fa-chevron-circle-right" aria-hidden="true"></i>
 			                    </a>
 		                    {% else %}
-			                	<a href="{% url 'edit_logistic' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Logística" {% if entri.has_participants %}disabled{% endif %}>
+			                	<a href="{% url 'edit_logistic' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Logística" {% if entri.has_participants %}disabled onclick="return false;"{% endif %}>
 			                        <i class="mdi mdi-circle-edit-outline mdi-18px" aria-hidden="true"></i>
 			                    </a>
 			                {% endif %}
@@ -225,12 +227,12 @@
 
                 	{% if entri.wasvalidated == 2 %}
 
-	                	<a href="{% url 'addregistration' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Inscrever no Evento{% if entri.currently_enrolled == 2 %} (já inscrito e aprovado!){% elif entri.currently_enrolled == 1 %} (inscrição anulada!){% elif entri.currently_enrolled == 0 %} (já inscrito!){% endif %}" {% if entri.currently_enrolled != -1 %}disabled{% endif %}>
+	                	<a href="{% url 'addregistration' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Inscrever no Evento{% if entri.currently_enrolled == 2 %} (já inscrito e aprovado!){% elif entri.currently_enrolled == 1 %} (inscrição anulada!){% elif entri.currently_enrolled == 0 %} (já inscrito!){% endif %}" {% if entri.currently_enrolled != -1 %}disabled onclick="return false;"{% endif %}>
 	                        <i class="fas fa-address-book" aria-hidden="true"></i>
 	                    </a>
 
 	                    {% if entri.formfeedbackid is not None %}
-		                    <a href="{% url 'feedback' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Deixar feedback{% if not entri.user_was_present %} (ainda não marcado como tendo estado presente!){% elif entri.user_feedback_already %} (feedback já submetido!){% endif %}" {% if entri.user_feedback_already or not entri.user_was_present %}disabled{% endif %}>
+		                    <a href="{% url 'feedback' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Deixar feedback{% if not entri.user_was_present %} (ainda não marcado como tendo estado presente!){% elif entri.user_feedback_already %} (feedback já submetido!){% endif %}" {% if entri.user_feedback_already or not entri.user_was_present %}disabled onclick="return false;"{% endif %}>
 		                        <i class="far fa-comments" aria-hidden="true"></i>
 		                    </a>
 		                {% endif %}
@@ -238,7 +240,7 @@
 
 
                     {% if entri.proponentid == user or user|has_group:'Administrador' %}
-                    <a href="{% url 'delete' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Evento{% if entri.has_participants %} (utilizadores inscritos!){% endif %}" onclick="return confirm('Tem a certeza que deseja apagar este Evento?');" {% if entri.has_participants %}disabled{% endif %}>
+                    <a href="{% url 'delete' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar Evento{% if entri.has_participants %} (utilizadores inscritos!){% endif %}" {% if entri.has_participants %}disabled onclick="return false;"{% else %}onclick="return confirm('Tem a certeza que deseja apagar este Evento?');"{% endif %}>
                         <i class="fa fa-trash fa-sm" aria-hidden="true"></i>
                     </a>
                     {% endif %}
