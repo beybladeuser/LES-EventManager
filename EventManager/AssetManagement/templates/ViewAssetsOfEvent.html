@@ -11,6 +11,28 @@
   {% endfor %}
 {% endblock %}
 
+
+{% block SubtypeEquipment %}
+  {% for equipmentType in equipmentTypes %}
+      <option >{{equipmentType}}</option>      
+  {% endfor %}
+{% endblock %}  
+ 
+{% block SubtypeRoom %}
+  {% for roomType in roomTypes %}
+      <option >{{roomType}}</option>
+      
+  {% endfor %}
+{% endblock SubtypeRoom %}
+
+{% block SubtypeService %}
+  {% for serviceType in serviceTypes %}
+      <option >{{getServiceType}}</option>
+      
+  {% endfor %}
+{% endblock %}   
+
+
 {% block tableHead %}
     <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
         Nome
@@ -48,7 +70,18 @@
             </span>
         {% endif %}
     </th>
-   
+   <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+        Estado
+        {% if filterKey and filterKey == '30' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-down"></i>
+            </span>
+        {% elif filterKey and filterKey == '31' %}
+            <span class="icon is-small">
+                <i class="mdi mdi-menu-up"></i>
+            </span>
+        {% endif %}
+    </th>
     <th width="250">Ações</th>
        
 {% endblock %}
@@ -71,12 +104,27 @@
           <td id="NameFilter{{ forloop.counter }}"><p>{{asset.assetid_asset.assetname}}</p></td>
           <td id="TypeFilter{{ forloop.counter}}"><p>{{asset.assetid_asset.assettype}}</p></td>
           <td id="SubtypeFilter{{ forloop.counter }}"><p>{{asset.assetid_asset.subtype}}</p></td>
+          <td id="StateFilter{{ forloop.counter }}">
+            {%if asset.isAssociated is not True %}
+                <p>Por Associar</p>
+            {% elif asset.isAssociated is True %}
+                <p>Associado</p>
+            {% endif %}
+
+          </td>
           <td>
            <a href="{% url 'DeassociateAssetsOfEvent' asset.eventid_event.id asset.assetid_asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desassociar recurso" onclick="return confirm('Tem a certeza que deseja desassociar este recurso do Evento em causa?');">
 		  	    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
-		    </a>
-
+		   </a>
           </td>
+          
+          {%if asset.isAssociated is not True %}
+            <td>
+                <a href="{% url 'AssociateAsset' eventID asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar Recurso" onclick="return confirm('Tem a certeza que deseja associar este recurso ao Evento?');">
+                    <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
+                </a>
+            </td>
+          {% endif %}
       </tr>
     {% endfor %}
 {% endblock  %}

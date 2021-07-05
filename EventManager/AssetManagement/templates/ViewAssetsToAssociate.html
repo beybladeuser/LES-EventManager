@@ -53,25 +53,25 @@
             </span>
         {% endif %}
     </th>
-    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
+    <th class="orderable {% if filterKey and filterKey == '10' or filterKey and filterKey == '11' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '10' %}'11'{% else %}'10'{% endif %})">
         Tipo
-        {% if filterKey and filterKey == '20' %}
+        {% if filterKey and filterKey == '10' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-down"></i>
             </span>
-        {% elif filterKey and filterKey == '21' %}
+        {% elif filterKey and filterKey == '11' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-up"></i>
             </span>
         {% endif %}
     </th>
-    <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
+    <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
         Sub-Tipo
-        {% if filterKey and filterKey == '30' %}
+        {% if filterKey and filterKey == '20' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-down"></i>
             </span>
-        {% elif filterKey and filterKey == '31' %}
+        {% elif filterKey and filterKey == '21' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-up"></i>
             </span>
@@ -87,9 +87,9 @@
   {% load asset_extras %}
     {% for asset in Assets %}
       <tr id="row{{ forloop.counter }}">
-          <td id="NameFilter{{ forloop.counter }}"><p>{{asset.assetname}}</p></td>
-          <td id="TypeFilter{{ forloop.counter}}"><p>{{asset.assettype}}</p></td>
-          <td id="SubtypeFilter{{ forloop.counter }}"><p>{{asset.subtype}}</p></td>
+          <td id="NameFilter{{forloop.counter}}"><p>{{asset.assetname}}</p></td>
+          <td id="TypeFilter{{forloop.counter}}"><p>{{asset.assettype}}</p></td>
+          <td id="SubtypeFilter{{forloop.counter}}"><p>{{asset.subtype}}</p></td>
           <td>
             <a href="{% url 'AssociateAsset' eventID asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar Recurso" onclick="return confirm('Tem a certeza que deseja associar este recurso ao Evento?');">
                 <i class="fas fa-plus fa-lg" aria-hidden="true"></i>

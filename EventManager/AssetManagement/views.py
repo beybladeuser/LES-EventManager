@@ -276,7 +276,7 @@ def associate_asset(request, eventID = 0, assetID = 0):
     AssetEvent_ = AssetEvent()
     AssetEvent_.eventid_event = Event.objects.get(pk=eventID)
     AssetEvent_.assetid_asset = Asset.objects.get(pk=assetID)
-    AssetEvent_.isAssociated
+    AssetEvent_.isAssociated = True
     AssetEvent_.save()
 
     return redirect('ViewAssetsOfEvent', eventID)         
@@ -302,6 +302,10 @@ def consultar_recursos_para_add(request, eventID = 0):
 
     template = loader.get_template('ViewAssetsToAssociate.html')
     context = {
+        'assetTypes': AssetType.getTypes(),
+        'equipmentTypes': Equipmenttype.getEquipmenttypes(),
+        'serviceTypes': Service.makeOptions(),
+        'roomTypes': RoomType.getRoomTypes(),
         'Assets' : Assets,
         'eventID' : eventID,
         'isViewAssets': 0,
@@ -333,6 +337,10 @@ def consultar_recursos_do_evento(request, eventID = 0):
             i+=1
         
     context = {
+        'assetTypes': AssetType.getTypes(),
+        'equipmentTypes': Equipmenttype.getEquipmenttypes(),
+        'serviceTypes': Service.makeOptions(),
+        'roomTypes': RoomType.getRoomTypes(),
         'Assets' : AssetsEvent,
         'assetTypes' : AssetType.getTypes(),
         'isViewAssets': 1,
@@ -343,6 +351,6 @@ def consultar_recursos_do_evento(request, eventID = 0):
 
 def desassociar_recurso(request, eventID = 0 , assetID = 0):
 
-    assetevent = AssetEvent.objects.filter(eventid_event=eventID, assetid_asset=assetID)
+    assetevent = AssetEvent.objects.filter(eventid_event=eventID, assetid_asset=assetID).order_by('eventid_event')[0]
     assetevent.delete() 
     return redirect('ViewAssetsOfEvent', eventID)
