@@ -7,26 +7,30 @@ from AssetManagement.models import *
 from FormManagement.models import *
 from EventManagement.models import *
 
-#	proposal_form_type = Formtype.objects.get(typename="Proposal")
-#
-#	event_types = Eventtype.objects.all()
-#	for event_type in event_types:
-#		if Form.objects.filter(eventtypeid=event_type, formtypeid_formtype=proposal_form_type).count() == 0:
-#			raise Exception("No proposal form exists for event type " + event_type.typename)
 
 def index(request):
 	return redirect('list') 
-	#template = loader.get_template('homePreEvent.html')
-	#context = {}
-	#return HttpResponse(template.render(context, request))
 
 
 
 
-def validate(request, id):
+def validate(request, id, validate):
+	#0 event proposed
+	#1 event proposal validated
+	#2 event logistics validated (event ready)
+	#-1 event proposal refused
+	#-2 event logistics refused
+
 	event = Event.objects.get(id=id)
-	event.wasvalidated+=1
+	if validate == 1:
+		event.wasvalidated+=1
+	else:
+		if event.wasvalidated == 0:
+			event.wasvalidated = -1
+		elif event.wasvalidated == 1:
+			event.wasvalidated = -2
 	event.save()
+
 	return redirect("list")
 
 
@@ -34,6 +38,7 @@ def delete(request, id):
 	event = Event.objects.get(id=id)
 
 	Answer.objects.filter(associatedformid=event.formproposalid, eventid_event=event).delete()
+	AssetEvent.objects.filter(eventid_event=event).delete()
 	event.delete()
 	return redirect("list")
 
@@ -52,7 +57,7 @@ def delete(request, id):
 
 
 
-def list(request, sort_key="00"): 
+def listing(request, sort_key="00"): 
 	proposal_form_type = Formtype.objects.get(id=1)
 	sortnames = ['eventname', 'eventtypeid', "campusid", "wasvalidated"]
 	events = Event.objects.order_by(('-' if int(sort_key[1:2])==1 else '')+sortnames[int(sort_key[0:1])])
@@ -191,8 +196,6 @@ def build_form(generic_name, form):
 				[option.id for option in currquestion.options],
 				[option.option for option in currquestion.options]
 			)
-
-
 		questions[currquestion.id] = question
 
 	return questions
@@ -232,11 +235,6 @@ class CreationForm:
 				'type': 'eachform',
 				'array': {}
 			},
-			#{#4
-			#	'name': 'logisticsform',
-			#	'type': 'eachform',
-			#	'array': {}
-			#}
 		]
 
 	def __init__(self, user, request=None):
@@ -460,22 +458,6 @@ def edit(request, id):
 				dateofcreation=datetime.datetime.now()
 			)
 			an.save()
-
-		#for answer in logistic_answers:
-		#	
-		#	if(answer["value"] == ''):
-		#		continue
-		#		
-		#	Answer.objects.filter(eventid_event=event, associatedformid=logistic_form, questionsid_questions=answer["question_obj"]).delete()
-		#	
-		#	an = Answer(
-		#		associatedformid=logistic_form,
-		#		questionsid_questions=answer["question_obj"],
-		#		eventid_event=event,
-		#		answer=answer["value"],
-		#		dateofcreation=datetime.datetime.now()
-		#	)
-		#	an.save()
 			
 		return redirect("list")
 
@@ -507,8 +489,9 @@ def edit(request, id):
 
 class LogisticForm:
 
-	def __initvars(self, user, eventtype):
 
+	def __init__(self, user, event, request=None):
+		eventtype = event.eventtypeid
 
 		registration_form_type = Formtype.objects.get(id=2)
 		feedback_form_type = Formtype.objects.get(id=3)
@@ -525,34 +508,156 @@ class LogisticForm:
 			Form.objects.filter(formtypeid_formtype=feedback_form_type, eventtypeid=eventtype, archived=False, published=True)
 		)
 
-
 		self.inputs = [
-			{#0
+			{
+				'type': 'hrline',
+				'identifier': 'Formulários',
+				'topbreak': False
+			},
+			{
 				'name': 'registration_form',
+				'identifier': 'Registration form',
 				'type': 'dropdown',
+				'optional': False,
+				'nochoice': "Formulário de registo indisponível para \""+event.eventtypeid.typename+"\", crie ou desarquive um formulário de registo para prosseguir.",
 				'choices': ziplist(
 					[x.id for x in registration_forms],
 					[x.formname for x in registration_forms]
 				),
 				'value': None
 			},
-			{#1
+			{
 				'name': 'feedback_form',
+				'identifier': 'Feedback form',
 				'type': 'dropdown',
+				'optional': True,
+				'nochoice': "Formulário de feedback indisponível para \""+event.eventtypeid.typename+"\", crie ou desarquive um formulário de registo para prosseguir.",
 				'choices': ziplist(
 					[x.id for x in feedback_forms],
 					[x.formname for x in feedback_forms]
 				),
 				'value': None
-			}
+			},
 		]
 
-	def __init__(self, user, event, request=None):
-		self.__initvars(user, event.eventtypeid)
-
 		if request != None:
-			self.inputs[0]["value"] = request.POST.get(self.inputs[0]["name"])
 			self.inputs[1]["value"] = request.POST.get(self.inputs[1]["name"])
+			self.inputs[2]["value"] = request.POST.get(self.inputs[2]["name"])
+
+
+		#------------------------------------------------------------------------------------------- equipment
+		self.inputs.append({
+			'type': 'hrline',
+			'identifier': 'Equipamento',
+			'topbreak': True
+		})
+
+		for equipment_type in Equipmenttype.objects.all():
+			equipment_list = Equipment.objects.filter(equipmenttypeid_equipmenttype=equipment_type)
+			asset_events = AssetEvent.objects.filter(
+				eventid_event=event, 
+				assetid_asset__in=[x.assetid for x in equipment_list]
+			)
+
+			curr_input = {
+				'name': 'equipment_list'+str(equipment_type.id),
+				'object': equipment_type,
+				'identifier': equipment_type.typename,
+				'type': 'multidropdown',
+				'nochoice': "Não existem equipamentos nesta categoria.",
+				'choices': ziplist(
+					[x.assetid.id for x in equipment_list],
+					[x.assetid.assetname for x in equipment_list]
+				),
+				'value': None if not asset_events.exists() else [x.assetid_asset for x in asset_events]
+			}
+			if(request != None):
+				curr_input["value"] = []
+				#print("--------------------------------")
+				#print('equipment_list'+str(equipment_type.id)+'_count')
+				count_var = request.POST.get('equipment_list'+str(equipment_type.id)+'_count')
+				if count_var is not None:
+					count = int(count_var)
+					for i in range(count):
+						asset_id = int(request.POST.get('equipment_list'+str(equipment_type.id)+'_'+str(i)))
+						curr_input['value'].append(Asset.objects.get(id=asset_id))
+
+			self.inputs.append(curr_input)
+
+
+
+		#------------------------------------------------------------------------------------------- services
+		self.inputs.append({
+			'type': 'hrline',
+			'identifier': 'Serviços',
+			'topbreak': True
+		})
+		
+		for service_type in Servicetype.objects.all():
+			service_list = Service.objects.filter(servicetypeid_servicetype=service_type)
+			asset_events = AssetEvent.objects.filter(
+				eventid_event=event, 
+				assetid_asset__in=[x.assetid for x in service_list]
+			)
+			curr_input = {
+				'name': 'service_list'+str(service_type.id),
+				'object': service_type,
+				'identifier': service_type.typename,
+				'type': 'multidropdown',
+				'nochoice': "Não existem serviços nesta categoria.",
+				'choices': ziplist(
+					[x.assetid.id for x in service_list],
+					[x.assetid.assetname for x in service_list]
+				),
+				'value': None if not asset_events.exists() else [x.assetid_asset for x in asset_events]
+			}
+			if(request != None):
+				curr_input["value"] = []
+				count_var = request.POST.get('service_list'+str(service_type.id)+'_count')
+				if count_var is not None:
+					count = int(count_var)
+					for i in range(count):
+						asset_id = int(request.POST.get('service_list'+str(service_type.id)+'_'+str(i)))
+						curr_input['value'].append(Asset.objects.get(id=asset_id))
+
+			self.inputs.append(curr_input)
+
+
+		#------------------------------------------------------------------------------------------- rooms
+		self.inputs.append({#2
+			'type': 'hrline',
+			'identifier': 'Salas',
+			'topbreak': True
+		})
+		for room_type in RoomType.objects.all():
+			room_list = Rooms.objects.filter(room_type=room_type)
+			asset_events = AssetEvent.objects.filter(
+				eventid_event=event, 
+				assetid_asset__in=[x.assetid for x in service_list]
+			)
+			curr_input = {
+				'name': 'room_list'+str(room_type.id),
+				'object': room_type,
+				'identifier': room_type.typename,
+				'type': 'multidropdown',
+				'nochoice': "Não existem salas nesta categoria.",
+				'choices': ziplist(
+					[x.assetid.id for x in room_list],
+					[x.assetid.assetname for x in room_list]
+				),
+				'value': None if not asset_events.exists() else [x.assetid_asset for x in asset_events]
+			}
+			if(request != None):
+				curr_input["value"] = []
+				count_var = request.POST.get('room_list'+str(room_type.id)+'_count')
+				if count_var is not None:
+					count = int(count_var)
+					for i in range(count):
+						asset_id = int(request.POST.get('room_list'+str(room_type.id)+'_'+str(i)))
+						curr_input['value'].append(Asset.objects.get(id=asset_id))
+
+			self.inputs.append(curr_input)
+		#------------------------------------------------------------------------------------------- /
 
 
 def fill_logistic(request, id):
@@ -564,6 +669,7 @@ def fill_logistic(request, id):
 
 		template = loader.get_template('logistics.html')
 		context = {
+			'inputs': formboi.inputs,
 			'form': formboi.inputs,
 			'event': event
 		}
@@ -572,11 +678,20 @@ def fill_logistic(request, id):
 	else:
 		formboi = LogisticForm(request.user, event, request)
 
-		event.formresgistrationid = Form.objects.get(id=int(formboi.inputs[0]["value"]))
-		if not (not formboi.inputs[1]["value"] or formboi.inputs[1]["value"] is None):
+		event.formresgistrationid = Form.objects.get(id=int(formboi.inputs[1]["value"]))
+		if not (not formboi.inputs[2]["value"] or formboi.inputs[2]["value"] is None):
 			event.formfeedbackid = Form.objects.get(id=int(formboi.inputs[1]["value"]))
-
 		event.save()
+
+		AssetEvent.objects.filter(eventid_event=event).delete()
+		for p in formboi.inputs:
+			if 'value' not in p: continue
+			if not isinstance(p["value"], list): continue
+			for asset in p["value"]:
+				assetevent = AssetEvent()
+				assetevent.eventid_event = event
+				assetevent.assetid_asset = asset
+				assetevent.save()
 	return redirect("list")
 
 
@@ -586,11 +701,12 @@ def edit_logistic(request, id):
 	if request.method != "POST":
 
 		formboi = LogisticForm(request.user, event)
-		formboi.inputs[0]["value"] = event.formresgistrationid.id
-		formboi.inputs[1]["value"] = event.formfeedbackid.id if event.formfeedbackid is not None else None
+		formboi.inputs[1]["value"] = event.formresgistrationid.id
+		formboi.inputs[2]["value"] = event.formfeedbackid.id if event.formfeedbackid is not None else None
 
 		template = loader.get_template('logistics.html')
 		context = {
+			'inputs': formboi.inputs,
 			'form': formboi.inputs,
 			'event': event
 		}
@@ -599,11 +715,24 @@ def edit_logistic(request, id):
 	else:
 		formboi = LogisticForm(request.user, event, request)
 
-		event.formresgistrationid = Form.objects.get(id=int(formboi.inputs[0]["value"]))
-		if not (not formboi.inputs[1]["value"] or formboi.inputs[1]["value"] is None):
-			event.formfeedbackid = Form.objects.get(id=int(formboi.inputs[1]["value"]))
-
+		event.formresgistrationid = Form.objects.get(id=int(formboi.inputs[1]["value"]))
+		if not (not formboi.inputs[2]["value"] or formboi.inputs[2]["value"] is None):
+			event.formfeedbackid = Form.objects.get(id=int(formboi.inputs[2]["value"]))
+		else:
+			event.formfeedbackid = None
+		if event.wasvalidated == -2:
+			event.wasvalidated = 1
 		event.save()
+
+		AssetEvent.objects.filter(eventid_event=event).delete()
+		for p in formboi.inputs:
+			if 'value' not in p: continue
+			if not isinstance(p["value"], list): continue
+			for asset in p["value"]:
+				assetevent = AssetEvent()
+				assetevent.eventid_event = event
+				assetevent.assetid_asset = asset
+				assetevent.save()
 	return redirect("list")
 
 
