@@ -1,0 +1,107 @@
+{% extends 'template_base.html' %}
+
+
+{% block loggedInContent %}
+
+
+<!--<script type="text/javascript">
+	function eventtype_change(){
+		console.log(this.value);
+		let button_active = true;
+		for(subform of document.getElementsByClassName("subforms")){
+			//console.log(subform.id.substring(7) + " vs " + this.value + " ==> " + (subform.id.substring(7) == this.value))
+			let shows = (
+				(
+					subform.id.startsWith("logisticsform") 
+					&& 
+					subform.id.substring(13+1) == this.value
+				)
+				||
+				(
+					subform.id.startsWith("proposalform") 
+					&& 
+					subform.id.substring(12+1) == this.value
+				)
+			);
+
+			subform.style.display = shows?"block":"none";
+			if(shows && subform.classList.contains("nonexistent"))button_active = false;
+
+		}
+		document.getElementById("submitbutton").disabled = !button_active;
+	}
+
+	function prepare_form(){
+		for(subform of document.getElementsByClassName("subforms")){
+			if(subform.style.display == "none")subform.remove();
+		}
+		return true;
+	}
+</script>-->
+
+<form class="box" action="" method="POST">{% csrf_token %}
+	
+	<div class="field">
+
+		<label class="label" for="{{form.0.name}}">Registration form:</label>
+		  {% if form.0.choices|length == 0 %}
+		  	<i>Formulário de registo indisponível para "{{event.eventtypeid.typename}}", crie ou desarquive um formulário de registo para prosseguir.</i>
+		  {% else %}
+			  <div class="dropdown-trigger">
+				<select name="{{form.0.name}}" class="select" aria-haspopup="true" aria-controls="dropdown-menu3" {% if form.0.value is not None %}value="{{form.0.value}}"{% endif %} style="margin: auto; width: 30%" required>
+
+					{% for choice in form.0.choices %}
+						<option class="dropdown-item" value="{{choice.0}}" {% if form.0.value is not None and form.0.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
+					{% endfor %}
+				</select><br>
+			  </div>
+		  {% endif %}
+	</div>
+
+	<div class="field">
+
+		<label class="label" for="{{form.1.name}}">Feedback form:</label>
+		  {% if form.1.choices|length == 0 %}
+		  	<i>Formulário de feedback indisponível para "{{event.eventtypeid.typename}}", crie ou desarquive um formulário de feedback para prosseguir.</i>
+		  {% else %}
+			  <div class="dropdown-trigger">
+				<select name="{{form.1.name}}" class="select" aria-haspopup="true" aria-controls="dropdown-menu3" {% if form.1.value is not None %}value="{{form.1.value}}"{% endif %} style="margin: auto; width: 30%">
+
+					{% for choice in form.1.choices %}
+						<option value="">Sem Feedback</option>
+						<option class="dropdown-item" value="{{choice.0}}" {% if form.1.value is not None and form.1.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
+					{% endfor %}
+				</select><br>
+			  </div>
+		  {% endif %}
+	</div>
+
+	<hr>
+	<i>resources</i><br><br>
+
+	<div class="field">
+
+		<label class="label" for="{{form.1.name}}">Feedback form:</label>
+		  {% if form.1.choices|length == 0 %}
+		  	<i>Formulário de feedback indisponível para "{{event.eventtypeid.typename}}", crie ou desarquive um formulário de feedback para prosseguir.</i>
+		  {% else %}
+			  <div class="dropdown-trigger">
+				<select name="{{form.1.name}}" class="select" aria-haspopup="true" aria-controls="dropdown-menu3" {% if form.1.value is not None %}value="{{form.1.value}}"{% endif %} style="margin: auto; width: 30%">
+
+					{% for choice in form.1.choices %}
+						<option value="">Sem Feedback</option>
+						<option class="dropdown-item" value="{{choice.0}}" {% if form.1.value is not None and form.1.value == choice.0 %}selected{% endif %}>{{choice.1}}</option>
+					{% endfor %}
+				</select><br>
+			  </div>
+		  {% endif %}
+	</div>
+
+
+	<br>
+	<input id="submitbutton" class="button is-success is-outlined" type="submit" value="Submeter" onclick="return prepare_form();" {% if form.0.choices|length == 0%}disabled{% endif %}>
+</form>
+  
+{% endblock %}
+{% block loggedOutContent %}
+{% endblock %}
