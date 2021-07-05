@@ -3,7 +3,7 @@ from .models import Asset
 import datetime
 from FormManagement.models import Form
 from AssetManagement.models import Service, Servicetype, Equipment, Equipmenttype, Campus
-from AssetManagement.models import Building, Rooms, RoomType
+from AssetManagement.models import AssetType, Building, RoomType, Rooms
 from django.utils.safestring import mark_safe
 from PreEventManagement.models import AssetEvent, Event
 from django.forms import ModelForm, TextInput, EmailInput
@@ -40,6 +40,7 @@ class InsertServiceForm(forms.Form):
 			newAsset = Asset.objects.get(id=assetID)
 		else:
 			newAsset = Asset()
+			newAsset.assettype = AssetType.objects.get(pk=1);
 		
 		newAsset.assetname = self.cleaned_data.get('assetName')
 		newAsset.quantity = self.cleaned_data.get('assetQuantity')
@@ -83,6 +84,8 @@ class InsertEquipmentForm(forms.Form):
 			newAsset = Asset.objects.get(id=assetID)
 		else:
 			newAsset = Asset()
+			newAsset.assettype = AssetType.objects.get(pk=2);
+		
 		newAsset.assetname = self.cleaned_data.get('assetName')
 		newAsset.quantity = self.cleaned_data.get('assetQuantity')
 		newAsset.save()
@@ -140,6 +143,7 @@ class InsertRoomForm(forms.Form):
 			newAsset = Asset.objects.get(id=assetID)
 		else:
 			newAsset = Asset()
+			newAsset.assettype = AssetType.objects.get(pk=3);
 		newAsset.assetname = self.cleaned_data.get('assetName')
 		newAsset.quantity = 1
 		newAsset.save()

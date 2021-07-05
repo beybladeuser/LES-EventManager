@@ -53,6 +53,16 @@
        
 {% endblock %}
   
+{% block choosePath %}
+    {%if isViewAssets is 0%}
+        <li class="is-active"><a>Associar Recursos</a></li>
+    {% elif isViewAssets is 1%}
+        <li class="is-active"><a>Recursos Associados do evento - <b>{{eventName}}</b></a></li>
+    {%endif%}
+
+{% endblock %}
+
+
 
 {% block listings %}
   {% load asset_extras %}

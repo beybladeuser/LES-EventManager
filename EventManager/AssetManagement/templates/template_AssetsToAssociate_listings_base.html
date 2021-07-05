@@ -233,7 +233,9 @@
 				<ul>
 					<li><a href="{% url 'homepage' %}">Início</a></li>
 					<li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
-					<li class="is-active"><a>Consultar Recursos</a></li>
+					<li><a href="{% url 'ViewAssociateAsset' %}">Consultar recursos associados a Eventos</a></li>
+					{% block choosePath %}
+					{% endblock %}
 				</ul>
 			</nav>
 			

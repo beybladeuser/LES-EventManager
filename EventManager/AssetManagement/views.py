@@ -45,14 +45,14 @@ def consultar_assets(request):
             room = Asset.getRoom(Assets[i])
             buildingg = Rooms.room_GetBuilding(room)
             
-            Assets[i].subtype = Building.CampusName_BuildingName(buildingg)
+            Assets[i].subtype = Asset.getRoom(Assets[i]).room_type
         i += 1
 
     context = {
         'assetTypes': AssetType.getTypes(),
-        # 'equipmentTypes': Equipmenttype.getEquipmenttypes(),
-        # 'serviceTypes': Service.makeOptions(),
-        # 'roomTypes': RoomType.getRoomTypes(),
+        'equipmentTypes': Equipmenttype.getEquipmenttypes(),
+        'serviceTypes': Service.makeOptions(),
+        'roomTypes': RoomType.getRoomTypes(),
         'Assets': Assets
     }
     return HttpResponse(template.render(context, request))
@@ -259,7 +259,8 @@ def view_associate_asset(request):
         else:
             event.hasAssets = 0
     context = {
-        'events': events,        
+        'events': events,     
+        'isViewAssets': 0,   
     }
     return HttpResponse(template.render(context, request))
 
@@ -275,7 +276,7 @@ def associate_asset(request, eventID = 0, assetID = 0):
     AssetEvent_.isAssociated
     AssetEvent_.save()
 
-    return redirect('ViewAssetsToAssociate', eventID)         
+    return redirect('ViewAssetsOfEvent', eventID)         
 
 def consultar_recursos_para_add(request, eventID = 0):
     
@@ -300,31 +301,38 @@ def consultar_recursos_para_add(request, eventID = 0):
     context = {
         'Assets' : Assets,
         'eventID' : eventID,
+        'isViewAssets': 0,
+        'eventName': Event.objects.get(pk=eventID).eventname
     }
     return HttpResponse(template.render(context, request))    
 
 def consultar_recursos_do_evento(request, eventID = 0):
 
     template = loader.get_template('ViewAssetsOfEvent.html')
-    AssetsEvent = AssetEvent.objects.filter(eventid_event=eventID),
+    AssetsEvent = AssetEvent.objects.filter(eventid_event=eventID)
     
-
-    for assetevent in AssetsEvent:
-        asset = Asset.objects.get(pk=assetevent.assetid_asset)
-        if Asset.getServiceType(asset) is not None:
-            asset.subtype =  Asset.getServiceType(asset)
+    if AssetsEvent is not None:
+        i = 0;
+        size = len(AssetsEvent)
+        while i < size:
+            asset = Asset.objects.get(pk=AssetsEvent[i].assetid_asset.id)
+            if Asset.getServiceType(asset) is not None:
+                AssetsEvent[i].assetid_asset.subtype =  Asset.getServiceType(asset)
+                
+            elif Asset.getEquipmentType(asset) is not None:
+                AssetsEvent[i].assetid_asset.subtype = Asset.getEquipmentType(asset)
+                
+            elif Asset.getRoom(asset) is not None:
+                room = Asset.getRoom(asset)
+                buildingg = Rooms.room_GetBuilding(room)
+                AssetsEvent[i].assetid_asset.subtype = Building.CampusName_BuildingName(buildingg)
             
-        elif Asset.getEquipmentType(asset) is not None:
-            asset.subtype = Asset.getEquipmentType(asset)
-            
-        elif Asset.getRoom(asset) is not None:
-            room = Asset.getRoom(asset)
-            buildingg = Rooms.room_GetBuilding(room)
-            
-            asset.subtype = Building.CampusName_BuildingName(buildingg)
-    
+            i+=1
+        
     context = {
-        'Assets' : AssetEvent.objects.filter(eventid_event=eventID),
-        'assetTypes' :AssetType.getTypes(),
+        'Assets' : AssetsEvent,
+        'assetTypes' : AssetType.getTypes(),
+        'isViewAssets': 1,
+        'eventName': Event.objects.get(pk=eventID).eventname
     }
     return HttpResponse(template.render(context, request))    

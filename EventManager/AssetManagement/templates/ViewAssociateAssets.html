@@ -79,14 +79,6 @@
             <a href="{% url 'ViewAssetsOfEvent' event.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Recursos Associados">
                 <i class="fa fa-search fa-lg" aria-hidden="true"></i>
             </a>
-            {% comment %} EDITAR {% endcomment %}
-            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
-                <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
-            </a>
-            {% comment %} Eliminar {% endcomment %}
-            <a href="" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar recurso" onclick="return confirm('Tem a certeza que deseja apagar este recurso?');">
-		  	    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
-		    </a>
           </td>
       </tr>
     {% endfor %}
