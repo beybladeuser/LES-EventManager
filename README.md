@@ -85,9 +85,13 @@ How to run this:
   python manage.py loaddata basic_fixtures.json
 ```
   this adds all the types of forms, events, assets, etc
+  
   the user groups
+  
   and a superuser of the admin group with the credentials:
+  
     username: admin
+    
     password: alaridodameianoite
 
 5º: run the server
