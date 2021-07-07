@@ -81,12 +81,25 @@
 	        {% endif %}
 	    </th>
 	    <th class="orderable {% if filterKey and filterKey == '30' or filterKey and filterKey == '31' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '30' %}'31'{% else %}'30'{% endif %})">
-	        Validado
+	        Estado
 	        {% if filterKey and filterKey == '30' %}
 	            <span class="icon is-small">
 	                <i class="mdi mdi-menu-down"></i>
 	            </span>
 	        {% elif filterKey and filterKey == '31' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-up"></i>
+	            </span>
+	        {% endif %}
+	    </th>
+
+	    <th class="orderable {% if filterKey and filterKey == '40' or filterKey and filterKey == '41' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '40' %}'41'{% else %}'40'{% endif %})">
+	        Proponente
+	        {% if filterKey and filterKey == '40' %}
+	            <span class="icon is-small">
+	                <i class="mdi mdi-menu-down"></i>
+	            </span>
+	        {% elif filterKey and filterKey == '41' %}
 	            <span class="icon is-small">
 	                <i class="mdi mdi-menu-up"></i>
 	            </span>
@@ -139,7 +152,7 @@
 	            		Validado
 	            	{% endif %}
             	</td>
-
+            	<td data-label="Proponente" id="ProponenteFilter{{ forloop.counter }}">{{entri.proponentid.username}}</td>
                 <td data-label="Ações">
 
 
@@ -204,6 +217,11 @@
 		                    <a href="{% url 'ViewAssetsOfEvent' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Verificar Recursos">
 		                    	<i class="fas fa-clipboard-list"></i>
 		                    </a>
+		                    {% if entri.has_associated_assets %}
+			                    <a href="{% url 'remove_all_assets' entri.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Remover Todos os Recursos" onclick="return confirm('Pretende mesmo remover todos os recursos deste evento?');" >
+			                    	<i class="fas fa-backspace"></i>
+			                    </a>
+			                {% endif %}
 	                    {% endif %}
                     {% endif %}
 
@@ -268,7 +286,7 @@
 		            	{% endfor %}
 	            	</td>
 
-	            	<td colspan="2">
+	            	<td colspan="1">
 	            		<i>Logistics:</i>
 	            		<br><br>
 	            		<b>Feedback form:</b><br> 
@@ -287,6 +305,42 @@
 	            			<a href="{% url 'checkFormLayout' entri.formresgistrationid.id %}">
 	            				{{entri.formresgistrationid.formname}}({{entri.formresgistrationid.id}})
 	            			</a>
+	            		{% endif %}
+	            	</td>
+	            	<td colspan="2">
+	            		<i>Assets:</i><br><br>
+	            		{% if not entri.has_equipment_assets and not entri.has_service_assets and not entri.has_room_assets %}
+	            			----
+	            		{% else %}
+	            			{% if entri.has_equipment_assets %}
+		            			<b>Equipamento:</b>
+		            			<br>
+		            			{% for equipment in entri.assets_equipment %}
+		            				{{equipment.assetid.assetname}} ({{equipment.equipmenttypeid_equipmenttype.typename}})
+		            				<br>
+		            			{% endfor%}
+		            			<br>
+							{% endif %}
+
+	            			{% if entri.has_service_assets %}
+		            			<b>Serviços:</b>
+		            			<br>
+								{% for service in entri.assets_service %}
+									{{service.assetid.assetname}} ({{service.servicetypeid_servicetype.typename}})
+		            				<br>
+								{% endfor%}
+		            			<br>
+							{% endif %}
+
+	            			{% if entri.has_room_assets %}
+								<b>Salas:</b>
+		            			<br>
+								{% for room in entri.assets_room %}
+									{{room.assetid.assetname}} ({{room.room_type.typename}})
+		            				<br>
+								{% endfor%}
+	            				<br>
+							{% endif %}
 	            		{% endif %}
 	            	</td>
 

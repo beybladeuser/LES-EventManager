@@ -14,6 +14,7 @@ urlpatterns = [
     path('validate/<int:id>/<int:validate>', views.validate, name='validate'),
     path('fill_logistic/<int:id>', views.fill_logistic, name='fill_logistic'),
     path('edit_logistic/<int:id>', views.edit_logistic, name='edit_logistic'),
+    path('remove_all_assets/<int:id>', views.remove_all_assets, name='remove_all_assets'),
     path('feedback/<int:id>', views.feedback, name='feedback'),
 
 ]

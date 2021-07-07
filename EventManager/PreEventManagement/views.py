@@ -59,7 +59,7 @@ def delete(request, id):
 
 def listing(request, sort_key="00"): 
 	proposal_form_type = Formtype.objects.get(id=1)
-	sortnames = ['eventname', 'eventtypeid', "campusid", "wasvalidated"]
+	sortnames = ['eventname', 'eventtypeid', "campusid", "wasvalidated", "proponentid__username"]
 	events = Event.objects.order_by(('-' if int(sort_key[1:2])==1 else '')+sortnames[int(sort_key[0:1])])
 	for event in events:
 		try:
@@ -83,6 +83,16 @@ def listing(request, sort_key="00"):
 		event.currently_enrolled = -1 if registration is None else registration.state
 		event.has_participants = Resgistration.objects.filter(eventid_event=event).exists()
 		event.user_feedback_already = Answer.objects.filter(associatedformid=event.formfeedbackid, eventid_event=event, resgistrationid__participantuserid=request.user).exists()
+		event.has_associated_assets = AssetEvent.objects.filter(eventid_event=event).exists()
+		
+		assetids = [x.assetid_asset for x in AssetEvent.objects.filter(eventid_event=event)]
+		event.assets_equipment = Equipment.objects.filter(assetid__in=assetids).order_by("equipmenttypeid_equipmenttype")
+		event.assets_service = Service.objects.filter(assetid__in=assetids).order_by("servicetypeid_servicetype")
+		event.assets_room = Rooms.objects.filter(assetid__in=assetids).order_by("room_type")
+		event.has_equipment_assets = event.assets_equipment.exists()
+		event.has_service_assets = event.assets_service.exists()
+		event.has_room_assets = event.assets_room.exists()
+
 
 		event.proposal_QAs = []
 		for question in proposal_form_questions:
@@ -108,7 +118,6 @@ def listing(request, sort_key="00"):
 				QA["answer"].text = Form.objects.get(id=int(answer.answer)).formname
 
 			event.proposal_QAs.append(QA)
-		
 
 		#event.logistic_QAs = []
 		#for question in logistic_form_questions:
@@ -633,7 +642,7 @@ class LogisticForm:
 			room_list = Rooms.objects.filter(room_type=room_type)
 			asset_events = AssetEvent.objects.filter(
 				eventid_event=event, 
-				assetid_asset__in=[x.assetid for x in service_list]
+				assetid_asset__in=[x.assetid for x in room_list]
 			)
 			curr_input = {
 				'name': 'room_list'+str(room_type.id),
@@ -736,6 +745,10 @@ def edit_logistic(request, id):
 	return redirect("list")
 
 
+def remove_all_assets(request, id):
+	event = Event.objects.get(id=id)
+	AssetEvent.objects.filter(eventid_event=event).delete()
+	return redirect("list")
 
 
 
