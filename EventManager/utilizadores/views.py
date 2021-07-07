@@ -193,7 +193,7 @@ def criar_utilizador(request, id):
 
 
 def login_action(request):
-    ''' Fazer login na plataforma do dia aberto e gestão de acessos à plataforma '''
+    ''' Fazer login na plataforma do gestão de eventos e gestão de acessos à plataforma '''
     if request.user.is_authenticated: 
         return redirect("utilizadores:logout")   
     else:
@@ -296,10 +296,10 @@ def rejeitar_utilizador(request, id):
         u = Utilizador.objects.get(id = id)
         u.valido = 'Rejeitado'           
         u.save()   
-        subject = 'Validação do registo do na plataforma do dia aberto'
+        subject = 'Validação do registo do na plataforma de Gestão de Eventos'
         message = 'Caro(a) '+u.first_name+",\n\n"
-        message+='O seu registo na plataforma do dia aberto foi rejeitado!'+"\n\n"
-        message+='Equipa do dia aberto da Ualg'
+        message+='O seu registo na plataforma de Gestão de eventos foi rejeitado!'+"\n\n"
+        message+='Equipa da Gestão de eventos da Ualg'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [u.email,]
         send_mail( subject, message, email_from, recipient_list )
@@ -338,10 +338,10 @@ def validar_utilizador(request, id):
         u = Utilizador.objects.get(id = id)
         u.valido = 'True'           
         u.save()   
-        subject = 'Validação do registo do na plataforma do dia aberto'
+        subject = 'Validação do registo do na plataforma de Gestão de Eventos'
         message = 'Caro(a) '+u.first_name+"\n\n"
-        message+='O seu registo na plataforma do dia aberto foi bem sucedido!'+",\n\n"
-        message+='Equipa do dia aberto da Ualg'
+        message+='O seu registo na plataforma de Gestão de Eventos foi bem sucedido!'+",\n\n"
+        message+='Equipa de Gestão de Eventos da Ualg'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [u.email,]
         send_mail( subject, message, email_from, recipient_list )

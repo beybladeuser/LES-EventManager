@@ -149,7 +149,7 @@
     {% load form_extras %}
     {% for form in forms %}
         {% if form|can_display_form:user %}
-            <tr id="row{{ forloop.counter }}">
+            <tr id="row{{ forloop.counter }}" style="word-wrap: break-word;">
                 <td id="NameFilter{{ forloop.counter }}" data-label="Nome">{{form.formname}}</td>
                 <td data-label="Tipo">{{form.formtypeid_formtype}}</td>
                 <td id="TypeFilter{{ forloop.counter }}" data-label="Tipo de evento">{{form.eventtypeid.typename}}</td>

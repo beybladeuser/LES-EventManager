@@ -336,13 +336,92 @@ def criar_mensagem(request, id):
             return redirect('notificacoes:criar-mensagem-admin', id) 
         elif user.getProfile()=="Participante":
             return redirect('notificacoes:criar-mensagem-participante', id) 
+        elif user.getProfile()=="Proponente":
+            return redirect('notificacoes:criar_mensagem_proponente', id) 
         else:
             return redirect('utilizadores:mensagem',5 ) 
     else:
         return redirect('utilizadores:mensagem', 5)      
 
 
-
+def criar_mensagem_proponente(request, id):
+    ''' Criar uma nova mensagem por um proponente '''
+    msg = False
+    if request.user.is_authenticated: 
+        user = get_user(request) 
+        if user.groups.filter(name = "Proponente").exists() == False:
+            return redirect('utilizadores:mensagem', 5)  
+        user = Utilizador.objects.get(id=user.id)
+    else:
+        return redirect('utilizadores:mensagem', 5)      
+           
+    if request.method == "POST":
+        tipo = id
+        if tipo == 0:
+            form = MensagemFormIndividualParticipante(request.POST)
+        elif tipo == 1:
+            form = MensagemFormGrupoParticipante(request.POST)
+        else:
+            return redirect("utilizadores:mensagem",5)
+        if form.is_valid():
+            titulo = form.cleaned_data.get('titulo')
+            mensagem = form.cleaned_data.get('mensagem')
+            if tipo == 0:
+                email = form.cleaned_data.get('email')
+                user_recipient = Utilizador.objects.get(email=email)
+                info = InformacaoMensagem(data=timezone.now(), pendente=False, titulo = titulo,
+                                descricao = mensagem, emissor = user , recetor = user_recipient, tipo = "Individual" , lido = False)
+                info.save()
+                mensagem1 = MensagemEnviada(mensagem=info)
+                mensagem1.mensagem.lido = False
+                mensagem1.save()
+                mensagem2 = MensagemRecebida(mensagem=info)
+                mensagem2.save()
+            elif tipo == 1:
+                tipo_utilizadores = request.POST.get('filtro_tipo')
+                if tipo_utilizadores == "Administrador":
+                    utilizadores = Administrador.objects.all()    
+                else:
+                    return redirect("utilizadores:mensagem",5)
+                
+                for x in utilizadores:
+                    user_recipient = Utilizador.objects.get(user_ptr_id=x.utilizador_ptr_id)
+                    info = InformacaoMensagem(data=timezone.now(), pendente=True, titulo = titulo,
+                                    descricao = mensagem, emissor = user , recetor = user_recipient, tipo = "Grupo de admistradores" , lido = False)
+                    info.save()
+                    if user_recipient.id != user.id:
+                        tmp = MensagemRecebida(mensagem=info)
+                        tmp.save()  
+                mensagem1 = MensagemEnviada(mensagem=info)
+                mensagem1.mensagem.lido = False
+                mensagem1.save()    
+            return redirect("notificacoes:concluir-envio")
+        else:
+            msg = True
+            if tipo == 0:
+                return render(request=request,
+                    template_name="notificacoes/enviar_notificacao.html",
+                    context={"form": form,"msg":msg,})
+            elif tipo == 1:    
+                form_group = UtilizadorFiltroParticipante(request.POST)
+                return render(request=request,
+                            template_name="notificacoes/enviar_para_grupo.html",
+                            context={"form": form,"form_group":form_group,"msg":msg,})
+    else:
+        tipo = id
+        if tipo == 0:
+            form = MensagemFormIndividualParticipante()
+            return render(request=request,
+                  template_name="notificacoes/enviar_notificacao.html",
+                  context={"form": form,"msg":msg,})
+        elif tipo == 1:
+            formFilter = UtilizadorFiltroParticipante()
+            form = MensagemFormGrupoParticipante()
+            return render(request=request,
+                  template_name="notificacoes/enviar_para_grupo.html",
+                  context={"form": form,"form_group":formFilter,"msg":msg,})
+        else:
+            return redirect("utilizadores:mensagem",5)
 
 
 def criar_mensagem_participante(request, id):
@@ -388,7 +467,7 @@ def criar_mensagem_participante(request, id):
                 for x in utilizadores:
                     user_recipient = Utilizador.objects.get(user_ptr_id=x.utilizador_ptr_id)
                     info = InformacaoMensagem(data=timezone.now(), pendente=True, titulo = titulo,
-                                    descricao = mensagem, emissor = user , recetor = user_recipient, tipo = "Grupo de admistradores do dia aberto" , lido = False)
+                                    descricao = mensagem, emissor = user , recetor = user_recipient, tipo = "Grupo de admistradores" , lido = False)
                     info.save()
                     if user_recipient.id != user.id:
                         tmp = MensagemRecebida(mensagem=info)

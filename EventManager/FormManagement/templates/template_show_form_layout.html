@@ -105,7 +105,7 @@
 
 {% block listings %}
         {% for question in questions %}
-            <tr id="row{{ forloop.counter }}">
+            <tr id="row{{ forloop.counter }}" style="word-wrap: break-word;">
                 <td id="NameFilter{{ forloop.counter }}" data-label="Questão">{{question.question}}</td>
                 <td id="TypeFilter{{ forloop.counter }}" data-label="Tipo">{{question.questiontypeid_questiontype.typename}}</td>
                 <td id="OptionsFilter{{ forloop.counter }}" data-label="Opções">
@@ -190,7 +190,7 @@
                 
                 <td id="ActionsFilter{{ forloop.counter }}" data-label="Ações">
                     {% if question.canEdit %}
-                        <a href="{% url 'createQuestion' question.id 0 %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Questão">
+                        <a href="{% url 'createQuestion' question.id form.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Questão">
                             <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
                         </a>
                     {% else %}

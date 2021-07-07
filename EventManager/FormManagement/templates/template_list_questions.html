@@ -128,7 +128,7 @@
 
 {% block listings %}
         {% for question in questions %}
-            <tr id="row{{ forloop.counter }}">
+            <tr id="row{{ forloop.counter }}" style="word-wrap: break-word;">
                 <td id="NameFilter{{ forloop.counter }}" data-label="Questão">{{question.question}}</td>
                 <td id="TypeFilter{{ forloop.counter }}" data-label="Tipo">{{question.questiontypeid_questiontype.typename}}</td>
                 <td id="OptionsFilter{{ forloop.counter }}" data-label="Opções">

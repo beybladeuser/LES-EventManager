@@ -19,10 +19,12 @@ urlpatterns = [
 
     ################################ Mensagens ###########################
 
-    path('escolhertipo', views.escolher_tipo, name="enviar-notificacao"),  path('criarmensagem/<int:id>', views.criar_mensagem, name="escrever-mensagem"),
+    path('escolhertipo', views.escolher_tipo, name="enviar-notificacao"),  
+    path('criarmensagem/<int:id>', views.criar_mensagem, name="escrever-mensagem"),
     path('criarmensagemuo/<int:id>',  views.criar_mensagem_uo, name="criar-mensagem-uo"),
     path('criarmensagemadmin/<int:id>', views.criar_mensagem_admin, name="criar-mensagem-admin"),
     path('criarmensagemparticipante/<int:id>', views.criar_mensagem_participante, name="criar-mensagem-participante"),
+    path('criarmensagemproponente/<int:id>', views.criar_mensagem_proponente, name="criar_mensagem_proponente"),
     path('mensagens/<int:id>', views.sem_mensagens, name='sem-mensagens'),
     path('concluirenvio', views.concluir_envio, name='concluir-envio'),
     path('mensagens/<int:id>/<int:nr>', views.detalhes_mensagens, name='detalhes-mensagem'),
