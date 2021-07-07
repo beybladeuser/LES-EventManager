@@ -53,6 +53,8 @@ def get_user_type(id):
             result =  "Coordenador" 
         elif user.groups.filter(name="Administrador").exists():
             result =  "Administrador"  
+        elif user.groups.filter(name="Proponente").exists():
+            result =  "Proponente"  
         else: 
             result = ""
         return result

@@ -11,6 +11,7 @@ EventManager/PreEventManagement/__pycache__
 EventManager/Schedules/__pycache__
 EventManager/utilizadores/__pycache__
 EventManager/utilizadores/templatetags/__pycache__
+EventManager/utilizadores/management/commands/__pycache__
 EventManager/notificacoes/__pycache__
 EventManager/notificacoes/templatetags/__pycache__
 

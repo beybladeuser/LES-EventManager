@@ -105,7 +105,7 @@
                         <div data-tooltip="Click em Nova Mensagem para comunicar diretamente com um utilizador"><i
                                 class="fa fa-question-circle"></i></div>
                     </a>
-                    <a onclick="alert.render('Tem a certeza que pretende eliminar todas as mensagens desta categoria?','{% url 'notificacoes:limpar-mensagens' categoria %}')"
+                    <a href="{% url 'notificacoes:limpar-mensagens' categoria %}" onclick="return confirm('Tem a certeza que pretende eliminar todas as mensagens desta categoria?')"
                         class="button is-small">
                         <i class="mdi mdi-trash-can-outline mdi-18px"></i>
                     </a>
@@ -209,7 +209,7 @@
                         <div data-tooltip="Escreva uma resposta a {{atual.mensagem.emissor.first_name}}"><i
                                 class="fa fa-question-circle"></i></div>
                     </a>
-                    <a onclick="alert.render('Tem a certeza que pretende eliminar esta mensagem?','{% url 'notificacoes:apagar-mensagem' categoria atual.mensagem.id %}?page={{notificacoes.number}}')"
+                    <a href="{% url 'notificacoes:apagar-mensagem' categoria atual.mensagem.id %}?page={{notificacoes.number}}" onclick="return confirm('Tem a certeza que pretende eliminar esta mensagem?')"
                         class="button is-small">
                         <i class="mdi mdi-trash-can-outline mdi-18px"></i>
                     </a>

@@ -23,8 +23,9 @@ class AssetEvent(models.Model):
 		return result
 		
 	def create(self, EventID, AssetID):
-		eventid_event = EventID
-		assetid_asset = AssetID
+		self.eventid_event = EventID
+		self.assetid_asset = AssetID
+		self.save()
 		return self
 
 

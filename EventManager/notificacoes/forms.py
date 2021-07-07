@@ -11,10 +11,8 @@ from utilizadores.models import *
 
 USER_CHOICES = (
     ("Administrador", "Administrador"),
-    ("Coordenador", "Coordenador"),
-    ("ProfessorUniversitario", "Professor Universitário"),
     ("Participante", "Participante"),
-    ("Colaborador", "Colaborador"),
+    ("Proponente", "Proponente"),
 )
 
 class UtilizadorFiltro(Form):

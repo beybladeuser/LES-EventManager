@@ -23,6 +23,8 @@ How to run this:
   (Django) c:\folder_example> python -m pip install django-filter
 
   (Django) c:\folder_example> python -m pip install django-notifications-latest
+  
+  (Django) c:\folder_example> python -m pip install django-notifications-hq
 
   (Django) c:\folder_example> python -m pip install django-clear-cache
 ```
@@ -36,6 +38,12 @@ How to run this:
   ```
 
   Where Django contains the django install and LES-EventManager contains this rep
+
+  Note:
+  after you clone the repo, you could install all dependencies using the following:
+  ```
+    (Django) c:\folder_example\LES-EventManager> python -m pip install -r requirements.txt
+  ```
 
 3º follow this to setup the db:
   just a cool tutorial:
@@ -71,23 +79,22 @@ How to run this:
     
     (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py migrate
 ```
-4º: add a super user
+
+4º: load default values
 ```
-    c:\folder_example> Django\Scripts\activate.bat
+  python manage.py loaddata basic_fixtures.json
+```
+  this adds all the types of forms, events, assets, etc
+  
+  the user groups
+  
+  and a superuser of the admin group with the credentials:
+  
+    username: admin
     
-    (Django) c:\folder_example> cd LES-EventManager\EventManager\
-    
-    (Django) c:\folder_example\LES-EventManager\EventManager> python manage.py createsuperuser
-```
-  put the credetials that you want
+    password: alaridodameianoite
 
-5º: dar load dos valores default
-
-```
-  python manage.py loaddata fixtures.json
-```
-
-6º: run the server
+5º: run the server
 ```    
     c:\folder_example> Django\Scripts\activate.bat
     

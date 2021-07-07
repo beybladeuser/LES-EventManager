@@ -31,6 +31,13 @@ def notificacoes_lidas(user):
     else:
         return None
 
+@register.filter(name='notificacoes_nao_lidas') 
+def notificacoes_nao_lidas(user):
+    if user.is_authenticated:    
+            return user.notifications.unread()[:7]
+    else:
+        return None
+
 
 @register.filter(name='nr_notificacoes_lidas') 
 def nr_notificacoes_lidas(user):
