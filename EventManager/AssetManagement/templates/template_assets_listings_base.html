@@ -1,6 +1,9 @@
 {% extends "template_asset_base.html" %}
-
+{% load django_tables2 %}
+{% load i18n %}
 {% block style %}
+
+
 	<style>
 		th.orderable {
 			cursor: pointer;
@@ -130,6 +133,8 @@
 {% endblock %}
 
 {% block NonErrorContent %}
+
+
 	<div class="columns">
 		<div class="column is-3">
 			<div class="menu">
@@ -137,6 +142,11 @@
 					Filtros
 				</div>
 				<ul class="menu-list">
+
+
+
+
+
 					<div class="field">
 						<div class="control has-icons-left">
 							<input type="text" class="input" id="NameFilter" placeholder="Nome" onkeyup="filter2()">
@@ -309,6 +319,8 @@
 {% endblock %}
 
 {% block scripts %}
+	{%block detalhesScripts %}
+	{%endblock detalhesScripts%}
 		<script>
 			function displaySubType(caller) {
 				var option = caller.options[caller.selectedIndex].text.toLowerCase();

@@ -291,6 +291,10 @@ class Service(models.Model):
     def __str__(self):
        return self.assetid
      
+
+    def getDescription(self):
+        return self.description;
+        
     @staticmethod
     def makeOptions():
         if "servicetype" in connection.introspection.table_names():

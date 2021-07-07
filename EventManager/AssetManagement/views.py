@@ -37,15 +37,24 @@ def consultar_assets(request):
     while i < sizeofAssets :
         if Asset.getServiceType(Assets[i]) is not None:
             Assets[i].subtype =  Asset.getServiceType(Assets[i])
-            
+
         elif Asset.getEquipmentType(Assets[i]) is not None:
             Assets[i].subtype = Asset.getEquipmentType(Assets[i])
             
+
         elif Asset.getRoom(Assets[i]) is not None:
             room = Asset.getRoom(Assets[i])
             buildingg = Rooms.room_GetBuilding(room)
             
             Assets[i].subtype = Asset.getRoom(Assets[i]).room_type
+            Assets[i].room = room
+            Assets[i].building = buildingg
+
+
+
+        if AssetEvent.objects.filter(assetid_asset=Assets[i].id).exists():
+            Assets[i].isAssociated = AssetEvent.objects.filter(assetid_asset=Assets[i].id, isAssociated=True).exists()
+        
         i += 1
 
     context = {
@@ -354,3 +363,34 @@ def desassociar_recurso(request, eventID = 0 , assetID = 0):
     assetevent = AssetEvent.objects.filter(eventid_event=eventID, assetid_asset=assetID).order_by('eventid_event')[0]
     assetevent.delete() 
     return redirect('ViewAssetsOfEvent', eventID)
+
+
+def detalhes(request, assetID = 0):
+    template = loader.get_template('detalhes.html')
+    
+    asset = Asset.objects.get(pk=assetID)
+    isType = 0
+    if asset.assettype.id is 1:    # Serviço
+        service = Service.objects.get(pk = assetID)
+        asset.subtype = service.servicetypeid_servicetype.typename
+        asset.description = service.description
+        isType = 1
+ 
+    elif asset.assettype.id is 2:   # Equipamento
+        equipment = Equipment.objects.get(pk=assetID)
+        asset.subtype = equipment.equipmenttypeid_equipmenttype.typename
+        isType = 2
+
+    elif asset.assettype.id is 3:    # Espaço
+        room = Rooms.objects.get(pk=assetID)
+        asset.subtype = room.room_type.typename
+        asset.building = room.buildingid_building.buildingname
+        asset.campus = room.buildingid_building.campusid.campusname
+        
+        isType = 3
+    
+    context = {
+        'asset': asset,
+        'istype': isType,
+    }
+    return HttpResponse(template.render(context, request))    

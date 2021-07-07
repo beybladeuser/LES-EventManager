@@ -1,0 +1,35 @@
+
+{% extends "template_asset_base.html" %}
+{% block loggedInContent %}
+<div class="columns" >
+ <div class="column is-6" style="text-align:center"> 
+        <div class="box" style="text-align:center">
+            <header >
+                <p class="card-header-title" >Detalhes do recurso: </p>
+                <p>{{asset.assetname}}</p>
+            </header>
+            <br>
+              <p><b>ID:</b>      {{asset.id}}</p>
+              <p><b>Tipo: </b> {{asset.assettype}}</p>
+              <p><b>Sub-Tipo: </b>{{asset.subtype}}</p>
+              
+            {% if istype is 1 %}
+              <p><b>Descrição: </b>{{asset.description}}</p>
+            
+            {% elif istype is 3 %}
+              <p><b>Edíficio: </b>{{asset.building}}</p>
+              <p><b>Campus: </b>{{asset.campus}}</p>
+              <p><b>Capacidade: </b>{{asset.capacity}}</p>
+              <p><b>Capacidade Mobilidade reduzida: </b>{{asset.reducedMobCapacity}}</p>
+            {% endif %}
+
+            
+
+            <br>
+            <footer class="card-footer">
+                <a href="{% url 'ViewAssets' %}" class="card-footer-item">Voltar</a>
+            </footer>    
+        </div>
+    </div>
+</div>
+{% endblock%}

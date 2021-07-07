@@ -35,5 +35,6 @@ urlpatterns = [
     path('ViewAssetsOfEvent/<int:eventID>/', views.consultar_recursos_do_evento, name='ViewAssetsOfEvent'),
 
     path('DeassociateAssetsOfEvent/<int:eventID>/<int:assetID>/', views.desassociar_recurso, name='DeassociateAssetsOfEvent'),
-   
+    path('Detalhes/<int:assetID>/', views.detalhes, name='Detalhes'),
+    
 ]

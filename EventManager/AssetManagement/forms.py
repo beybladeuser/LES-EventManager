@@ -58,11 +58,11 @@ class InsertServiceForm(forms.Form):
 
 class InsertEquipmentForm(forms.Form):
 	user = None
-	assetName = forms.CharField(label='Nome do Equipamento', max_length=255, required=False, widget=forms.TextInput(attrs={'class' : 'input'}))
+	assetName = forms.CharField(label='Nome do Equipamento', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 	assetQuantity = forms.IntegerField(label='Quantidade', required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 	
 	OPTIONS_equipmentType = Equipment.makeOptions()
-	equipmentType =  forms.CharField(widget=forms.Select(choices=OPTIONS_equipmentType, attrs={'class' : 'input'}), label='Equipment Type', required=True)
+	equipmentType =  forms.CharField(widget=forms.Select(choices=OPTIONS_equipmentType, attrs={'class' : 'input'}), label='Tipo de Equipamento', required=True)
 
 	def __init__(self, *args, **kwargs):
 		if kwargs:
@@ -102,7 +102,7 @@ class InsertEquipmentForm(forms.Form):
 
 class InsertRoomForm(forms.Form):
 	user = None
-	assetName = forms.CharField(label='Número/Nome do Espaço', max_length=255, required=False, widget=forms.TextInput(attrs={'class' : 'input'}))
+	assetName = forms.CharField(label='Número/Nome do Espaço', max_length=255, required=True, widget=forms.TextInput(attrs={'class' : 'input'}))
 		
 	OPTIONS_campus = Campus.makeOptions()
 	campus =  forms.CharField(widget=forms.Select(choices=OPTIONS_campus, attrs={'class' : 'input'}), label='Campus', required=True)
