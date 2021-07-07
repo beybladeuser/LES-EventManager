@@ -100,32 +100,30 @@
           <td id="QuantityFilter{{ forloop.counter }}">  <p>{{asset.quantity}}</p></td>
           <td>
             {% comment %} VER Agendamento {% endcomment %}
-            <a href="{% url 'Detalhes' %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Agendamento">
+            <a href="{% url 'Detalhes' asset.id %}" class="trigger_popup_fricc" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Ver Detalhes">
                 <i class="fa fa-search fa-lg" aria-hidden="true"></i>
+               
             </a>
             {% comment %} EDITAR {% endcomment %}
-            <a href="{% url 'EditAsset' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Formulário">
+            <a href="{% url 'EditAsset' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Editar Recurso">
                 <i class="mdi mdi-circle-edit-outline mdi-24px" aria-hidden="true"></i>
             </a>
             {% comment %} Eliminar {% endcomment %}
-            <a href="{% url 'DeleteAssets' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar recurso" onclick="return confirm('Tem a certeza que deseja apagar este recurso?');">
-		  	    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
-		    </a>
+            {% if asset.isAssociated is True %}
+          
+                <a class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Não pode eliminar este recurso porque está associado a um evento" disabled onclick="Não pode eliminar este recurso porque está associado a um evento">
+                    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                 <a href="{% url 'DeleteAssets' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Eliminar recurso"  onclick="return confirm('Tem a certeza que deseja apagar este recurso?');">
+                    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
+                </a>
+            {% endif%}
+          
           </td>
       </tr>
     {% endfor %}
 {% endblock  %}
-
-{% block scriptsDetalhes %}
-<script>
-    $('.main-table > tbody > tr:not(.detail)').click(function (e) {
-        $('.main-table > tbody > tr.detail').not($(this).next()).removeClass('is-active');
-        $('.main-table > tbody > tr:not(.detail)').not($(this)).find('td.chevron-cell .icon').removeClass('is-expanded');
-        $(this).next().toggleClass('is-active');
-        $(this).find('td.chevron-cell .icon').toggleClass('is-expanded');
-    })
-</script>
-{% endblock scriptsDetalhes %}
 
 
 

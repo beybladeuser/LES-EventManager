@@ -2,7 +2,8 @@
 {% load django_tables2 %}
 {% load i18n %}
 {% block style %}
-	
+
+
 	<style>
 		th.orderable {
 			cursor: pointer;
@@ -133,8 +134,6 @@
 
 {% block NonErrorContent %}
 
-	{%block detalhes %}
-	{%endblock%}
 
 	<div class="columns">
 		<div class="column is-3">
@@ -320,8 +319,8 @@
 {% endblock %}
 
 {% block scripts %}
-	{%block scriptsDetalhes %}
-	{%endblock scriptsDetalhes%}
+	{%block detalhesScripts %}
+	{%endblock detalhesScripts%}
 		<script>
 			function displaySubType(caller) {
 				var option = caller.options[caller.selectedIndex].text.toLowerCase();
