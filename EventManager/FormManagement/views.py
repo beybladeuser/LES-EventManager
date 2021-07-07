@@ -85,7 +85,9 @@ def checkFormLayout(request, formID = None, filterKey=None) :
     else :
         request.session["createQuestion_cancelRedirect"] = reverse('checkFormLayout')
         request.session["createOption_cancelRedirect"] = reverse('checkFormLayout')
-
+    
+    if form :
+        existsQuestions = Questions.objects.all().exclude(pk__in=form.formquestions).exists()
     template = loader.get_template('template_show_form_layout.html')
     context = {
         'questionTypes' : Questiontype.objects.all(),
@@ -95,6 +97,7 @@ def checkFormLayout(request, formID = None, filterKey=None) :
         'errorMessage' : errorMessage,
         'filterKey' : filterKey,
         'warningMessage' : warningMessage,
+        'existsQuestions' : existsQuestions,
     }
     return HttpResponse(template.render(context, request))
 

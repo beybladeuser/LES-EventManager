@@ -318,16 +318,18 @@
 			</nav>
 
             {% if form.canEdit %}
-			    <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;" onclick="toggle('ExistingQuestion');toggle('NewQuestion');">
+			    <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;" onclick="{% if existsQuestions %}toggle('ExistingQuestion');{% endif %}toggle('NewQuestion');">
                     <span>Adicionar Questão</span>
                     <span class="icon is-small"><i class="fas fa-arrow-right"></i></span>
 			    </button>
+				{% if existsQuestions %}
                 <a href="{% url 'listQuestions' form.id %}">
                     <button id="ExistingQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
                         <span class="icon is-small"><i class="fas fa-link"></i></span>
                         <span>Adicionar Questão Existente</span>
                     </button>
                 </a>
+				{% endif %}
                 <a href="{% url 'createQuestion' 0 form.id %}">
                     <button id="NewQuestion" type="button" class="button is-success is-outlined" style="margin-bottom: 1rem; display: none;">
                         <span class="icon is-small"><i class="mdi mdi-plus"></i></span>
