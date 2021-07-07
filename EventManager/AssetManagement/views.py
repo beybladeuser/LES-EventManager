@@ -354,3 +354,11 @@ def desassociar_recurso(request, eventID = 0 , assetID = 0):
     assetevent = AssetEvent.objects.filter(eventid_event=eventID, assetid_asset=assetID).order_by('eventid_event')[0]
     assetevent.delete() 
     return redirect('ViewAssetsOfEvent', eventID)
+
+
+def detalhes(request):
+    template = loader.get_template('detalhes.html')
+    context = {
+        
+    }
+    return HttpResponse(template.render(context, request))    

@@ -3,25 +3,25 @@
 {% block table_class %}is-hoverable{% endblock table_class %}
 
 {% block seta_th %}
-<th width="40px"></th>
+    <th width="40px"></th>
 {% endblock seta_th %}
 
 {% block seta_tr %}
-<td class="chevron-cell"><a role="button"><span class="icon"><i class="mdi mdi-chevron-right mdi-24px"></i></span></a>
+    <td class="chevron-cell"><a role="button"><span class="icon"><i class="mdi mdi-chevron-right mdi-24px"></i></span></a>
 </td>
 {% endblock seta_tr %}
 
 {% block detail %}
-<tr class="detail">
-    <td colspan="{{ table.columns|length|add:'1' }}" style="border-collapse: separate;">
-        <div class="detail-container">
-            <div style="font-size: 15px;">
-                {% block details_content %}
-                {% endblock details_content %}
+    <tr class="detail">
+        <td colspan="{{ table.columns|length|add:'1' }}" style="border-collapse: separate;">
+            <div class="detail-container">
+                <div style="font-size: 15px;">
+                    {% block details_content %}
+                    {% endblock details_content %}
+                </div>
             </div>
-        </div>
-    </td>
-</tr>
+        </td>
+    </tr>
 {% endblock detail %}
 
 {% block scripts %}
