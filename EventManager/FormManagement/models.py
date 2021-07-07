@@ -133,7 +133,7 @@ class Form(models.Model):
         return self.userHasEditPermitions(user) and not self.archived and len(self.formquestions) > 0 and self.isValid() == 0
 
     def canUnarchive(self, user) :
-        return self.userHasEditPermitions(user) and user.id == self.createdby.id and self.archived
+        return self.userHasEditPermitions(user) and self.archived
 
     def canAssociateQuestion(self, question) :
         e1 = not QuestionsForm.objects.filter(questionsid_questions=question, formid_form=self).exists()
