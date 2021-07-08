@@ -149,9 +149,9 @@
 						<div class="control has-icons-left">
 							<select class="input" id="StateEventFilter" onchange="filter2();">
 							  	<option>Selecione o estado dos Eventos </option>
-							  	{% comment %} {% block filterTypes %}
-							
-								{% endblock %} {% endcomment %}
+							  	<option>Validado</option>
+								<option>Validação da Proposta Pendente</option>
+
 							</select>
 							<span class="icon is-left">
 								<i class="	fa fa-angle-down mdi-24px"></i>
@@ -162,9 +162,8 @@
 						<div class="control has-icons-left">
 							<select class="input" id="StateAssetFilter" onchange="filter2();">
 							  	<option>Selecione o estado dos Recursos </option>
-							  	{% comment %} {% block filterTypes %}
-							
-								{% endblock %} {% endcomment %}
+							  	<option>Possui recursos associados</option>
+								<option>Não possui recursos associados</option>
 							</select>
 							<span class="icon is-left">
 								<i class="	fa fa-angle-down mdi-24px"></i>

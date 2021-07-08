@@ -31,9 +31,30 @@
   {% endfor %}
 {% endblock %}   
 
+{% block preListingBlock %}
+   
+    <a href="{% url 'InsertEquipment' %}">
+        <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Equipamento</span>
+        </button>
+    </a>
+    <a href="{% url 'InsertService' %}">
+        <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Serviço</span>
+        </button>
+    </a>
+    <a href="{% url 'InsertRoom' %}">
+        <button type="button" class="button is-success is-outlined" style="margin-bottom: 1rem;"><span
+                class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>Adicionar Espaço</span>
+        </button>
+    </a>
+{% endblock %}
+
+
 
 
 {% block tableHead %}
+    {%load asset_extras %}
    
     
     <th class="orderable {% if filterKey and filterKey == '00' or filterKey and filterKey == '01' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '00' %}'01'{% else %}'00'{% endif %})">
@@ -50,11 +71,11 @@
     </th>
     <th class="orderable {% if filterKey and filterKey == '20' or filterKey and filterKey == '21' %}is-sorting{% endif %}" onclick="redirectToFilter({% if filterKey and filterKey == '20' %}'21'{% else %}'20'{% endif %})">
         Tipo
-        {% if filterKey and filterKey == '20' %}
+        {% if filterKey and filterKey == '10' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-down"></i>
             </span>
-        {% elif filterKey and filterKey == '21' %}
+        {% elif filterKey and filterKey == '11' %}
             <span class="icon is-small">
                 <i class="mdi mdi-menu-up"></i>
             </span>
