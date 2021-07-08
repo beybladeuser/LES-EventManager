@@ -386,6 +386,8 @@ def detalhes(request, assetID = 0):
         asset.subtype = room.room_type.typename
         asset.building = room.buildingid_building.buildingname
         asset.campus = room.buildingid_building.campusid.campusname
+        asset.capacity = room.capacity
+        asset.reducedMobCapacity = room.reducedMobCapacity
         
         isType = 3
     

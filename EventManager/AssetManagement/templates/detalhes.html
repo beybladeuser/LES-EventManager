@@ -1,18 +1,32 @@
 
 {% extends "template_asset_base.html" %}
 {% block loggedInContent %}
+<div class ="column">
+<nav aria-label="breadcrumbs" class="breadcrumb">
+          <ul>
+            <li><a href="{% url 'homepage' %}">Início</a></li>
+            <li><a href="{% url 'assetHome' %}">Gestor de Recursos</a></li>
+            <li><a href="{% url 'ViewAssets' %}">Consultar Recursos</a></li>
+            <li class="is-active"><a>Consultar Detalhes</a></li>
+          </ul>
+    </nav>
+</div>
+
+
+
+
 <div class="columns" >
  <div class="column is-6" style="text-align:center"> 
-        <div class="box" style="text-align:center">
+        <div class="box" >
             <header >
                 <p class="card-header-title" >Detalhes do recurso: </p>
                 <p>{{asset.assetname}}</p>
+               
             </header>
             <br>
-              <p><b>ID:</b>      {{asset.id}}</p>
               <p><b>Tipo: </b> {{asset.assettype}}</p>
               <p><b>Sub-Tipo: </b>{{asset.subtype}}</p>
-              
+              <p><b>Quantidade: </b>{{asset.quantity}}</p>
             {% if istype is 1 %}
               <p><b>Descrição: </b>{{asset.description}}</p>
             
