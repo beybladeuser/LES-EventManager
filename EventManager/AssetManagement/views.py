@@ -60,7 +60,7 @@ def consultar_assets(request):
     context = {
         'assetTypes': AssetType.getTypes(),
         'equipmentTypes': Equipmenttype.getEquipmenttypes(),
-        'serviceTypes': Service.makeOptions(),
+        'serviceTypes': Servicetype.getServiceType(),
         'roomTypes': RoomType.getRoomTypes(),
         'Assets': Assets
     }
@@ -324,7 +324,7 @@ def consultar_recursos_para_add(request, eventID = 0):
     context = {
         'assetTypes': AssetType.getTypes(),
         'equipmentTypes': Equipmenttype.getEquipmenttypes(),
-        'serviceTypes': Service.makeOptions(),
+        'serviceTypes': Servicetype.getServiceType(),
         'roomTypes': RoomType.getRoomTypes(),
         'Assets' : Assets,
         'eventID' : eventID,

@@ -116,15 +116,15 @@
            <a href="{% url 'DeassociateAssetsOfEvent' asset.eventid_event.id asset.assetid_asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Desassociar recurso" onclick="return confirm('Tem a certeza que deseja desassociar este recurso do Evento em causa?');">
 		  	    <i class="fas fa-times fa-lg" style="color: red;" aria-hidden="true"></i>
 		   </a>
-          </td>
           
           {%if asset.isAssociated is not True %}
-            <td>
+            
                 <a href="{% url 'AssociateAssetV2' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar Recurso" onclick="return confirm('Tem a certeza que deseja associar este recurso ao Evento?');">
                     <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
                 </a>
-            </td>
+            
           {% endif %}
+          </td>
       </tr>
     {% endfor %}
 {% endblock  %}
