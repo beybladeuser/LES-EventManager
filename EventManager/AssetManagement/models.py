@@ -155,6 +155,14 @@ class Building(models.Model):
             return (("1", "No Database created"),)
 
 
+    @staticmethod
+    def makeOptionsWithCampus(campus):
+        if "building" in connection.introspection.table_names():
+            buildings = Building.objects.filter(campusid=campus)
+            options=([(building.id, building.buildingname) for building in buildings])
+            return options
+        else:
+            return (("1", "No Database created"),)
 
 
 
@@ -242,8 +250,7 @@ class Rooms(models.Model):
         self.campus = self.buildingid_building.campusid
         return self
     
-
-
+    
     @staticmethod
     def makeOptions():
         if "roomtype" in connection.introspection.table_names():

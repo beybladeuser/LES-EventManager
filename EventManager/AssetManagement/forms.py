@@ -110,7 +110,7 @@ class InsertRoomForm(forms.Form):
 	OPTIONS_Rooms = Rooms.makeOptions()
 	room_type =  forms.CharField(widget=forms.Select(choices=OPTIONS_Rooms, attrs={'class' : 'input'}), label='Tipo de Espaço', required=True)
 
-
+	
 	OPTIONS_buildings = Building.makeOptions()
 	buildings =  forms.CharField(widget=forms.Select(choices=OPTIONS_buildings, attrs={'class' : 'input'}), label='Edifício', required=True)
 
