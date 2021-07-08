@@ -120,7 +120,7 @@
           
           {%if asset.isAssociated is not True %}
             <td>
-                <a href="{% url 'AssociateAsset' eventID asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar Recurso" onclick="return confirm('Tem a certeza que deseja associar este recurso ao Evento?');">
+                <a href="{% url 'AssociateAssetV2' asset.id %}" class="icon has-text-info button is-white" style="vertical-align: middle;" data-tooltip="Associar Recurso" onclick="return confirm('Tem a certeza que deseja associar este recurso ao Evento?');">
                     <i class="fas fa-plus fa-lg" aria-hidden="true"></i>
                 </a>
             </td>

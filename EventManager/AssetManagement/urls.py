@@ -31,6 +31,7 @@ urlpatterns = [
     path('ViewAssetsToAssociate/<int:eventID>/', views.consultar_recursos_para_add, name='ViewAssetsToAssociate'),
     
     path('AssociateAsset/<int:eventID>/<int:assetID>/', views.associate_asset, name='AssociateAsset'),
+    path('AssociateAssetV2/<int:assocID>/', views.associate_assetV2, name='AssociateAssetV2'),
 
     path('ViewAssetsOfEvent/<int:eventID>/', views.consultar_recursos_do_evento, name='ViewAssetsOfEvent'),
 

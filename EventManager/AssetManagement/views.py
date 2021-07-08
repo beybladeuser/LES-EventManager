@@ -288,7 +288,18 @@ def associate_asset(request, eventID = 0, assetID = 0):
     AssetEvent_.isAssociated = True
     AssetEvent_.save()
 
-    return redirect('ViewAssetsOfEvent', eventID)         
+    return redirect('ViewAssetsOfEvent', eventID) 
+
+def associate_assetV2(request, assocID = None):
+    temp = None
+    if assocID :
+        if AssetEvent.objects.filter(pk = assocID).exists() :
+            temp = AssetEvent.objects.get(pk = assocID)
+            temp.isAssociated = True
+            temp.save()
+    if temp :
+        return redirect('ViewAssetsOfEvent', temp.eventid_event.id)
+    return redirect('homepage')     
 
 def consultar_recursos_para_add(request, eventID = 0):
     
